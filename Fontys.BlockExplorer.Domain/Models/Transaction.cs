@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fontys.BlockExplorer.Domain.Models
+﻿namespace Fontys.BlockExplorer.Domain.Models
 {
-    internal class Transaction
+    using System.ComponentModel.DataAnnotations;
+
+    public class Transaction
     {
+        [Key]
+        public string Hash { get; set; }
+
+        public ICollection<Transfer> Transfers { get; set; }    
+
     }
 }

@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fontys.BlockExplorer.Domain.Models
+﻿namespace Fontys.BlockExplorer.Domain.Models
 {
-    internal class Transfer
+    using System.ComponentModel.DataAnnotations;
+
+    public class Transfer
     {
+        [Key]
+        public Guid Id { get; set; }    
+
+        [Required]
+        public long Value { get; set; }
+
+        public Address Address { get; set; }    
     }
 }
