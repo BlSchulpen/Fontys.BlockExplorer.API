@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fontys.BlockExplorer.Application\Fontys.BlockExplorer.Application.csproj" />
     <ProjectReference Include="..\Fontys.BlockExplorer.Data\Fontys.BlockExplorer.Data.csproj" />
   </ItemGroup>
 
