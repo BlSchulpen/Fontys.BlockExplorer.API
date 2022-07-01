@@ -12,6 +12,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fontys.BlockExplorer.API\Fontys.BlockExplorer.API.csproj" />
+    <ProjectReference Include="..\Fontys.BlockExplorer.NodeWarehouse\Fontys.BlockExplorer.NodeWarehouse.csproj" />
   </ItemGroup>
 
 </Project>

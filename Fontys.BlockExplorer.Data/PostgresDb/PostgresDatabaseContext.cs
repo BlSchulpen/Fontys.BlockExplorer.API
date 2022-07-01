@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fontys.BlockExplorer.Data.PostgresDb
+﻿namespace Fontys.BlockExplorer.Data.PostgresDb
 {
-    internal class PostgresDatabaseContext
+    using Microsoft.EntityFrameworkCore;
+
+    public class PostgresDatabaseContext : BlockExplorerContext
     {
+        private readonly string _connectionString;
+        public PostgresDatabaseContext(DbContextOptions<BlockExplorerContext> options, PostgresDbOptions postgresDbOptions) : base(options)
+        {
+            _connectionString = postgresDbOptions.ConnectionsString;
+        }
+
+
+        protected void OnConfigure(DbContextOptionsBuilder dbContextOptionsBuilder)
+        {
+            dbContextOptionsBuilder.UseNpgsql(_connectionString);
+
+        }
     }
 }

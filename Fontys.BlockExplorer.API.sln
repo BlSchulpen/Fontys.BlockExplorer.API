@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.Data",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.Domain", "Fontys.BlockExplorer.Domain\Fontys.BlockExplorer.Domain.csproj", "{508A97FA-2439-42A7-AF86-2C94F08D3B89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fontys.BlockExplorer.NodeDataManager", "Fontys.BlockExplorer.NodeDataManager\Fontys.BlockExplorer.NodeDataManager.csproj", "{06553A0D-1190-4563-A12B-5A9D055BD152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.NodeDataManager", "Fontys.BlockExplorer.NodeDataManager\Fontys.BlockExplorer.NodeDataManager.csproj", "{06553A0D-1190-4563-A12B-5A9D055BD152}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fontys.BlockExplorer.NodeWarehouse", "Fontys.BlockExplorer.NodeWarehouse\Fontys.BlockExplorer.NodeWarehouse.csproj", "{7F4C3767-59BC-46A1-829E-4838EF54F05D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{06553A0D-1190-4563-A12B-5A9D055BD152}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06553A0D-1190-4563-A12B-5A9D055BD152}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06553A0D-1190-4563-A12B-5A9D055BD152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F4C3767-59BC-46A1-829E-4838EF54F05D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F4C3767-59BC-46A1-829E-4838EF54F05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F4C3767-59BC-46A1-829E-4838EF54F05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F4C3767-59BC-46A1-829E-4838EF54F05D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{C273A7B9-9A8B-4877-9AB3-CB64581EEE3F} = {2D3AFD67-9714-4BE5-8609-946D4F991398}
 		{508A97FA-2439-42A7-AF86-2C94F08D3B89} = {5C7B7850-EA70-4226-B64B-921225A86762}
 		{06553A0D-1190-4563-A12B-5A9D055BD152} = {2BD5B363-CABE-4D97-A560-786B92EE98E6}
+		{7F4C3767-59BC-46A1-829E-4838EF54F05D} = {2BD5B363-CABE-4D97-A560-786B92EE98E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86BB9A63-EE75-458E-9F4E-16EA568C20DD}

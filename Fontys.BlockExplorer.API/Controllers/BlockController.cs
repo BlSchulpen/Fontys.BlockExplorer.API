@@ -2,11 +2,15 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
+
+    [ApiController]
+    [Route("[controller]")]
     public class BlockController : Controller
     {
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return Ok();
         }
     }
 }
