@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+    
 jobs:
   build:
 
@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Build and Push Docker Image 
+    - name: Build and Push Docker image 
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
         image: blschulpen/block_explorer
