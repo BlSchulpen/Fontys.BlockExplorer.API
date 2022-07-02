@@ -27,6 +27,7 @@ jobs:
     - name: Build and Push Docker image 
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
+        file: ./Fontys.BlockExplorer.API/Dockerfile
         image: blschulpen/block_explorer
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
