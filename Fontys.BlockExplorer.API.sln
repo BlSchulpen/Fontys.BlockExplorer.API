@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3F161E25-CD83-4ACD-9BFC-BFBA6F44A4D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{229818BA-ABB6-49C1-8E88-0D39F9C2D217}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{842D4F52-BBED-45A9-A8B2-C11B8D5A5D30}"
 EndProject
@@ -25,9 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.NodeWarehouse", "Fontys.BlockExplorer.NodeWarehouse\Fontys.BlockExplorer.NodeWarehouse.csproj", "{7F4C3767-59BC-46A1-829E-4838EF54F05D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fontys.BlockExplorer.NodeDataManager", "Fontys.BlockExplorer.NodeDataManager\Fontys.BlockExplorer.NodeDataManager.csproj", "{7AD096F5-7FDB-4DE9-9E00-9D41B6DF6922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.NodeDataManager", "Fontys.BlockExplorer.NodeDataManager\Fontys.BlockExplorer.NodeDataManager.csproj", "{7AD096F5-7FDB-4DE9-9E00-9D41B6DF6922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fontys.BlockExplorer.API.Test", "Fontys.BlockExplorer.API.Test\Fontys.BlockExplorer.API.Test.csproj", "{D5D6EB24-5DCC-443B-9965-C0D7B3BF600A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fontys.BlockExplorer.API.Test", "Fontys.BlockExplorer.API.Test\Fontys.BlockExplorer.API.Test.csproj", "{D5D6EB24-5DCC-443B-9965-C0D7B3BF600A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
