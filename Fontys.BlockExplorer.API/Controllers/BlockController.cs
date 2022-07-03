@@ -18,14 +18,17 @@
             _blockService = blockService;    
         }
 
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetBlock([FromBody] BlockRequest blockRequest)
         {
             var command = new GetBlockCommand() { Hash = blockRequest.Hash };
+            return Json("test");
+            /*
             var blockResult = await _blockService.GetBlockAsync(command);
             var response = new BlockResponse() { Hash = blockResult.Hash };
             return Json(response);
+            */
         }
     }
 }
