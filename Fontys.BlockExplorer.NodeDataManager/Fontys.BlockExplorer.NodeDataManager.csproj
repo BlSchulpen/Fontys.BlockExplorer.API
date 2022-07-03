@@ -10,4 +10,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fontys.BlockExplorer.API\Fontys.BlockExplorer.API.csproj" />
+    <ProjectReference Include="..\Fontys.BlockExplorer.Application\Fontys.BlockExplorer.Application.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,15 +1,15 @@
 ﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices
-
 {
     using Fontys.BlockExplorer.Domain.Models;
+    using Microsoft.Extensions.Options;
 
-    public class BtcCoreSerivce : IExplorerBtcService
+    public class BtcCoreService : IExplorerBtcService
     {
         private readonly NodeOptions _options;
 
-        public BtcCoreSerivce(NodeOptions nodeOptions)
+        public BtcCoreService(IOptions<NodeOptions> nodeOptions)
         {
-            _options = nodeOptions;
+            _options = nodeOptions.Value;
         }
 
         public Task<string> GetBestBlockHashAsync()

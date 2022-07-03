@@ -1,25 +1,25 @@
+using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
+using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.NodeDataManager.Workers;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<NodeOptions>(builder.Configuration.GetSection("NodeCommands"));
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<INodeService, BtcCoreService>();
+
+builder.Services.AddScoped<INodeMonitoringService, ExplorerMonitoringService>();
+
+builder.Services.AddDbContext<BlockExplorerContext>(options => options.UseNpgsql("User ID=postgres;Password=Explorer;Host=localhost;Port=5432;Database=ExplorerDb;")); // todo fix connection string from appsettings
+
+builder.Services.AddHostedService<NodeDataWorker>();
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();
