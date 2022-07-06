@@ -22,7 +22,7 @@
             throw new NotImplementedException();
         }
 
-        public Task<string> GetHashFromHeight(int height)
+        public Task<string> GetHashFromHeightAsync(int height)
         {
             throw new NotImplementedException();
         }

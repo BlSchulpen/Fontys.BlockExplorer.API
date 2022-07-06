@@ -21,33 +21,34 @@
            return await GetNewBlocksAsync();
         }
 
-        private async Task<ICollection<Block>> RemoveBadBlocksAsync()
+        private async Task RemoveBadBlocksAsync()
         {
-            var badBlocks = new List<Block>();
-            var storedHeight = _context.Blocks.Max(b => b.Height);
+            var storedHeight = _context.Blocks.Max(x => x.Height);
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
-            var nodeHash = await _nodeService.GetHashFromHeight(storedHeight);
-            var nodeBlock = await _nodeService.GetBlockFromHashAsync(nodeHash);
-            while (nodeBlock.Hash != storedBlock.Hash)
-            {
-                badBlocks.Add(storedBlock);
-                nodeBlock = await _nodeService.GetBlockFromHashAsync(nodeBlock.PreviousHash);
-                storedBlock = _context.Blocks.FirstOrDefault(b => b.Hash == storedBlock.PreviousHash);
+            var chainHash = await _nodeService.GetHashFromHeightAsync(storedBlock.Height);
+            while (storedBlock.Hash != chainHash)
+            { 
+                _context.Blocks.Remove(storedBlock);
+                storedHeight -= 1;
+                storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
+                chainHash = await _nodeService.GetHashFromHeightAsync(storedBlock.Height);
             }
-            return badBlocks;
+            await _context.SaveChangesAsync();
         }
 
         private async Task<ICollection<Block>> GetNewBlocksAsync()
         {
             var newBlocks = new List<Block>();
-            var nodeHash = await _nodeService.GetBestBlockHashAsync();
-            var nodeBlock = await _nodeService.GetBlockFromHashAsync(nodeHash);
-            while (!_context.Blocks.Any(b => b.Hash == nodeHash))
+            var storedHeight = _context.Blocks.Max(x => x.Height);
+            var chainHash = await _nodeService.GetBestBlockHashAsync();
+            var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
+
+            while (storedHeight < chainBlock.Height)
             {
-                newBlocks.Add(nodeBlock);
-                _context.Add(nodeBlock);
-                nodeHash = nodeBlock.PreviousHash;
-                nodeBlock = await _nodeService.GetBlockFromHashAsync(nodeHash);
+                _context.Add(chainBlock);
+                newBlocks.Add(chainBlock);
+                chainHash = chainBlock.PreviousHash;
+                chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             }
             await _context.SaveChangesAsync();
             return newBlocks;
