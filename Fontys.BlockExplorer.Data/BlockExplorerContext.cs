@@ -8,6 +8,9 @@
         public BlockExplorerContext(DbContextOptions options) : base(options)
         {
         }
+        public BlockExplorerContext( ) 
+        {
+        }
 
         public virtual DbSet<Address> Addresss { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }

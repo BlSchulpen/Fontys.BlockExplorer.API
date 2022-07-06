@@ -11,8 +11,7 @@
         [Required]
         public int Height { get; set; }
 
-        [Required]
-        public string PreviousHash { get; set; }
+        public string? PreviousHash { get; set; }
 
         [Required]
         public CoinType CoinType { get; set; }
@@ -20,7 +19,6 @@
         [Required]
         public NetworkType NetworkType { get; set; }
 
-        [Required]
-        public ICollection<Transaction> Transactions { get; set; }
+        public ICollection<Transaction>? Transactions { get; set; }
     }
 }
