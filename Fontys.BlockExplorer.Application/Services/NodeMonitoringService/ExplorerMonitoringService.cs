@@ -15,13 +15,7 @@
             _nodeService = nodeService;
         }
 
-        public async Task<ICollection<Block>> UpdateStoredAsync()
-        {
-           await RemoveBadBlocksAsync();
-           return await GetNewBlocksAsync();
-        }
-
-        private async Task RemoveBadBlocksAsync()
+        public async Task RemoveBadBlocksAsync()
         {
             var storedHeight = _context.Blocks.Max(x => x.Height);
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
@@ -36,23 +30,18 @@
             await _context.SaveChangesAsync();
         }
 
-        private async Task<ICollection<Block>> GetNewBlocksAsync()
+        public async Task GetNewBlocksAsync()
         {
-            var newBlocks = new List<Block>();
             var storedHeight = _context.Blocks.Max(x => x.Height);
             var chainHash = await _nodeService.GetBestBlockHashAsync();
             var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
-
             while (storedHeight < chainBlock.Height)
             {
                 _context.Add(chainBlock);
-                newBlocks.Add(chainBlock);
                 chainHash = chainBlock.PreviousHash;
                 chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             }
             await _context.SaveChangesAsync();
-            return newBlocks;
         }
-
     }
 }

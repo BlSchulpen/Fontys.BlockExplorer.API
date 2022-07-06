@@ -20,7 +20,8 @@
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(5000, stoppingToken);
-                _nodeService.UpdateStoredAsync();
+                await _nodeService.RemoveBadBlocksAsync();
+                await _nodeService.GetNewBlocksAsync();
             }
         }
     }
