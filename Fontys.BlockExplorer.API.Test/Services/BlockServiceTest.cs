@@ -51,7 +51,6 @@
             wrongBlocks.Add(new Block() { Height = removeBlock.Height, Hash = "Wrong" });
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(wrongBlocks);
 
-
             // act
             var removedBlocks = await _monitoringService.RemoveBadBlocksAsync();
 
@@ -59,9 +58,25 @@
             removedBlocks.Should().HaveCount(1);
         }
 
+        [Fact]
+        public async Task Get_NewBlocks_TwoNew()
+        {
+            // arrange
+            var blocks = MockBlocks();
+           SetupUpNodeService(blocks);
+            var storedBlocks = new List<Block>(){ blocks[0] };
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+
+            // act
+            var newBlocks = await _monitoringService.GetNewBlocksAsync();
+
+            // assert
+            newBlocks.Should().HaveCount(2);
+        }
+
         private void SetupUpNodeService(List<Block> blocks) {
             
-            _nodeServiceMock.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync("1");
+            _nodeServiceMock.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync((_nrBlocks - 1).ToString());
             foreach (var block in blocks)
             {
                 _nodeServiceMock.Setup(x => x.GetBlockFromHashAsync(block.Hash)).ReturnsAsync(block);
