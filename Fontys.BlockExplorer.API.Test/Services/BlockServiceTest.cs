@@ -8,6 +8,7 @@
     using Moq;
     using Moq.EntityFrameworkCore;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Xunit;
 
@@ -17,7 +18,6 @@
         private readonly Mock<INodeService> _nodeServiceMock = new Mock<INodeService>();
         private readonly Mock<BlockExplorerContext> _dbContextMock = new Mock<BlockExplorerContext>();
         private readonly int _nrBlocks = 3;
-
 
         public BlockServiceTest()
         {
@@ -33,10 +33,30 @@
             SetupUpNodeService(blocks);
 
             // act
-            await _monitoringService.RemoveBadBlocksAsync();
+            var removedBlocks = await _monitoringService.RemoveBadBlocksAsync();
 
             // assert
-            _dbContextMock.Object.Blocks.Should().HaveCount(_nrBlocks);
+            removedBlocks.Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task Get_BadBlock_OneBad()
+        {
+            // arrange
+            var blocks = MockBlocks();
+            SetupUpNodeService(blocks);
+            var wrongBlocks = new List<Block>(blocks);
+            var removeBlock = blocks.LastOrDefault();
+            wrongBlocks.Remove(removeBlock);
+            wrongBlocks.Add(new Block() { Height = removeBlock.Height, Hash = "Wrong" });
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(wrongBlocks);
+
+
+            // act
+            var removedBlocks = await _monitoringService.RemoveBadBlocksAsync();
+
+            // assert
+            removedBlocks.Should().HaveCount(1);
         }
 
         private void SetupUpNodeService(List<Block> blocks) {
