@@ -1,23 +1,23 @@
-﻿namespace Fontys.BlockExplorer.Application.Services.BlockService
+﻿namespace Fontys.BlockExplorer.Application.Services.TxService
 {
     using Fontys.BlockExplorer.Data;
     using Fontys.BlockExplorer.Domain.CQS;
     using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public class ExplorerBlockService : IBlockService
+    public class ExplorerTxService : ITxService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
-        
-        public ExplorerBlockService(BlockExplorerContext blockExplorerContext)
+
+        public ExplorerTxService(BlockExplorerContext blockExplorerContext)
         {
             _blockExplorerContext = blockExplorerContext;
         }
 
-        public async Task<Block> GetBlockAsync(GetBlockCommand command)
+        public async Task<Transaction> GetBlockAsync(GetTxCommand command)
         {
             var hash = command.Hash;
-            var stored = await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash);
+            var stored = await _blockExplorerContext.Transactions.FirstOrDefaultAsync(b => b.Hash == hash);
             return stored;
         }
     }

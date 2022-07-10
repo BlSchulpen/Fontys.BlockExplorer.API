@@ -8,7 +8,7 @@
 
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BlockController : Controller
     {
         private readonly IBlockService _blockService;
@@ -18,12 +18,17 @@
             _blockService = blockService;    
         }
 
-        [HttpPost]
+        [HttpGet ("{hash}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetBlock([FromBody] BlockRequest blockRequest)
+        public async Task<IActionResult> GetBlock(string hash)
         {
-            var command = new GetBlockCommand() { Hash = blockRequest.Hash };
-            return Json("test");
+            var command = new GetBlockCommand() { Hash = hash };
+            var results = "test";
+            if (results == null)
+            { 
+                return NotFound();  
+            }
+            return Ok(hash);
             /*
             var blockResult = await _blockService.GetBlockAsync(command);
             var response = new BlockResponse() { Hash = blockResult.Hash };
