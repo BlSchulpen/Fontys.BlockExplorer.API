@@ -22,8 +22,8 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-            string _connectionString = "User ID=postgres;Password=Explorer;Host=localhost;Port=5432;Database=ExplorerDb;";
-            dbContextOptionsBuilder.UseNpgsql(_connectionString);
+   //         string _connectionString = "User ID=postgres;Password=Explorer;Host=localhost;Port=5432;Database=ExplorerDb;";
+      //      dbContextOptionsBuilder.UseNpgsql(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
