@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Fontys.BlockExplorer.API.Migrations
 {
     [DbContext(typeof(BlockExplorerContext))]
-    [Migration("20220717101613_InitialCreate")]
+    [Migration("20220717102718_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

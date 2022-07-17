@@ -11,7 +11,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<PostgresDatabaseContext>().As<BlockExplorerContext>();
+           // builder.RegisterType<PostgresDatabaseContext>().As<BlockExplorerContext>();
             builder.RegisterType<ExplorerBlockService>().As<IBlockService>();
             builder.RegisterType<ExplorerTxService>().As<ITxService>();
             builder.RegisterType<ExplorerAddressService>().As<IAddressService>();
