@@ -17,6 +17,7 @@
         public async Task<Block> GetBlockAsync(GetBlockCommand command)
         {
             var hash = command.Hash;
+            var test = _blockExplorerContext.Transactions.ToList();
             var stored = await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash);
             return stored;
         }

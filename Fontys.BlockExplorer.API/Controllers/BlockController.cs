@@ -23,6 +23,7 @@
         public async Task<IActionResult> GetBlock(string hash)
         {
             var command = new GetBlockCommand() { Hash = hash };
+            var blockResult = await _blockService.GetBlockAsync(command);
             var results = "test";
             if (results == null)
             { 

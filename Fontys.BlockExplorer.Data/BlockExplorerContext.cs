@@ -8,36 +8,36 @@
         public BlockExplorerContext(DbContextOptions options) : base(options)
         {
         }
-        public BlockExplorerContext( ) 
+        public BlockExplorerContext()
         {
         }
 
-        public virtual DbSet<Address> Addresss { get; set; }
         public virtual DbSet<Block> Blocks { get; set; }
+        
         public virtual DbSet<Transaction> Transactions { get; set; }
 
         public virtual DbSet<Transfer> Transfers { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        public virtual DbSet<Address> Addresses { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
+            string _connectionString = "User ID=postgres;Password=Explorer;Host=localhost;Port=5432;Database=ExplorerDb;";
+            dbContextOptionsBuilder.UseNpgsql(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Address>()
-                .HasIndex(x => x.Hash)
-                .IsUnique();
             builder.Entity<Block>()
-                .HasIndex(x => x.Hash)
-                .IsUnique();
+                .HasMany(x => x.Transactions);
+            
             builder.Entity<Transaction>()
-                .HasIndex(x => x.Hash)
-                .IsUnique();
+                .HasMany(x => x.Transfers);
+            
             builder.Entity<Transfer>()
-                .HasIndex(x => x.Id)
-                .IsUnique();
+                .HasOne(x => x.Address);
         }
     }
 }

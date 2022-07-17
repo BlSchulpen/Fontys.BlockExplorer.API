@@ -10,6 +10,9 @@
             _connectionString = postgresDbOptions.ConnectionsString;
         }
 
+        public PostgresDatabaseContext()
+        {
+        }
 
         protected void OnConfigure(DbContextOptionsBuilder dbContextOptionsBuilder)
         {

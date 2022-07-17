@@ -7,7 +7,7 @@
         [Key]
         public string Hash { get; set; }
 
-        public ICollection<Transfer> Transfers { get; set; }    
+        public virtual ICollection<Transfer> Transfers { get; set; }    
 
     }
 }

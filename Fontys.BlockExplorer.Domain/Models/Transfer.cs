@@ -10,6 +10,7 @@
         [Required]
         public long Value { get; set; }
 
-        public Address Address { get; set; }    
+       [Required]
+        public virtual Address Address { get; set; }    
     }
 }
