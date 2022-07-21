@@ -5,6 +5,6 @@
 
     public interface ITxService
     {
-        public Task<Transaction> GetBlockAsync(GetTxCommand command);
+        public Task<Transaction> GeTransactionAsync(GetTxCommand command);
     }
 }

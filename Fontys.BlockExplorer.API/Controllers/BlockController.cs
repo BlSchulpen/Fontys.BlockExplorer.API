@@ -30,11 +30,6 @@
                 return NotFound();  
             }
             return Ok(hash);
-            /*
-            var blockResult = await _blockService.GetBlockAsync(command);
-            var response = new BlockResponse() { Hash = blockResult.Hash };
-            return Json(response);
-            */
         }
     }
 }

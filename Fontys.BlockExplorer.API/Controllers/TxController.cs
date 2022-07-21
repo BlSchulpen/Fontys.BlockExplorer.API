@@ -18,10 +18,10 @@ namespace Fontys.BlockExplorer.API.Controllers
 
         [HttpGet("{hash}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetBlock(string hash)
+        public async Task<IActionResult> GetTransaction(string hash)
         {
             var command = new GetTxCommand() { Hash = hash };
-            var results = "test";
+            var results = _txService.GeTransactionAsync(command);
             if (results == null)
             {
                 return NotFound();

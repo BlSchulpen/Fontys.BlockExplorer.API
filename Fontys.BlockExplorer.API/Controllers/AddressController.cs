@@ -20,7 +20,7 @@
         public async Task<IActionResult> GetAddress(string hash)
         {
             var command = new GetAddressCommand() { Hash = hash };
-            var results = "test";
+            var results = _addressService.GetAddressAsync(command);
             if (results == null)
             {
                 return NotFound();
