@@ -25,7 +25,7 @@
         }
 
         [Fact]
-        public async Task Get_BadBlock_NoBad()
+        public async Task Get_BadBlock_ReturnEmpty()
         {
             // arrange
             var blocks = MockBlocks();
@@ -40,7 +40,7 @@
         }
 
         [Fact]
-        public async Task Get_BadBlock_OneBad()
+        public async Task Get_BadBlock_ReturnOne()
         {
             // arrange
             var blocks = MockBlocks();
@@ -59,12 +59,12 @@
         }
 
         [Fact]
-        public async Task Get_NewBlocks_TwoNew()
+        public async Task Get_NewBlocks_ReturnTwo()
         {
             // arrange
             var blocks = MockBlocks();
-           SetupUpNodeService(blocks);
-            var storedBlocks = new List<Block>(){ blocks[0] };
+            SetupUpNodeService(blocks);
+            var storedBlocks = new List<Block>() { blocks[0] };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
 
             // act
@@ -74,8 +74,25 @@
             newBlocks.Should().HaveCount(2);
         }
 
-        private void SetupUpNodeService(List<Block> blocks) {
-            
+        [Fact]
+        public async Task Get_NewBlocks_ReturnOne()
+        {
+            // arrange
+            var blocks = MockBlocks();
+            SetupUpNodeService(blocks);
+            var storedBlocks = new List<Block>();
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+
+            // act
+            var newBlocks = await _monitoringService.GetNewBlocksAsync();
+
+            // assert
+            newBlocks.Should().HaveCount(3);
+        }
+
+        private void SetupUpNodeService(List<Block> blocks)
+        {
+
             _nodeServiceMock.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync((_nrBlocks - 1).ToString());
             foreach (var block in blocks)
             {
@@ -84,14 +101,14 @@
             }
         }
 
-        private List<Block> MockBlocks() 
+        private List<Block> MockBlocks()
         {
             var newBlocks = new List<Block>();
             for (int i = 0; i < _nrBlocks; i++)
             {
-                newBlocks.Add(new Block() { Height = i, Hash = i.ToString()});
+                newBlocks.Add(new Block() { Height = i, Hash = i.ToString() });
             }
             return newBlocks;
-        }        
+        }
     }
 }

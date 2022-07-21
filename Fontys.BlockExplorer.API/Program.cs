@@ -19,13 +19,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-/*
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<BlockExplorerContext>();
-    dbContext.Database.Migrate();
-}
-*/
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -34,11 +27,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
-
-
 app.Run();

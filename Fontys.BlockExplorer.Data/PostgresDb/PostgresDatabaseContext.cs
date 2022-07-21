@@ -1,5 +1,6 @@
 ﻿namespace Fontys.BlockExplorer.Data.PostgresDb
 {
+    using Microsoft.Data.Sqlite;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
 

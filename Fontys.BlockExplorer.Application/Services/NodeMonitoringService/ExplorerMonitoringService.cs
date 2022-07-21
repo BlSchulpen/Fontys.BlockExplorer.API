@@ -3,6 +3,7 @@
     using Fontys.BlockExplorer.Data;
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+    using Microsoft.Data.Sqlite;
 
     public class ExplorerMonitoringService : INodeMonitoringService
     {
@@ -22,7 +23,7 @@
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
             var chainHash = await _nodeService.GetHashFromHeightAsync(storedBlock.Height);
             while (storedBlock.Hash != chainHash)
-            { 
+            {
                 _context.Blocks.Remove(storedBlock);
                 removedBlocks.Add(storedBlock);
                 storedHeight -= 1;
@@ -36,8 +37,7 @@
         public async Task<ICollection<Block>> GetNewBlocksAsync()
         {
             var newBlocks = new List<Block>();
-            var storedHeight = _context.Blocks.Max(x => x.Height);
-            var test = _context.Blocks.ToList();
+            var storedHeight = await InitialBlockHeight(newBlocks);
             var chainHash = await _nodeService.GetBestBlockHashAsync();
             var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             while (storedHeight < chainBlock.Height)
@@ -49,6 +49,22 @@
             }
             await _context.SaveChangesAsync();
             return newBlocks;
+        }
+
+        private async Task<int> InitialBlockHeight(ICollection<Block> newBlocks)
+        {
+            if (_context.Blocks.ToList().Count == 0)
+            {
+                var initialHeight = 0;
+                var initialHash = await _nodeService.GetHashFromHeightAsync(initialHeight);
+                var initialBlock = await _nodeService.GetBlockFromHashAsync(initialHash);
+                _context.Blocks.Add(initialBlock);
+                await _context.SaveChangesAsync();
+                newBlocks.Add(initialBlock);
+                return initialHeight;
+            }
+            var storedHeight = _context.Blocks.Max(x => x.Height);
+            return storedHeight;
         }
     }
 }
