@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices
+﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
     using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.Extensions.Options;

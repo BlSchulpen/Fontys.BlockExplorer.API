@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.Test.Services
+﻿namespace Fontys.BlockExplorer.API.UnitTest.Services
 {
     using FluentAssertions;
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;

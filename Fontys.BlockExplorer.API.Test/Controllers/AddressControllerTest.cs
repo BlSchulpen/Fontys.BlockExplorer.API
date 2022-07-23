@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.Test.Controllers
+﻿namespace Fontys.BlockExplorer.API.UnitTest.Controllers
 {
     using Fontys.BlockExplorer.API.Controllers;
     using Fontys.BlockExplorer.Application.Services.AddressService;

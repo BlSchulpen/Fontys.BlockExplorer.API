@@ -1,9 +1,11 @@
 ﻿namespace Fontys.BlockExplorer.API.Controllers
 {
-    using Fontys.BlockExplorer.API.Dto;
+    using AutoMapper;
     using Fontys.BlockExplorer.API.Dto.Response;
     using Fontys.BlockExplorer.Application.Services.BlockService;
     using Fontys.BlockExplorer.Domain.CQS;
+    using Fontys.BlockExplorer.Domain.Enums;
+    using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.AspNetCore.Mvc;
 
 
@@ -12,10 +14,12 @@
     public class BlockController : Controller
     {
         private readonly IBlockService _blockService;
+        private readonly IMapper _mapper; 
 
-        public BlockController(IBlockService blockService)
+        public BlockController(IBlockService blockService, IMapper mapper)
         {
             _blockService = blockService;    
+            _mapper = mapper;   
         }
 
         [HttpGet ("{hash}")]
@@ -24,12 +28,12 @@
         {
             var command = new GetBlockCommand() { Hash = hash };
             var blockResult = await _blockService.GetBlockAsync(command);
-            var results = "test";
-            if (results == null)
-            { 
-                return NotFound();  
+            if (blockResult == null)
+            {
+                return NotFound();
             }
-            return Ok(hash);
+            var response = _mapper.Map<BlockResponse>(blockResult);
+            return Ok(response);         
         }
     }
 }

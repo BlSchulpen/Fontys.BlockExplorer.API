@@ -2,6 +2,7 @@ using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.NodeDataManager.Workers;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

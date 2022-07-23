@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.Test.Controllers
+﻿namespace Fontys.BlockExplorer.API.UnitTest.Controllers
 {
     using Fontys.BlockExplorer.API.Controllers;
     using Fontys.BlockExplorer.Application.Services.TxService;
@@ -10,7 +10,7 @@
     public class TxControllerTest
     {
         [Fact]
-        public async Task Get_Tx_Call_Service() 
+        public async Task Get_Tx_Call_Service()
         {
             // arrange
             var hash = "Test";
