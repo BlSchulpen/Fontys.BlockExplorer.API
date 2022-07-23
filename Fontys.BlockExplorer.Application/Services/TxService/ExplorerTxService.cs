@@ -14,7 +14,7 @@
             _blockExplorerContext = blockExplorerContext;
         }
 
-        public async Task<Transaction> GeTransactionAsync(GetTxCommand command)
+        public async Task<Transaction> GetTransactionAsync(GetTxCommand command)
         {
             var hash = command.Hash;
             var stored = await _blockExplorerContext.Transactions.FirstOrDefaultAsync(b => b.Hash == hash);
