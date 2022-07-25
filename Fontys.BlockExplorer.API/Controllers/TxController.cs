@@ -31,7 +31,7 @@ namespace Fontys.BlockExplorer.API.Controllers
             {
                 return NotFound();
             }
-            var response = _mapper.Map<Transaction,TransactionResponse>(result);
+            var response = _mapper.Map<Transaction, TransactionResponse>(result);
             return Ok(response);
         }
     }

@@ -12,16 +12,15 @@
     using Fontys.BlockExplorer.API.Dto.Response;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
+    using Fontys.BlockExplorer.API.Profiles;
 
     public class BlockControllerIntergrationTest
     {
-        private readonly MockDbFactory _dbFactory;
         private readonly Mock<BlockExplorerContext> _dbContextMock;
 
         public BlockControllerIntergrationTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
-            _dbFactory = new MockDbFactory();
         }
 
         //todo maybe add new intergration test with database connectivity --> API request        
@@ -30,10 +29,10 @@
         {
             // arrange
             var nrBlocks = 1;
-            var blocks = _dbFactory.MockBlocks(nrBlocks);
+            var blocks = MockBlocks(nrBlocks);
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
             var service = new ExplorerBlockService(_dbContextMock.Object);
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
             var mapper = new Mapper(config);
             var controller = new BlockController(service, mapper);
             string hash = "0";
@@ -65,6 +64,18 @@
             // assert
             var result = response.Result as NotFoundResult;
             result.Should().NotBeNull();
+        }
+
+        private List<Block> MockBlocks(int nrTransactions)
+        {
+            var newBlocks = new List<Block>();
+            for (int i = 0; i < nrTransactions; i++)
+            {
+                var transaction = new Transaction() { Hash = "0", Transfers = new List<Transfer>() };
+                var transactions = new List<Transaction>() { transaction };
+                newBlocks.Add(new Block() { Height = i, Hash = i.ToString(), Transactions = transactions });
+            }
+            return newBlocks;
         }
     }
 }
