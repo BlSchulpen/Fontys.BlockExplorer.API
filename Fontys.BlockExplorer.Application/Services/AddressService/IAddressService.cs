@@ -5,6 +5,6 @@
 
     public interface IAddressService
     {
-        public Task<Address> GetAddressAsync(GetAddressCommand getBlockCommand);
+        public Task<Address?> GetAddressAsync(GetAddressCommand getBlockCommand);
     }
 }

@@ -24,7 +24,7 @@
 
         [HttpGet ("{hash}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetBlock(string hash)
+        public async Task<IActionResult> GetBlockAsync(string hash)
         {
             var command = new GetBlockCommand() { Hash = hash };
             var blockResult = await _blockService.GetBlockAsync(command);

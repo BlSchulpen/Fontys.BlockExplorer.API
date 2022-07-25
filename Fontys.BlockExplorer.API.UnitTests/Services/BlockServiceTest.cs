@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.UnitTest.Services
+﻿namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
     using FluentAssertions;
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
@@ -15,12 +15,14 @@
     public class BlockServiceTest
     {
         private readonly ExplorerMonitoringService _monitoringService;
-        private readonly Mock<INodeService> _nodeServiceMock = new Mock<INodeService>();
-        private readonly Mock<BlockExplorerContext> _dbContextMock = new Mock<BlockExplorerContext>();
+        private readonly Mock<INodeService> _nodeServiceMock;
+        private readonly Mock<BlockExplorerContext> _dbContextMock;
         private readonly int _nrBlocks = 3;
 
         public BlockServiceTest()
         {
+            _nodeServiceMock = new Mock<INodeService>();
+            _dbContextMock = new Mock<BlockExplorerContext>();
             _monitoringService = new ExplorerMonitoringService(_dbContextMock.Object, _nodeServiceMock.Object);
         }
 

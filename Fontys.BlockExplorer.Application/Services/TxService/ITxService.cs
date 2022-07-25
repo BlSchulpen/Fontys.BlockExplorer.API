@@ -5,6 +5,6 @@
 
     public interface ITxService
     {
-        public Task<Transaction> GetTransactionAsync(GetTxCommand command);
+        public Task<Transaction?> GetTransactionAsync(GetTxCommand command);
     }
 }

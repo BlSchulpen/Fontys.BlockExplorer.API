@@ -5,6 +5,6 @@
 
     public interface IBlockService
     {
-        public Task<Block> GetBlockAsync(GetBlockCommand getBlockCommand);
+        public Task<Block?> GetBlockAsync(GetBlockCommand getBlockCommand);
     }
 }

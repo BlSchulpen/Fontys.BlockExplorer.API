@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.UnitTest.Controllers
+﻿namespace Fontys.BlockExplorer.API.UnitTests.Controllers
 {
     using Xunit;
     using Fontys.BlockExplorer.Application.Services.BlockService;
@@ -23,7 +23,7 @@
             var controller = new BlockController(mockService.Object, mapper);
 
             // act
-            await controller.GetBlock(hash);
+            await controller.GetBlockAsync(hash);
 
             // assert
             mockService.Verify(f => f.GetBlockAsync(It.Is<GetBlockCommand>(x => x.Hash == hash)));
