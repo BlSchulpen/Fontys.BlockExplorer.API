@@ -29,13 +29,8 @@
         {
             // arrange
             var nrBlocks = 1;
-            var blocks = MockBlocks(nrBlocks);
-            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
-            var service = new ExplorerBlockService(_dbContextMock.Object);
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
-            var mapper = new Mapper(config);
-            var controller = new BlockController(service, mapper);
             string hash = "0";
+            var controller = SetupController(nrBlocks);
 
             // act
             var response = controller.GetBlockAsync(hash);
@@ -50,13 +45,9 @@
         public void Get_Block_Not_Found()
         {
             // arrange
-            var blocks = new List<Block>();
-            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
-            var service = new ExplorerBlockService(_dbContextMock.Object);
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
-            var mapper = new Mapper(config);
-            var controller = new BlockController(service, mapper);
+            var nrBlocks = 0;
             string hash = "0";
+            var controller = SetupController(nrBlocks);
 
             // act
             var response = controller.GetBlockAsync(hash);
@@ -64,6 +55,18 @@
             // assert
             var result = response.Result as NotFoundResult;
             result.Should().NotBeNull();
+        }
+
+        //todo make factory? 
+        private BlockController SetupController(int nrBlocks) 
+        {
+            var blocks = MockBlocks(nrBlocks);
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
+            var service = new ExplorerBlockService(_dbContextMock.Object);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
+            var mapper = new Mapper(config);
+            var controller = new BlockController(service, mapper);
+            return controller;
         }
 
         private List<Block> MockBlocks(int nrTransactions)

@@ -30,16 +30,11 @@
         {
             // arrange
             var nrTransactions = 1;
-            var transactions = MockTransactions(nrTransactions);
-            _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);
-            var service = new ExplorerTxService(_dbContextMock.Object);
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
-            var mapper = new Mapper(config);
-            var controller = new TxController(service, mapper);
             string hash = "0";
+            var controller = SetupController(nrTransactions);
 
             // act
-           var response = controller.GetTransaction(hash);
+            var response = controller.GetTransaction(hash);
 
             // assert
             var result = response.Result as OkObjectResult;
@@ -51,13 +46,8 @@
         {
             // arrange
             var nrTransactions = 0;
-            var transactions = MockTransactions(nrTransactions);
-            _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);
-            var service = new ExplorerTxService(_dbContextMock.Object);
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
-            var mapper = new Mapper(config);
-            var controller = new TxController(service, mapper);
             string hash = "0";
+            var controller = SetupController(nrTransactions);
 
             // act
             var response = controller.GetTransaction(hash);
@@ -76,6 +66,17 @@
                 newTransactions.Add(transaction);
             }
             return newTransactions;
-        }    
+        }
+
+        private TxController SetupController(int nrTransactions) 
+        {
+            var transactions = MockTransactions(nrTransactions);
+            _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);
+            var service = new ExplorerTxService(_dbContextMock.Object);
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
+            var mapper = new Mapper(config);
+            var controller = new TxController(service, mapper);
+            return controller;
+        }
     }
 }
