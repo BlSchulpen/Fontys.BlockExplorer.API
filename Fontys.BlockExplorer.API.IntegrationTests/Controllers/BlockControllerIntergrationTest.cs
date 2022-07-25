@@ -5,7 +5,6 @@
     using Fontys.BlockExplorer.Data;
     using Moq;
     using Moq.EntityFrameworkCore;
-    using System.Threading.Tasks;
     using Xunit;
     using Fontys.BlockExplorer.Application.Services.BlockService;
     using AutoMapper;
@@ -25,14 +24,13 @@
             _dbFactory = new MockDbFactory();
         }
 
-        //todo maybe add new intergration test with database connectivity --> API request
-        /*
+        //todo maybe add new intergration test with database connectivity --> API request        
         [Fact]
         public void Get_Block_Existing()
         {
-
             // arrange
-            var blocks = _dbFactory.MockBlocks();
+            var nrBlocks = 1;
+            var blocks = _dbFactory.MockBlocks(nrBlocks);
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
             var service = new ExplorerBlockService(_dbContextMock.Object);
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
@@ -45,12 +43,9 @@
 
             // assert
             var result = response.Result as OkObjectResult;
-            var test = response.Result as NotFoundResult;
-            result.Should().BeNull();
-            test.Should().NotBeNull();
-
+            result.Should().NotBeNull();
         }
-        */
+
 
         [Fact]
         public void Get_Block_Not_Found()
