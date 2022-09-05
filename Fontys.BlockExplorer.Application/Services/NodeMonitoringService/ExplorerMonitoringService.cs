@@ -44,14 +44,17 @@
             var storedHeight = await InitialBlockHeight(newBlocks);
             var chainHash = await _nodeService.GetBestBlockHashAsync();
             var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
-            while (storedHeight < chainBlock.Height)
+            while (storedHeight < chainBlock.Height && _context.Blocks.Count() < chainBlock.Height)
             {
-                _context.Add(chainBlock);
-                newBlocks.Add(chainBlock);
+                if (!_context.Blocks.Any(b => b.Height == chainBlock.Height))
+                {
+                    _context.Add(chainBlock);
+                    newBlocks.Add(chainBlock);
+                    await _context.SaveChangesAsync();
+                }
                 chainHash = await _nodeService.GetHashFromHeightAsync(chainBlock.Height - 1);
                 chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             }
-            await _context.SaveChangesAsync();
             return newBlocks;
         }
 
