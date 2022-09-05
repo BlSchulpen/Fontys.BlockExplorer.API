@@ -20,13 +20,11 @@
         public async Task<ICollection<Block>> RemoveBadBlocksAsync()
         {
             var removedBlocks = new List<Block>();
-            var storedHeight = _context.Blocks.Max(x => x.Height);
-            if (storedHeight == null)
+            if (!_context.Blocks.Any())
                 return removedBlocks;
 
-            var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
-
-            
+            var storedHeight = _context.Blocks.DefaultIfEmpty().Max(x => x.Height);
+            var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight); 
             var chainHash = await _nodeService.GetHashFromHeightAsync(storedBlock.Height);
             while (storedBlock.Hash != chainHash)
             {
@@ -43,8 +41,18 @@
         public async Task<ICollection<Block>> GetNewBlocksAsync()
         {
             var newBlocks = new List<Block>();
-            var storedHeight = await InitialBlockHeight(newBlocks);
-            var chainHash = await _nodeService.GetBestBlockHashAsync();
+            var storedHeight = 0; //TODO check if this is okay
+            try
+            {
+                 storedHeight = await InitialBlockHeight(newBlocks);
+            }
+
+            catch (Exception ex)
+            {
+                // TODO: Add logging --> no blocks found
+                throw;
+            }
+                var chainHash = await _nodeService.GetBestBlockHashAsync();
             var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             while (storedHeight < chainBlock.Height)
             {
