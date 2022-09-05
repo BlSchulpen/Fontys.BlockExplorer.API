@@ -8,3 +8,14 @@ services:
       POSTGRES_DB: ExplorerDb
     ports:
       - 5432:5432
+      
+  bitcoin-core:
+    image: ruimarinho/bitcoin-core
+    command:
+      -printtoconsole
+      -rpcallowip=172.17.0.0/16
+      --rpcuser=foo
+      --rpcpassword="qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0="
+    expose:
+      - "8332"
+      - "8333"

@@ -41,18 +41,8 @@
         public async Task<ICollection<Block>> GetNewBlocksAsync()
         {
             var newBlocks = new List<Block>();
-            var storedHeight = 0; //TODO check if this is okay
-            try
-            {
-                 storedHeight = await InitialBlockHeight(newBlocks);
-            }
-
-            catch (Exception ex)
-            {
-                // TODO: Add logging --> no blocks found
-                throw;
-            }
-                var chainHash = await _nodeService.GetBestBlockHashAsync();
+            var storedHeight = await InitialBlockHeight(newBlocks);
+            var chainHash = await _nodeService.GetBestBlockHashAsync();
             var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
             while (storedHeight < chainBlock.Height)
             {

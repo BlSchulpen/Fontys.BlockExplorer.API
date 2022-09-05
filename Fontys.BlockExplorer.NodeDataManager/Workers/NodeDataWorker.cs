@@ -9,7 +9,7 @@
     {
         private readonly IServiceProvider _service;
 
-        public NodeDataWorker(IServiceProvider service  )
+        public NodeDataWorker(IServiceProvider service)
         {
             _service = service;
         }
@@ -22,9 +22,18 @@
                 {
                     using (var scope = _service.CreateScope())
                     {
+                        
                         var nodeService = scope.ServiceProvider.GetRequiredService<INodeMonitoringService>();
-                        await nodeService.RemoveBadBlocksAsync();
-                        await nodeService.GetNewBlocksAsync();
+                        try
+                        {
+                            await nodeService.RemoveBadBlocksAsync();
+                        }
+
+                        catch (Exception e)
+                        {
+                            return;
+                        }
+                            await nodeService.GetNewBlocksAsync();
                     }
                 }
             }

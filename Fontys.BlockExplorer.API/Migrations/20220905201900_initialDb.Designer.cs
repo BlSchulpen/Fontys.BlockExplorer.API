@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Fontys.BlockExplorer.API.Migrations
 {
     [DbContext(typeof(PostgresDatabaseContext))]
-    [Migration("20220717124933_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220905201900_initialDb")]
+    partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
