@@ -28,20 +28,28 @@
             return formated;
         }
 
-        public Task<Block> GetBlockFromHashAsync(string hash)
+        public async Task<Block> GetBlockFromHashAsync(string hash)
         {
-            throw new NotImplementedException();
+            var addition = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
+            var response = await SendMessageAsync(addition);
+            var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
+            var responseBlock = JsonConvert.DeserializeObject<Block>(json); //todo test if this works
+            return responseBlock;
         }
 
-        public Task<string> GetHashFromHeightAsync(int height)
+        public async Task<string> GetHashFromHeightAsync(int height)
         {
-            throw new NotImplementedException();
+            var addition = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
+            var response = await SendMessageAsync(addition);
+            var hash = JObject.Parse(response)["result"].ToString(Formatting.None);
+            hash = hash.Substring(1, hash.Length - 2);
+            return hash;
         }
 
         private async Task<string> SendMessageAsync(string json)
         {
-            var username = _options.Username; //TODO: azure key vault
-            var password = _options.Password;//TODO: azure key vault
+            var username = _options.Username; 
+            var password = _options.Password;
             using HttpClient client = new();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
             var response = await client.PostAsync(_options.BaseUrl ,new StringContent(json));
