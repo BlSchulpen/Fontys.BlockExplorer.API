@@ -4,6 +4,7 @@
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
     using Microsoft.Data.Sqlite;
+    using Microsoft.EntityFrameworkCore;
 
     public class ExplorerMonitoringService : INodeMonitoringService
     {
@@ -20,7 +21,12 @@
         {
             var removedBlocks = new List<Block>();
             var storedHeight = _context.Blocks.Max(x => x.Height);
+            if (storedHeight == null)
+                return removedBlocks;
+
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
+
+            
             var chainHash = await _nodeService.GetHashFromHeightAsync(storedBlock.Height);
             while (storedBlock.Hash != chainHash)
             {
