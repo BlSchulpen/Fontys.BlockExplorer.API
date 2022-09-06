@@ -3,8 +3,7 @@
     using Fontys.BlockExplorer.Data;
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
-    using Microsoft.Data.Sqlite;
-    using Microsoft.EntityFrameworkCore;
+
 
     public class ExplorerMonitoringService : INodeMonitoringService
     {
@@ -19,6 +18,7 @@
 
         public async Task<ICollection<Block>> RemoveBadBlocksAsync()
         {
+            var tes = await _nodeService.GetBestBlockHashAsync();
             var removedBlocks = new List<Block>();
             if (!_context.Blocks.Any())
                 return removedBlocks;

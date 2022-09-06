@@ -14,8 +14,9 @@ services:
     command:
       -printtoconsole
       -rpcallowip=172.17.0.0/16
+      -rpcbind=0.0.0.0
       --rpcuser=foo
       --rpcpassword="qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0="
-    expose:
-      - "8332"
-      - "8333"
+    ports:
+      - "8332:8332"
+      - "8333:8333"

@@ -21,19 +21,10 @@
                 await Task.Delay(5000, stoppingToken);
                 {
                     using (var scope = _service.CreateScope())
-                    {
-                        
+                    {                       
                         var nodeService = scope.ServiceProvider.GetRequiredService<INodeMonitoringService>();
-                        try
-                        {
-                            await nodeService.RemoveBadBlocksAsync();
-                        }
-
-                        catch (Exception e)
-                        {
-                            return;
-                        }
-                            await nodeService.GetNewBlocksAsync();
+                        await nodeService.RemoveBadBlocksAsync();
+                        await nodeService.GetNewBlocksAsync();
                     }
                 }
             }

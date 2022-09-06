@@ -12,17 +12,21 @@
 
     public class BtcCoreService : IExplorerBtcService
     {
-        private readonly btcOptions _options;
+        private readonly BtcOptions _options;
+        private static HttpClient _client;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public BtcCoreService(IOptions<btcOptions> nodeOptions)
+        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory)
         {
+            _httpClientFactory = httpClientFactory;
+            _client = _httpClientFactory.CreateClient("BtcCore");
             _options = nodeOptions.Value;
         }
 
         public async Task<string> GetBestBlockHashAsync()
         {
-            var addition = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
-            var response = await SendMessageAsync(addition);
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
+            var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var formated = json.Substring(1, json.Length - 2);
             return formated;
@@ -30,17 +34,17 @@
 
         public async Task<Block> GetBlockFromHashAsync(string hash)
         {
-            var addition = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
-            var response = await SendMessageAsync(addition);
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
+            var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
-            var responseBlock = JsonConvert.DeserializeObject<Block>(json); //todo test if this works
+            var responseBlock = JsonConvert.DeserializeObject<Block>(json); 
             return responseBlock;
         }
 
         public async Task<string> GetHashFromHeightAsync(int height)
         {
-            var addition = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
-            var response = await SendMessageAsync(addition);
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
+            var response = await SendMessageAsync(content);
             var hash = JObject.Parse(response)["result"].ToString(Formatting.None);
             hash = hash.Substring(1, hash.Length - 2);
             return hash;
@@ -48,11 +52,7 @@
 
         private async Task<string> SendMessageAsync(string json)
         {
-            var username = _options.Username; 
-            var password = _options.Password;
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
-            var response = await client.PostAsync(_options.BaseUrl ,new StringContent(json));
+            var response = await _client.PostAsync(_client.BaseAddress ,new StringContent(json));
             var content = await response.Content.ReadAsStringAsync();
             return content;
         }
