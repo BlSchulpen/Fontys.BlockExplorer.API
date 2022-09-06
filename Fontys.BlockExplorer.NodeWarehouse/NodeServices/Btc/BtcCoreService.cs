@@ -10,7 +10,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
-    public class BtcCoreService : IExplorerBtcService
+    public class BtcCoreService : INodeService
     {
         private readonly BtcOptions _options;
         private static HttpClient _client;
@@ -25,7 +25,7 @@
 
         public async Task<string> GetBestBlockHashAsync()
         {
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"; //todo improve custom content class
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var formated = json.Substring(1, json.Length - 2);
