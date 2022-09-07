@@ -10,13 +10,14 @@ services:
       - 5432:5432
       
   bitcoin-core:
-    image: ruimarinho/bitcoin-core
+    image: ruimarinho/bitcoin-core:0.17
     command:
       -printtoconsole
-      -rpcallowip=172.17.0.0/16
-      -rpcbind=0.0.0.0
+      -rest
+      -rpcallowip=::/0
+      -rpcport=8332
       --rpcuser=foo
       --rpcpassword="qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0="
+      -server
     ports:
       - "8332:8332"
-      - "8333:8333"

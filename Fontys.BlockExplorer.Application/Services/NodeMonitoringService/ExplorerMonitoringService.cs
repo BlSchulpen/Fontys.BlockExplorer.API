@@ -18,7 +18,7 @@
 
         public async Task<ICollection<Block>> RemoveBadBlocksAsync()
         {
-            var tes = await _nodeService.GetBestBlockHashAsync();
+            var tes = await _nodeService.GetBlockFromHashAsync("00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048");
             var removedBlocks = new List<Block>();
             if (!_context.Blocks.Any())
                 return removedBlocks;

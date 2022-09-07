@@ -6,6 +6,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using Fontys.BlockExplorer.Domain.Models;
+    using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
     using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -37,7 +38,16 @@
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
-            var responseBlock = JsonConvert.DeserializeObject<Block>(json); 
+            try
+            {
+                var test = JsonConvert.DeserializeObject<BtcBlockResponse>(json);
+                var test2 = 0;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+                var responseBlock = JsonConvert.DeserializeObject<Block>(json); 
             return responseBlock;
         }
 
