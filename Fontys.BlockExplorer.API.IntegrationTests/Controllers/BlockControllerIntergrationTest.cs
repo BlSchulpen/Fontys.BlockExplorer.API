@@ -23,23 +23,6 @@
             _dbContextMock = new Mock<BlockExplorerContext>();
         }
 
-        //todo maybe add new intergration test with database connectivity --> API request        
-        [Fact]
-        public void Get_Block_Existing()
-        {
-            // arrange
-            var nrBlocks = 1;
-            string hash = "0";
-            var controller = SetupController(nrBlocks);
-
-            // act
-            var response = controller.GetBlockAsync(hash);
-
-            // assert
-            var result = response.Result as OkObjectResult;
-            result.Should().NotBeNull();
-        }
-
 
         [Fact]
         public void Get_Block_Not_Found()
