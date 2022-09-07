@@ -1,9 +1,12 @@
 ﻿namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
+    using AutoMapper;
     using FluentAssertions;
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
     using Fontys.BlockExplorer.Data;
     using Fontys.BlockExplorer.Domain.Models;
+    using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
+    using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
     using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
     using Moq;
     using Moq.EntityFrameworkCore;
@@ -23,7 +26,10 @@
         {
             _nodeServiceMock = new Mock<INodeService>();
             _dbContextMock = new Mock<BlockExplorerContext>();
-            _monitoringService = new ExplorerMonitoringService(_dbContextMock.Object, _nodeServiceMock.Object);
+            var profile = new BtcProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
+            var mapper = new Mapper(configuration);
+            _monitoringService = new ExplorerMonitoringService(_dbContextMock.Object, _nodeServiceMock.Object, mapper);
         }
 
         [Fact]
@@ -32,7 +38,7 @@
             // arrange
             var blocks = MockBlocks();
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
-            SetupUpNodeService(blocks);
+            SetupUpNodeService();
 
             // act
             var removedBlocks = await _monitoringService.RemoveBadBlocksAsync();
@@ -46,7 +52,7 @@
         {
             // arrange
             var blocks = MockBlocks();
-            SetupUpNodeService(blocks);
+            SetupUpNodeService();
             var wrongBlocks = new List<Block>(blocks);
             var removeBlock = blocks.LastOrDefault();
             wrongBlocks.Remove(removeBlock);
@@ -65,7 +71,7 @@
         {
             // arrange
             var blocks = MockBlocks();
-            SetupUpNodeService(blocks);
+            SetupUpNodeService();
             var storedBlocks = new List<Block>() { blocks[0] };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
 
@@ -81,7 +87,7 @@
         {
             // arrange
             var blocks = MockBlocks();
-            SetupUpNodeService(blocks);
+            SetupUpNodeService();
             var storedBlocks = new List<Block>();
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
 
@@ -92,8 +98,9 @@
             newBlocks.Should().HaveCount(3);
         }
 
-        private void SetupUpNodeService(List<Block> blocks)
+        private void SetupUpNodeService()
         {
+            var blocks = MockBlocksResponses();
 
             _nodeServiceMock.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync((_nrBlocks - 1).ToString());
             foreach (var block in blocks)
@@ -101,6 +108,16 @@
                 _nodeServiceMock.Setup(x => x.GetBlockFromHashAsync(block.Hash)).ReturnsAsync(block);
                 _nodeServiceMock.Setup(x => x.GetHashFromHeightAsync(block.Height)).ReturnsAsync(block.Hash);
             }
+        }
+
+        private List<BtcBlockResponse> MockBlocksResponses()
+        {
+            var newBlocks = new List<BtcBlockResponse>();
+            for (int i = 0; i < _nrBlocks; i++)
+            {
+                newBlocks.Add(new BtcBlockResponse() { Height = i, Hash = i.ToString() });
+            }
+            return newBlocks;
         }
 
         private List<Block> MockBlocks()

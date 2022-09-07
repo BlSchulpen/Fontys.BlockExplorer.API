@@ -1,24 +1,25 @@
-﻿namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
+﻿using AutoMapper;
+using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Models;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+
+namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 {
-    using Fontys.BlockExplorer.Data;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
-
-
     public class ExplorerMonitoringService : INodeMonitoringService
     {
         private readonly BlockExplorerContext _context;
         private readonly INodeService _nodeService;
+        private readonly IMapper _mapper;
 
-        public ExplorerMonitoringService(BlockExplorerContext blockExplorerContext, INodeService nodeService) //TODO coins to nodes
+        public ExplorerMonitoringService(BlockExplorerContext blockExplorerContext, INodeService nodeService, IMapper mapper)
         {
             _context = blockExplorerContext;
             _nodeService = nodeService;
+            _mapper = mapper;
         }
 
         public async Task<ICollection<Block>> RemoveBadBlocksAsync()
         {
-            var tes = await _nodeService.GetBlockFromHashAsync("00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048");
             var removedBlocks = new List<Block>();
             if (!_context.Blocks.Any())
                 return removedBlocks;
@@ -43,8 +44,10 @@
             var newBlocks = new List<Block>();
             var storedHeight = await InitialBlockHeight(newBlocks);
             var chainHash = await _nodeService.GetBestBlockHashAsync();
-            var chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
-            while (storedHeight < chainBlock.Height && _context.Blocks.Count() < chainBlock.Height)
+            var chainBlockResponse = await _nodeService.GetBlockFromHashAsync(chainHash);
+            var chainBlock = _mapper.Map<Block>(chainBlockResponse);
+            var newHeight = chainBlock.Height;
+            while (storedHeight < chainBlock.Height && _context.Blocks.Count() < newHeight)
             {
                 if (!_context.Blocks.Any(b => b.Height == chainBlock.Height))
                 {
@@ -53,7 +56,9 @@
                     await _context.SaveChangesAsync();
                 }
                 chainHash = await _nodeService.GetHashFromHeightAsync(chainBlock.Height - 1);
-                chainBlock = await _nodeService.GetBlockFromHashAsync(chainHash);
+                chainBlockResponse = await _nodeService.GetBlockFromHashAsync(chainHash);
+                chainBlock = _mapper.Map<Block>(chainBlockResponse);
+                var test = _context.Blocks.Count(); 
             }
             return newBlocks;
         }
@@ -64,7 +69,9 @@
             {
                 var initialHeight = 0;
                 var initialHash = await _nodeService.GetHashFromHeightAsync(initialHeight);
-                var initialBlock = await _nodeService.GetBlockFromHashAsync(initialHash);
+                var initialBlockResponse = await _nodeService.GetBlockFromHashAsync(initialHash);
+                var initialBlock = _mapper.Map<Block>(initialBlockResponse);
+
                 _context.Blocks.Add(initialBlock);
                 await _context.SaveChangesAsync();
                 newBlocks.Add(initialBlock);

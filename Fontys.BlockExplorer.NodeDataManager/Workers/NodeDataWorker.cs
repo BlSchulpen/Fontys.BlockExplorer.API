@@ -1,9 +1,7 @@
 ﻿namespace Fontys.BlockExplorer.NodeDataManager.Workers
 {
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
-    using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
     using Microsoft.Extensions.Hosting;
-    using System.Collections.Specialized;
 
     public class NodeDataWorker : BackgroundService
     {

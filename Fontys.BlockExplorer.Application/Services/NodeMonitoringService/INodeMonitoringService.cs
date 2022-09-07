@@ -1,8 +1,8 @@
-﻿namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
-{
-    using Fontys.BlockExplorer.Domain.Models;
-    using System.Threading.Tasks;
-    
+﻿using Fontys.BlockExplorer.Domain.Models;
+using System.Threading.Tasks;
+
+namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
+{   
     public interface INodeMonitoringService
     {
         Task<ICollection<Block>> RemoveBadBlocksAsync();

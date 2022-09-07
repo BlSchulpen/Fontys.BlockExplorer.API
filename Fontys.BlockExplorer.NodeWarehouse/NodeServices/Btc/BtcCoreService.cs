@@ -6,26 +6,24 @@
     using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
     using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-    using static System.Net.Mime.MediaTypeNames;
 
     public class BtcCoreService : INodeService
     {
         private readonly BtcOptions _options;
         private static HttpClient _client;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IMapper _mapper; //TODO add the automappers in the application layer....
 
-        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory, IMapper mapper)
+        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
             _client = _httpClientFactory.CreateClient("BtcCore");
             _options = nodeOptions.Value;
-            _mapper = mapper;   
         }
 
         public async Task<string> GetBestBlockHashAsync()
@@ -37,25 +35,13 @@
             return formated;
         }
 
-        public async Task<Block> GetBlockFromHashAsync(string hash)
+        public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            var test2 = new Source() { Hash = "test",Height =1, Previousblockhash= "test", Tx = new List<SourceAddition>() { new SourceAddition() { Hash = "Test123" } } };
-            var test3 = _mapper.Map<Destination>(test2);
-
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
-            try
-            {
-                var test = JsonConvert.DeserializeObject<BtcBlockResponse>(json);
-                _mapper.Map<Block>(test);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-                var responseBlock = JsonConvert.DeserializeObject<Block>(json); 
-            return responseBlock;
+            var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);  
+            return responseObject;
         }
 
         public async Task<string> GetHashFromHeightAsync(int height)

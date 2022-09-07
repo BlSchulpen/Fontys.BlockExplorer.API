@@ -1,10 +1,10 @@
-﻿namespace Fontys.BlockExplorer.Application.Services.TxService
-{
-    using Fontys.BlockExplorer.Data;
-    using Fontys.BlockExplorer.Domain.CQS;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Microsoft.EntityFrameworkCore;
+﻿using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.CQS;
+using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
+namespace Fontys.BlockExplorer.Application.Services.TxService
+{
     public class ExplorerTxService : ITxService
     {
         private readonly BlockExplorerContext _blockExplorerContext;

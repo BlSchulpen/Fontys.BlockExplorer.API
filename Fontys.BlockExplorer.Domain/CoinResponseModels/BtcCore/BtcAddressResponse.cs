@@ -2,5 +2,6 @@
 {
     public class BtcAddressResponse
     {
+        public string Hash { get; set; }
     }
 }
