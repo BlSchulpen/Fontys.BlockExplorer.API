@@ -8,6 +8,7 @@
         [Key]
         public string Hash { get; set; }
 
+
         [Required]
         public int Height { get; set; }
 

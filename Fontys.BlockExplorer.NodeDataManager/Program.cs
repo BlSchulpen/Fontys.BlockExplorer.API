@@ -1,6 +1,8 @@
+using AutoMapper;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Data.PostgresDb;
+using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeDataManager.Workers;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
@@ -18,6 +20,9 @@ builder.Services.AddScoped<INodeService, BtcCoreService>();
 builder.Services.AddScoped<INodeMonitoringService, ExplorerMonitoringService>();
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreConnection"), b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
 builder.Services.AddHostedService<NodeDataWorker>();
+
+// Automappers
+builder.Services.AddAutoMapper(typeof(BtcProfile));
 
 // Http Clients
 builder.Services.AddHttpClient("BtcCore", httpClient =>

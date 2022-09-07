@@ -5,23 +5,27 @@
     using System.Net.Http.Headers;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
     using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using static System.Net.Mime.MediaTypeNames;
 
     public class BtcCoreService : INodeService
     {
         private readonly BtcOptions _options;
         private static HttpClient _client;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IMapper _mapper; //TODO add the automappers in the application layer....
 
-        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory)
+        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _client = _httpClientFactory.CreateClient("BtcCore");
             _options = nodeOptions.Value;
+            _mapper = mapper;   
         }
 
         public async Task<string> GetBestBlockHashAsync()
@@ -35,13 +39,16 @@
 
         public async Task<Block> GetBlockFromHashAsync(string hash)
         {
+            var test2 = new Source() { Hash = "test",Height =1, Previousblockhash= "test", Tx = new List<SourceAddition>() { new SourceAddition() { Hash = "Test123" } } };
+            var test3 = _mapper.Map<Destination>(test2);
+
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             try
             {
                 var test = JsonConvert.DeserializeObject<BtcBlockResponse>(json);
-                var test2 = 0;
+                _mapper.Map<Block>(test);
             }
             catch (Exception e)
             {
