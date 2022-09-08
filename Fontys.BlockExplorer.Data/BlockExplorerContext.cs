@@ -40,7 +40,10 @@
             builder.Entity<Transaction>()
                 .HasMany(x => x.Inputs);
 
-            builder.Entity<Transfer>()
+            builder.Entity<TxInput>()
+                .HasOne(x => x.Address);
+
+            builder.Entity<TxOutput>()
                 .HasOne(x => x.Address);
         }
     }

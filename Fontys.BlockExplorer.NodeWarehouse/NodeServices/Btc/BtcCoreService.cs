@@ -47,7 +47,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
         {
             var returnObject = true; //block data with transaction data - todo custom class 
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString() + "]}";
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcTransactionResponse>(json);

@@ -53,24 +53,49 @@ namespace Fontys.BlockExplorer.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transfer",
+                name: "TxInputs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Value = table.Column<long>(type: "bigint", nullable: false),
-                    AddressHash = table.Column<string>(type: "text", nullable: true),
-                    TransactionHash = table.Column<string>(type: "text", nullable: true)
+                    IsNewlyGenerated = table.Column<bool>(type: "boolean", nullable: false),
+                    TransactionHash = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<double>(type: "double precision", nullable: false),
+                    AddressHash = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transfer", x => x.Id);
+                    table.PrimaryKey("PK_TxInputs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transfer_Addresses_AddressHash",
+                        name: "FK_TxInputs_Addresses_AddressHash",
                         column: x => x.AddressHash,
                         principalTable: "Addresses",
                         principalColumn: "Hash");
                     table.ForeignKey(
-                        name: "FK_Transfer_Transactions_TransactionHash",
+                        name: "FK_TxInputs_Transactions_TransactionHash",
+                        column: x => x.TransactionHash,
+                        principalTable: "Transactions",
+                        principalColumn: "Hash");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TxOutputs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TransactionHash = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<double>(type: "double precision", nullable: false),
+                    AddressHash = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TxOutputs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TxOutputs_Addresses_AddressHash",
+                        column: x => x.AddressHash,
+                        principalTable: "Addresses",
+                        principalColumn: "Hash");
+                    table.ForeignKey(
+                        name: "FK_TxOutputs_Transactions_TransactionHash",
                         column: x => x.TransactionHash,
                         principalTable: "Transactions",
                         principalColumn: "Hash");
@@ -82,20 +107,33 @@ namespace Fontys.BlockExplorer.API.Migrations
                 column: "BlockHash");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transfer_AddressHash",
-                table: "Transfer",
+                name: "IX_TxInputs_AddressHash",
+                table: "TxInputs",
                 column: "AddressHash");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transfer_TransactionHash",
-                table: "Transfer",
+                name: "IX_TxInputs_TransactionHash",
+                table: "TxInputs",
+                column: "TransactionHash");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TxOutputs_AddressHash",
+                table: "TxOutputs",
+                column: "AddressHash");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TxOutputs_TransactionHash",
+                table: "TxOutputs",
                 column: "TransactionHash");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Transfer");
+                name: "TxInputs");
+
+            migrationBuilder.DropTable(
+                name: "TxOutputs");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

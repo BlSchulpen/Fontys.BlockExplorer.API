@@ -2,8 +2,8 @@
 {
     public class BtcOutputResponse
     {
-        public long Value { get; set; }
+        public double Value { get; set; }
         public int N { get; set; } //todo maybe consider somehow mapping this...
-        public BtcAddressResponse Address { get; set; } 
+        public BtcScriptPubKeyResponse ScriptPubKey { get; set; }
     }
 }

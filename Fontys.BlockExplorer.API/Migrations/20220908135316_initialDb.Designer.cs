@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Fontys.BlockExplorer.API.Migrations
 {
     [DbContext(typeof(PostgresDatabaseContext))]
-    [Migration("20220908111721_initialDb")]
+    [Migration("20220908135316_initialDb")]
     partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,7 +71,34 @@ namespace Fontys.BlockExplorer.API.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transfer", b =>
+            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.TxInput", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AddressHash")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsNewlyGenerated")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("TransactionHash")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressHash");
+
+                    b.HasIndex("TransactionHash");
+
+                    b.ToTable("TxInputs");
+                });
+
+            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.TxOutput", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,8 +110,8 @@ namespace Fontys.BlockExplorer.API.Migrations
                     b.Property<string>("TransactionHash")
                         .HasColumnType("text");
 
-                    b.Property<long>("Value")
-                        .HasColumnType("bigint");
+                    b.Property<double>("Value")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -92,7 +119,7 @@ namespace Fontys.BlockExplorer.API.Migrations
 
                     b.HasIndex("TransactionHash");
 
-                    b.ToTable("Transfer");
+                    b.ToTable("TxOutputs");
                 });
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>
@@ -102,14 +129,27 @@ namespace Fontys.BlockExplorer.API.Migrations
                         .HasForeignKey("BlockHash");
                 });
 
-            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transfer", b =>
+            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.TxInput", b =>
                 {
                     b.HasOne("Fontys.BlockExplorer.Domain.Models.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressHash");
 
                     b.HasOne("Fontys.BlockExplorer.Domain.Models.Transaction", null)
-                        .WithMany("Transfers")
+                        .WithMany("Inputs")
+                        .HasForeignKey("TransactionHash");
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.TxOutput", b =>
+                {
+                    b.HasOne("Fontys.BlockExplorer.Domain.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressHash");
+
+                    b.HasOne("Fontys.BlockExplorer.Domain.Models.Transaction", null)
+                        .WithMany("Outputs")
                         .HasForeignKey("TransactionHash");
 
                     b.Navigation("Address");
@@ -122,7 +162,9 @@ namespace Fontys.BlockExplorer.API.Migrations
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>
                 {
-                    b.Navigation("Transfers");
+                    b.Navigation("Inputs");
+
+                    b.Navigation("Outputs");
                 });
 #pragma warning restore 612, 618
         }

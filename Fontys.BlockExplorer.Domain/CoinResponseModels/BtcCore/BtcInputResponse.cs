@@ -8,8 +8,8 @@
 
         //========================================
         //TODO should be removed from response --> never expect Value and addres has to be set manually, consider adding a new DTO
-        public long? Value { get; set; }
-        public BtcAddressResponse? Address { get; set; }
+        public double? Value { get; set; }
+        public List<string>? Addresses { get; set; }
 
     }
 }

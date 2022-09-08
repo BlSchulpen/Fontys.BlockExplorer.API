@@ -19,7 +19,8 @@ namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
                 .ForMember(dest => dest.Outputs, act => act.MapFrom(src => src.Vout)); //TODO Sepreate Vin and vout destination object: so that automapper works and to indicate if from coin base
             CreateMap<BtcInputResponse, TxInput>()
                      .ForMember(dest => dest.IsNewlyGenerated, act => act.MapFrom(src => src.Coinbase != null));
-            CreateMap<BtcOutputResponse, TxOutput>();
+            CreateMap<BtcOutputResponse, TxOutput>()
+                    .ForMember(dest => dest.Address, act => act.MapFrom(src => new Address() { Hash = src.ScriptPubKey.Addresses[0] })); //todo maybe add a null check? or do mappers ignore null anyway
             CreateMap<BtcAddressResponse, Address>();
         }
     }

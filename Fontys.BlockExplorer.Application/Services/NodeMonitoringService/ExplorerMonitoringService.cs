@@ -42,27 +42,32 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         public async Task<ICollection<Block>> GetNewBlocksAsync()
         {
-            var newBlocks = new List<Block>();
-            var storedHeight = await InitialBlockHeight(newBlocks);
-            var chainHash = await _nodeService.GetBestBlockHashAsync();
-            var chainBlockResponse = await _nodeService.GetBlockFromHashAsync(chainHash);
-            var chainBlock = _mapper.Map<Block>(chainBlockResponse);
-            var newHeight = chainBlock.Height;
-            while (storedHeight < chainBlock.Height && _context.Blocks.Count() < newHeight)
+            try
             {
-                if (!_context.Blocks.Any(b => b.Height == chainBlock.Height))
+                var newBlocks = new List<Block>();
+                var storedHeight = await InitialBlockHeight(newBlocks);
+                var chainHash = await _nodeService.GetBestBlockHashAsync();
+                var chainBlock = await GetBlockAsync(chainHash);
+                var newHeight = chainBlock.Height;
+                while (storedHeight < chainBlock.Height && _context.Blocks.Count() < newHeight)
                 {
-                    _context.Add(chainBlock);
-                    newBlocks.Add(chainBlock);
-                    await _context.SaveChangesAsync();
+                    if (!_context.Blocks.Any(b => b.Height == chainBlock.Height))
+                    {
+                        _context.Add(chainBlock);
+                        newBlocks.Add(chainBlock);
+                        await _context.SaveChangesAsync();
+                    }
+                    chainHash = await _nodeService.GetHashFromHeightAsync(chainBlock.Height - 1);
+                    chainBlock = chainBlock = await GetBlockAsync(chainHash);
                 }
-                chainHash = await _nodeService.GetHashFromHeightAsync(chainBlock.Height - 1);
-                chainBlockResponse = await _nodeService.GetBlockFromHashAsync(chainHash);
-                chainBlock = _mapper.Map<Block>(chainBlockResponse);
-                var test = _context.Blocks.Count(); 
+                return newBlocks;
             }
-            return newBlocks;
-        }
+            catch (Exception e)
+            {
+                var test = 0;
+                throw;
+            }
+         }
 
         private async Task<int> InitialBlockHeight(ICollection<Block> newBlocks)
         {
@@ -70,8 +75,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             {
                 var initialHeight = 0;
                 var initialHash = await _nodeService.GetHashFromHeightAsync(initialHeight);
-                var initialBlockResponse = await _nodeService.GetBlockFromHashAsync(initialHash);
-                var initialBlock = _mapper.Map<Block>(initialBlockResponse);
+                var initialBlock = await GetBlockAsync(initialHash);
                 _context.Blocks.Add(initialBlock);
                 await _context.SaveChangesAsync();
                 newBlocks.Add(initialBlock);
@@ -83,19 +87,20 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         //todo this should be a lot easier to read
         //TODO IMPROVE CODE QUALITY
-        private async Task<Block> GetBlock(string hash)
+        //TODO UNIT TEST
+        private async Task<Block> GetBlockAsync(string hash) //todo check if address excists...
         {
             var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
             foreach (var transaction in blockResponse.Tx)
             {
                 var usedIndexes = new List<int>();
-                foreach (var input in transaction.Vin)
+                foreach (var input in transaction.Vin.Where(t => t.TxId != null))
                 {
                     var rawTransaction = await _nodeService.GetRawTransactionAsync(input.TxId);
                     var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
                     if (usedOutput != null)
                     {
-                        input.Address = usedOutput.Address;
+                        input.Addresses = usedOutput.ScriptPubKey.Addresses;
                         input.Value = usedOutput.Value;
                     }
                 }
