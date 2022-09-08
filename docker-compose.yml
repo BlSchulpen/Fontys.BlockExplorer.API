@@ -13,6 +13,7 @@ services:
     image: ruimarinho/bitcoin-core:0.17
     command:
       -printtoconsole
+      -txindex=1
       -rest
       -rpcallowip=::/0
       -rpcport=8332

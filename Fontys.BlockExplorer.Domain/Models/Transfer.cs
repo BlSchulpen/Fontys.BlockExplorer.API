@@ -11,9 +11,6 @@
         [Required]
         public long Value { get; set; }
 
-        [Required]
-        public TransferType TransferType { get; set;}
-
 //       [Required]
         public virtual Address? Address { get; set; }   //todo change to required
     }

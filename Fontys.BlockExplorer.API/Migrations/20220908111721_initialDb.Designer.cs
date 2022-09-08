@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Fontys.BlockExplorer.API.Migrations
 {
     [DbContext(typeof(PostgresDatabaseContext))]
-    [Migration("20220908090326_initialDb")]
+    [Migration("20220908111721_initialDb")]
     partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,9 +83,6 @@ namespace Fontys.BlockExplorer.API.Migrations
                     b.Property<string>("TransactionHash")
                         .HasColumnType("text");
 
-                    b.Property<int>("TransferType")
-                        .HasColumnType("integer");
-
                     b.Property<long>("Value")
                         .HasColumnType("bigint");
 
@@ -95,7 +92,7 @@ namespace Fontys.BlockExplorer.API.Migrations
 
                     b.HasIndex("TransactionHash");
 
-                    b.ToTable("Transfers");
+                    b.ToTable("Transfer");
                 });
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>

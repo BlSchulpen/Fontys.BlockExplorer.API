@@ -81,9 +81,6 @@ namespace Fontys.BlockExplorer.API.Migrations
                     b.Property<string>("TransactionHash")
                         .HasColumnType("text");
 
-                    b.Property<int>("TransferType")
-                        .HasColumnType("integer");
-
                     b.Property<long>("Value")
                         .HasColumnType("bigint");
 
@@ -93,7 +90,7 @@ namespace Fontys.BlockExplorer.API.Migrations
 
                     b.HasIndex("TransactionHash");
 
-                    b.ToTable("Transfers");
+                    b.ToTable("Transfer");
                 });
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>

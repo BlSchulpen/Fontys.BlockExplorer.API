@@ -57,7 +57,7 @@
             var newBlocks = new List<Block>();
             for (int i = 0; i < nrTransactions; i++)
             {
-                var transaction = new Transaction() { Hash = "0", Transfers = new List<Transfer>() };
+                var transaction = new Transaction() { Hash = "0", Inputs = new List<TxInput>(), Outputs = new List<TxOutput>() };
                 var transactions = new List<Transaction>() { transaction };
                 newBlocks.Add(new Block() { Height = i, Hash = i.ToString(), Transactions = transactions });
             }

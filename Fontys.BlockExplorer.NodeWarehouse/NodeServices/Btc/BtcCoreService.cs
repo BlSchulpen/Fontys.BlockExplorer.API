@@ -1,4 +1,5 @@
-﻿using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
+using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -26,7 +27,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
+            var verbosity = 2; //block data with transaction data - todo custom class 
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity.ToString() + "]}"; 
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);  
@@ -40,6 +42,16 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var hash = JObject.Parse(response)["result"].ToString(Formatting.None);
             hash = hash.Substring(1, hash.Length - 2);
             return hash;
+        }
+
+        public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
+        {
+            var returnObject = true; //block data with transaction data - todo custom class 
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString() + "]}";
+            var response = await SendMessageAsync(content);
+            var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
+            var responseObject = JsonConvert.DeserializeObject<BtcTransactionResponse>(json);
+            return responseObject;
         }
 
         private async Task<string> SendMessageAsync(string json)

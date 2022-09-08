@@ -15,12 +15,11 @@ namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
                 .ForMember(dest => dest.CoinType, act => act.MapFrom(src => CoinType.BTC))
                 .ForMember(dest => dest.NetworkType, act => act.MapFrom(src => NetworkType.BtcMainet));
             CreateMap<BtcTransactionResponse, Transaction>()
-                .ForMember(dest => dest.Transfers, act => act.MapFrom(src => src.Vin))
-                .ForMember(dest => dest.Transfers, act => act.MapFrom(src => src.Vout)); //TODO Sepreate Vin and vout destination object: so that automapper works and to indicate if from coin base
-            CreateMap<BtcInputResponse, Transfer>()
-                     .ForMember(dest => dest.TransferType, act => act.MapFrom(src => TransferType.Input));
-            CreateMap<BtcOutputResponse, Transfer>()
-                     .ForMember(dest => dest.TransferType, act => act.MapFrom(src => TransferType.Output));
+                .ForMember(dest => dest.Inputs, act => act.MapFrom(src => src.Vin))
+                .ForMember(dest => dest.Outputs, act => act.MapFrom(src => src.Vout)); //TODO Sepreate Vin and vout destination object: so that automapper works and to indicate if from coin base
+            CreateMap<BtcInputResponse, TxInput>()
+                     .ForMember(dest => dest.IsNewlyGenerated, act => act.MapFrom(src => src.Coinbase != null));
+            CreateMap<BtcOutputResponse, TxOutput>();
             CreateMap<BtcAddressResponse, Address>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 
@@ -78,6 +79,29 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             }
             var storedHeight = _context.Blocks.Max(x => x.Height);
             return storedHeight;
+        }
+
+        //todo this should be a lot easier to read
+        //TODO IMPROVE CODE QUALITY
+        private async Task<Block> GetBlock(string hash)
+        {
+            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
+            foreach (var transaction in blockResponse.Tx)
+            {
+                var usedIndexes = new List<int>();
+                foreach (var input in transaction.Vin)
+                {
+                    var rawTransaction = await _nodeService.GetRawTransactionAsync(input.TxId);
+                    var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
+                    if (usedOutput != null)
+                    {
+                        input.Address = usedOutput.Address;
+                        input.Value = usedOutput.Value;
+                    }
+                }
+            }
+            var block = _mapper.Map<Block>(blockResponse);
+            return block;
         }
     }
 }
