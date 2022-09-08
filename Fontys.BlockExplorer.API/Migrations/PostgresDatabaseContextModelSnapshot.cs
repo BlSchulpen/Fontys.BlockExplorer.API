@@ -46,7 +46,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                     b.Property<int>("NetworkType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PreviousHash")
+                    b.Property<string>("PreviousBlockHash")
                         .HasColumnType("text");
 
                     b.HasKey("Hash");
@@ -76,11 +76,13 @@ namespace Fontys.BlockExplorer.API.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("AddressHash")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("TransactionHash")
                         .HasColumnType("text");
+
+                    b.Property<int>("TransferType")
+                        .HasColumnType("integer");
 
                     b.Property<long>("Value")
                         .HasColumnType("bigint");
@@ -105,9 +107,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                 {
                     b.HasOne("Fontys.BlockExplorer.Domain.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressHash")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressHash");
 
                     b.HasOne("Fontys.BlockExplorer.Domain.Models.Transaction", null)
                         .WithMany("Transfers")

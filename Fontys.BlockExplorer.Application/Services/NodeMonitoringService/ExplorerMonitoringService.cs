@@ -71,7 +71,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                 var initialHash = await _nodeService.GetHashFromHeightAsync(initialHeight);
                 var initialBlockResponse = await _nodeService.GetBlockFromHashAsync(initialHash);
                 var initialBlock = _mapper.Map<Block>(initialBlockResponse);
-
                 _context.Blocks.Add(initialBlock);
                 await _context.SaveChangesAsync();
                 newBlocks.Add(initialBlock);

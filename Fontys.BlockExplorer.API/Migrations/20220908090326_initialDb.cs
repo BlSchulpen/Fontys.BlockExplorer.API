@@ -26,7 +26,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                 {
                     Hash = table.Column<string>(type: "text", nullable: false),
                     Height = table.Column<int>(type: "integer", nullable: false),
-                    PreviousHash = table.Column<string>(type: "text", nullable: true),
+                    PreviousBlockHash = table.Column<string>(type: "text", nullable: true),
                     CoinType = table.Column<int>(type: "integer", nullable: false),
                     NetworkType = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -58,7 +58,8 @@ namespace Fontys.BlockExplorer.API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Value = table.Column<long>(type: "bigint", nullable: false),
-                    AddressHash = table.Column<string>(type: "text", nullable: false),
+                    TransferType = table.Column<int>(type: "integer", nullable: false),
+                    AddressHash = table.Column<string>(type: "text", nullable: true),
                     TransactionHash = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -68,8 +69,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                         name: "FK_Transfers_Addresses_AddressHash",
                         column: x => x.AddressHash,
                         principalTable: "Addresses",
-                        principalColumn: "Hash",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Hash");
                     table.ForeignKey(
                         name: "FK_Transfers_Transactions_TransactionHash",
                         column: x => x.TransactionHash,

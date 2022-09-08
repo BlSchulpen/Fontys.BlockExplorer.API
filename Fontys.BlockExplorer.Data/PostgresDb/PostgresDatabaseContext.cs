@@ -8,11 +8,17 @@
     {
         private readonly string _connectionString;
 
-        public PostgresDatabaseContext(IOptions<PostgresDbOptions> options) 
+        public PostgresDatabaseContext(DbContextOptions options, IOptions<PostgresDbOptions> postgresDbOptions) : base(options)
+        {
+            _connectionString = postgresDbOptions.Value.ConnectionsString;
+        }
+
+        public PostgresDatabaseContext(IOptions<PostgresDbOptions> options)
         {
             _connectionString = options.Value.ConnectionsString;
         }
-   
+
+
         public PostgresDatabaseContext()
         {
         }

@@ -12,7 +12,7 @@
         [Required]
         public int Height { get; set; }
 
-        public string? Previousblockhash { get; set; }
+        public string? PreviousBlockHash { get; set; }
 
         [Required]
         public CoinType CoinType { get; set; }
