@@ -14,11 +14,13 @@ services:
     command:
       -printtoconsole
       -txindex=1
+      -testnet=1
       -rest
-      -rpcallowip=::/0
-      -rpcport=8332
+      -rpcallowip=192.168.178.87
+      -rpcallowip=172.17.0.0/16
+      -rpcport=18332
       --rpcuser=foo
       --rpcpassword="qDDZdeQ5vw9XXFeVnXT4PZ--tGN2xNjjR4nrtyszZx0="
       -server
     ports:
-      - "8332:8332"
+      - "18332:18332"
