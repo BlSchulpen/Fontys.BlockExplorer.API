@@ -18,13 +18,13 @@
     public class BlockServiceTest
     {
         private readonly ExplorerMonitoringService _monitoringService;
-        private readonly Mock<INodeService> _nodeServiceMock;
+        private readonly Mock<IBtcNodeService> _nodeServiceMock;
         private readonly Mock<BlockExplorerContext> _dbContextMock;
         private readonly int _nrBlocks = 3;
 
         public BlockServiceTest()
         {
-            _nodeServiceMock = new Mock<INodeService>();
+            _nodeServiceMock = new Mock<IBtcNodeService>();
             _dbContextMock = new Mock<BlockExplorerContext>();
             var profile = new BtcProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));

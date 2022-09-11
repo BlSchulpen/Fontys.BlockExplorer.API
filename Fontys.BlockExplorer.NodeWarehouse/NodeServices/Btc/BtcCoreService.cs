@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
-    public class BtcCoreService : INodeService
+    public class BtcCoreService : IBtcNodeService
     {
         private static HttpClient _client;
         private readonly IHttpClientFactory _httpClientFactory;

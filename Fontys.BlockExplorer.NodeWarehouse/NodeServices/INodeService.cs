@@ -4,7 +4,7 @@
     using Fontys.BlockExplorer.Domain.Models;
     using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
 
-    public interface INodeService
+    public interface IBtcNodeService
     {
         Task<string> GetBestBlockHashAsync();
         Task<string> GetHashFromHeightAsync(int height);
