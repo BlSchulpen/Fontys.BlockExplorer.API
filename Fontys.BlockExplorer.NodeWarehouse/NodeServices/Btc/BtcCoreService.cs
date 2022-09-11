@@ -1,29 +1,19 @@
-﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
-{
-    using System;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
-    using Microsoft.Extensions.Options;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
+using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
+namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
+{
     public class BtcCoreService : INodeService
     {
-        private readonly BtcOptions _options;
         private static HttpClient _client;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public BtcCoreService(IOptions<BtcOptions> nodeOptions, IHttpClientFactory httpClientFactory)
+        public BtcCoreService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
             _client = _httpClientFactory.CreateClient("BtcCore");
-            _options = nodeOptions.Value;
         }
 
         public async Task<string> GetBestBlockHashAsync()
@@ -37,7 +27,8 @@
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\",2]}";
+            var verbosity = 2; //block data with transaction data - todo custom class 
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity.ToString() + "]}"; 
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);  
@@ -51,6 +42,16 @@
             var hash = JObject.Parse(response)["result"].ToString(Formatting.None);
             hash = hash.Substring(1, hash.Length - 2);
             return hash;
+        }
+
+        public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
+        {
+            var returnObject = true; //block data with transaction data - todo custom class 
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
+            var response = await SendMessageAsync(content);
+            var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
+            var responseObject = JsonConvert.DeserializeObject<BtcTransactionResponse>(json);
+            return responseObject;
         }
 
         private async Task<string> SendMessageAsync(string json)

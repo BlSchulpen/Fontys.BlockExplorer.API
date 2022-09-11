@@ -16,14 +16,15 @@
         
         public virtual DbSet<Transaction> Transactions { get; set; }
 
-        public virtual DbSet<Transfer> Transfers { get; set; }
+        public virtual DbSet<TxInput> TxInputs { get; set; }
+        public virtual DbSet<TxOutput> TxOutputs { get; set; }
+
 
         public virtual DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-       //    string _connectionString = "User ID=postgres;Password=Explorer;Host=localhost;Port=5432;Database=ExplorerDb;";
-       //    dbContextOptionsBuilder.UseNpgsql(_connectionString);
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -34,9 +35,15 @@
                 .HasMany(x => x.Transactions);
             
             builder.Entity<Transaction>()
-                .HasMany(x => x.Transfers);
-            
-            builder.Entity<Transfer>()
+                .HasMany(x => x.Outputs);
+
+            builder.Entity<Transaction>()
+                .HasMany(x => x.Inputs);
+
+            builder.Entity<TxInput>()
+                .HasOne(x => x.Address);
+
+            builder.Entity<TxOutput>()
                 .HasOne(x => x.Address);
         }
     }
