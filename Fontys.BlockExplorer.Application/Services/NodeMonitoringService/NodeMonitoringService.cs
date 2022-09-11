@@ -81,9 +81,16 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         private async Task StoreBlockAsync(Block block)
         {
-            await _addressRestoreService.RestoreAddressesAsync(block);
-            _context.Blocks.Add(block);
-            await _context.SaveChangesAsync();
-        }
+            try
+            {
+                await _addressRestoreService.RestoreAddressesAsync(block);
+                _context.Blocks.Add(block);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+         }
     }
 }

@@ -1,25 +1,45 @@
 using AutoMapper;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
+using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
-using Fontys.BlockExplorer.Application.Services.NodeMonitoringService.Coins;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Data.PostgresDb;
+using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeDataManager.Workers;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Security.Cryptography;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Inject provider types
+builder.Services.AddScoped<BtcBlockProviderService>();
+
+builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService>>(blockProviderType => key =>
+{
+    switch (key)
+    {
+        case CoinType.BTC:
+            return blockProviderType.GetService<BtcBlockProviderService>();
+        default:
+            return null;
+    }
+});
 
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.Configure<PostgresDbOptions>(builder.Configuration.GetRequiredSection(nameof(PostgresDbOptions)));
 builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
-builder.Services.AddScoped<INodeMonitoringService, BtcMonitoringService>();
+builder.Services.AddScoped<INodeMonitoringService, NodeMonitoringService>();
+builder.Services.AddScoped<IAddressRestoreService, AddressRestoreService>();
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
 builder.Services.AddHostedService<NodeDataWorker>();
+
+
 
 // Automappers
 builder.Services.AddAutoMapper(typeof(BtcProfile));

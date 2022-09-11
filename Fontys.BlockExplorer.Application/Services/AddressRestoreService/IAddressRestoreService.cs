@@ -4,6 +4,6 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 {
     public interface IAddressRestoreService
     {
-        Task RestoreAddressesAsync(Block block);
+        Task<List<Address>> RestoreAddressesAsync(Block block);
     }
 }
