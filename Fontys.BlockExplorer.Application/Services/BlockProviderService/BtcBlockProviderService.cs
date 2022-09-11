@@ -4,7 +4,7 @@ using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
-    public class BtcBlockProviderService : IBlockProviderService
+    public class BtcBlockProviderService : IBlockDataProviderService
     {
         private readonly IBtcNodeService _nodeService;
         private readonly IMapper _mapper;
@@ -13,6 +13,12 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         {
             _nodeService = nodeService;
             _mapper = mapper;
+        }
+
+        public async Task<string> GetBestBlockHashAsync()
+        {
+            var hash = await _nodeService.GetBestBlockHashAsync();
+            return hash;
         }
 
         public async Task<Block> GetBlockAsync(string hash)
@@ -34,6 +40,12 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             }
             var block = _mapper.Map<Block>(blockResponse);
             return block;
+        }
+
+        public async Task<string> GetHashFromHeightAsync(int height)
+        {
+            var hash = await _nodeService.GetHashFromHeightAsync(height);
+            return hash;
         }
     }
 }
