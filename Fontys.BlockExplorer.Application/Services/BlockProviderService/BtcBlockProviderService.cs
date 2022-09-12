@@ -23,7 +23,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 
         public async Task<Block> GetBlockAsync(string hash)
         {
-            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
+            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash); //todo check if null
             foreach (var transaction in blockResponse.Tx)
             {
                 var usedIndexes = new List<int>();

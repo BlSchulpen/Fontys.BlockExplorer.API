@@ -28,10 +28,14 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
                 .ToList();
             var distinctAddressesHashes = distinctAddresses.Select(a => a.Hash).ToList();
             var alreadyStoredAddresses = _context.Addresses.Where(a => distinctAddressesHashes.Contains(a.Hash)).ToList();
-            var alreadyStoredAddressesHashes = alreadyStoredAddresses.Select(a => a.Hash); //address hashes in both new addresses and context --> do not add
+            var alreadyStoredAddressesHashes = alreadyStoredAddresses.Select(a => a.Hash).ToList(); ; //address hashes in both new addresses and context --> do not add
             var newAddressesHashes = distinctAddressesHashes.Except(alreadyStoredAddressesHashes).ToList();
             var newAddresses = addresses.Where(a => newAddressesHashes.Contains(a.Hash)).ToList();
-            foreach (var a in newAddresses)
+            var distinctNewAddresses = newAddresses
+                .GroupBy(i => i.Hash)
+                .Select(i => i.First())
+                .ToList();
+            foreach (var a in distinctNewAddresses)
             {
                 _context.Addresses.Add(a);
                 await _context.SaveChangesAsync();
@@ -46,7 +50,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             {
                 output.Address = _context.Addresses.FirstOrDefault(x => x.Hash == output.Address.Hash);
             }
-            return newAddresses;
+            return distinctNewAddresses;
         }
     }
 }

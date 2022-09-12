@@ -6,7 +6,7 @@
 
         public int Height { get; init; }
 
-        public string? PreviousHash { get; init; }
+        public string? PreviousBlockHash { get; init; }
 
         public virtual ICollection<TransactionResponse> Transactions { get; init; }
     }

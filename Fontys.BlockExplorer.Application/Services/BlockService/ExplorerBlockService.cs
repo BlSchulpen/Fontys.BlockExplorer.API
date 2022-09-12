@@ -17,7 +17,15 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
         public async Task<Block?> GetBlockAsync(GetBlockCommand command)
         {
             var hash = command.Hash;
-            var stored = await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash);
+            var stored = await _blockExplorerContext.Blocks
+                .Include(b => b.Transactions)
+                    .ThenInclude(t => t.Inputs)
+                        .ThenInclude(i => i.Address)
+
+                .Include(b => b.Transactions)
+                    .ThenInclude(t => t.Outputs)
+                        .ThenInclude(o => o.Address)
+                .FirstOrDefaultAsync(b => b.Hash == hash);
             return stored;
         }
     }
