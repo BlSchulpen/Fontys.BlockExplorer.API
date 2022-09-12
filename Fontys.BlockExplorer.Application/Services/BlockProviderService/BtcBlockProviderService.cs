@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+using System.Diagnostics;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
@@ -21,6 +22,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             return hash;
         }
 
+        //120 ms
         public async Task<Block> GetBlockAsync(string hash)
         {
             var blockResponse = await _nodeService.GetBlockFromHashAsync(hash); //todo check if null

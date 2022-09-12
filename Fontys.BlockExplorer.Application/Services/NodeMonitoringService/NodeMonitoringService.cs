@@ -41,6 +41,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             return removedBlocks;
         }
 
+        //todo create a way to keep meassuring time indiviual methods....
         public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
@@ -50,7 +51,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                 var firstBlock = await StoreFirstBlockAsync(coinType);
                 newBlocks.Add(firstBlock);
             }
-
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
             var chainHash = await providerService.GetBestBlockHashAsync();
             var chainBlock = await providerService.GetBlockAsync(chainHash);
