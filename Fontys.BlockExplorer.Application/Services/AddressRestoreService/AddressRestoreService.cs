@@ -25,14 +25,10 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             var outputAddresses = block.Transactions.Where(t => t.Outputs != null).SelectMany(tx => tx.Outputs).Where(i => i.Address != null).ToList().Select(i => i.Address).ToList();
             addresses.AddRange(inputAddresses);
             addresses.AddRange(outputAddresses);
-            var distinctAddresses = addresses
-                .GroupBy(i => i.Hash)
-                .Select(i => i.First())
-                .ToList();
-            var distinctAddressesHashes = distinctAddresses.Select(a => a.Hash).ToList();
-            var alreadyStoredAddresses = _context.Addresses.Where(a => distinctAddressesHashes.Contains(a.Hash)).ToList();
+            var hashes = addresses.Select(a => a.Hash).ToList();
+            var alreadyStoredAddresses = _context.Addresses.Where(a => hashes.Contains(a.Hash)).ToList();
             var alreadyStoredAddressesHashes = alreadyStoredAddresses.Select(a => a.Hash).ToList(); ; //address hashes in both new addresses and context --> do not add
-            var newAddressesHashes = distinctAddressesHashes.Except(alreadyStoredAddressesHashes).ToList();
+            var newAddressesHashes = hashes.Except(alreadyStoredAddressesHashes).ToList();
             var newAddresses = addresses.Where(a => newAddressesHashes.Contains(a.Hash)).ToList();
             var distinctNewAddresses = newAddresses
                 .GroupBy(i => i.Hash)

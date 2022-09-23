@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
-using System.Diagnostics;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
@@ -21,6 +20,11 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             var hash = await _nodeService.GetBestBlockHashAsync();
             return hash;
         }
+        public async Task<string> GetHashFromHeightAsync(int height)
+        {
+            var hash = await _nodeService.GetHashFromHeightAsync(height);
+            return hash;
+        }
 
         //120 ms
         public async Task<Block> GetBlockAsync(string hash)
@@ -28,26 +32,19 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             var blockResponse = await _nodeService.GetBlockFromHashAsync(hash); //todo check if null
             foreach (var transaction in blockResponse.Tx)
             {
-                var usedIndexes = new List<int>();
                 foreach (var input in transaction.Vin.Where(t => t.TxId != null))
                 {
                     var rawTransaction = await _nodeService.GetRawTransactionAsync(input.TxId);
                     var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
                     if (usedOutput != null)
                     {
-                        input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve preformance...
+                        input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve performance...
                         input.Value = usedOutput.Value;
                     }
                 }
             }
             var block = _mapper.Map<Block>(blockResponse);
             return block;
-        }
-
-        public async Task<string> GetHashFromHeightAsync(int height)
-        {
-            var hash = await _nodeService.GetHashFromHeightAsync(height);
-            return hash;
         }
     }
 }

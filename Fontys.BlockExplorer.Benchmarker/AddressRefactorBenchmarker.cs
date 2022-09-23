@@ -18,14 +18,10 @@ namespace MyBenchmarks
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
 
-
         public AddressRefactorBenchmarker()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
         }
-
-
-
 
         //17 seconds
         [Benchmark]
@@ -79,33 +75,5 @@ namespace MyBenchmarks
             var block = new Block() { Hash = "0", CoinType = CoinType.BTC, NetworkType = NetworkType.BtcMainet, Height = 0, PreviousBlockHash = "0", Transactions = new List<Transaction>() { transaction } };
             return block;
         }
-
-        /*
-        [Benchmark]
-        public string GetFullStringNormally()
-        {
-            string output = "";
-
-            for (int i = 0; i < 100; i++)
-            {
-                output += i;
-            }
-
-            return output;
-        }
-
-        [Benchmark]
-        public string GetFullStringWithStringBuilder()
-        {
-            StringBuilder output = new StringBuilder();
-
-            for (int i = 0; i < 100; i++)
-            {
-                output.Append(i);
-            }
-
-            return output.ToString();
-        }
-        */
     }
 }

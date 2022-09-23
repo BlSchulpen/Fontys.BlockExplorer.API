@@ -62,7 +62,7 @@
             var newTransactions = new List<Transaction>();
             for (int i = 0; i < nrTransactions; i++)
             {
-                var transaction = new Transaction() { Hash = i.ToString(), Transfers = new List<Transfer>() };
+                var transaction = new Transaction() { Hash = i.ToString(), Inputs = new List<TxInput>(), Outputs = new List<TxOutput>() };
                 newTransactions.Add(transaction);
             }
             return newTransactions;
