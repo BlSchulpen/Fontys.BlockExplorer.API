@@ -12,14 +12,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories
     {
         public BtcBlockResponse CreateBlockResponse(string hash, int height, string previousHash, int nrTransactions )
         {
-            var transactions = new List<BtcTransactionResponse>();
-            for (int i = 0; i < nrTransactions; i++)
-            {
-
-            }
-
             var block = new BtcBlockResponse(){ Hash = hash, Height = height, Previousblockhash = previousHash};
-            return null;
+            return block;
         }
 
         public BtcTransactionResponse CreateTransactionResponse(string hash, List<BtcInputResponse> vin, List<BtcOutputResponse> vout)

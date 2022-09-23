@@ -21,16 +21,16 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"; //todo improve custom content class
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
-            var formated = json.Substring(1, json.Length - 2);
-            return formated;
+            var formatted = json.Substring(1, json.Length - 2);
+            return formatted;
         }
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            var verbosity = 2; //block data with transaction data - todo custom class 
+            const int verbosity = 2; //block data with transaction data - todo custom class 
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity.ToString() + "]}"; 
             var response = await SendMessageAsync(content);
-            var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
+            var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);  
             return responseObject;
         }
@@ -39,8 +39,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         {
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var response = await SendMessageAsync(content);
-            var hash = JObject.Parse(response)["result"].ToString(Formatting.None);
-            hash = hash.Substring(1, hash.Length - 2);
+            var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
+            hash = hash?.Substring(1, hash.Length - 2);
             return hash;
         }
 
