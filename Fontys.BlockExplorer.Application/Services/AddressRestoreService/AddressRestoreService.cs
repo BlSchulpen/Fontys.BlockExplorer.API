@@ -16,7 +16,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 
         //TODO check on network type not cointype ---> for example btc cash 
         //TODO update this to make it way more readable
-
+        //TODO maybe research other way to handle this... (maybe consider first creating address, then transfer etc...)
         //3199 ms
         public async Task<List<Address>> RestoreAddressesAsync(Block block)
         {

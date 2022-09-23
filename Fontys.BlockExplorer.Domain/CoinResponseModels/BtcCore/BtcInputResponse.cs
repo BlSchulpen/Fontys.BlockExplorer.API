@@ -3,7 +3,7 @@
     public class BtcInputResponse
     {
         public string TxId { get; set; }
-        public int Vout { get; set; }//todo readup on how vin transactions work
+        public int Vout { get; set; }
         public string? Coinbase { get; set; }
 
         //========================================
