@@ -26,15 +26,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _blockFactory = new BtcCoreBlockResponseFactory();
             _transactionFactory = new BtcCoreTransactionResponseFactory();
         }
-    
-        /*
-        [SetUp]
-        public void Init()
-        {
-            factory = new BtcCoreBlockResponseFactory();
-        }
-        */
-
+        
         [Fact]
         public async Task GetBlock_BlockExists_ReturnBlock()
         {
@@ -53,6 +45,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             mapper.Should().NotBeNull();
         }
 
+        //Todo determine why excpetion instead of returning null 
         private Mock<IBtcNodeService> GetMockNodeService(int blockNr)
         {
             const int nrInputs = 3;
