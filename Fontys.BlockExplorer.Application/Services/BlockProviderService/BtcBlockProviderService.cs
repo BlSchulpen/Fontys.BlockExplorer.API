@@ -29,22 +29,29 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         //120 ms
         public async Task<Block> GetBlockAsync(string hash)
         {
-            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash); //todo check if null
-            foreach (var transaction in blockResponse.Tx)
+            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
+            var transactionIds = blockResponse.Transactions.Select(t => t.Hash);
+            foreach (var transactionId in transactionIds)
             {
-                foreach (var input in transaction.Vin.Where(t => t.TxId != null))
-                {
-                    var rawTransaction = await _nodeService.GetRawTransactionAsync(input.TxId);
-                    var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
-                    if (usedOutput != null)
-                    {
-                        input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve performance...
-                        input.Value = usedOutput.Value;
-                    }
-                }
+               await RetrieveNonCoinBasedInputDataAsync(transactionId);
             }
             var block = _mapper.Map<Block>(blockResponse);
             return block;
+        }
+
+        private async Task RetrieveNonCoinBasedInputDataAsync(string transactionId)
+        {
+            var rawTransaction = await _nodeService.GetRawTransactionAsync(transactionId);
+            foreach (var input in rawTransaction.Vin.Where(t => t.TxId != null)) //todo check if it could be null
+            {
+                var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
+                if (usedOutput == null)
+                {
+                    continue;
+                }
+                input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve performance...
+                input.Value = usedOutput.Value;
+            }
         }
     }
 }

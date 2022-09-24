@@ -1,18 +1,17 @@
-﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
-using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Factories
+namespace Fontys.BlockExplorer.API.UnitTests.Factories.Ignore
 {
     public class BtcBlockDataResponseFactory : IBlockResponseDataFactory
     {
-        public BtcBlockResponse CreateBlockResponse(string hash, int height, string previousHash, int nrTransactions )
+        public BtcBlockResponse CreateBlockResponse(string hash, int height, string previousHash, int nrTransactions)
         {
-            var block = new BtcBlockResponse(){ Hash = hash, Height = height, Previousblockhash = previousHash};
+            var block = new BtcBlockResponse() { Hash = hash, Height = height, Previousblockhash = previousHash };
             return block;
         }
 
@@ -43,16 +42,16 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories
         {
             var output = new BtcOutputResponse()
             {
-                N = n, 
-                Value = value, 
-                ScriptPubKey = new BtcScriptPubKeyResponse() {Addresses = addresses}
+                N = n,
+                Value = value,
+                ScriptPubKey = new BtcScriptPubKeyResponse() { Addresses = addresses }
             };
             return output;
         }
 
         public BtcAddressResponse CreateAddressResponse(string address)
         {
-            return new BtcAddressResponse() { Hash = address};
+            return new BtcAddressResponse() { Hash = address };
         }
     }
 }

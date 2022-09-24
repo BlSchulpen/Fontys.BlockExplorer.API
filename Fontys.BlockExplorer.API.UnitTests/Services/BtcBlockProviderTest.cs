@@ -4,9 +4,10 @@ using AutoMapper;
 using FluentAssertions;
 using Xunit;
 using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
+using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 using Fontys.BlockExplorer.Domain.Models;
-using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
 
@@ -14,6 +15,21 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
     public class BtcBlockProviderTest
     {
+        private readonly BtcCoreBlockResponseFactory _factory;
+
+        public BtcBlockProviderTest()
+        {
+            _factory = new BtcCoreBlockResponseFactory();
+        }
+    
+        /*
+        [SetUp]
+        public void Init()
+        {
+            factory = new BtcCoreBlockResponseFactory();
+        }
+        */
+
         [Fact]
         public async Task GetBlock_BlockExists_ReturnBlock()
         {
@@ -36,10 +52,10 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         private Mock<IBtcNodeService> GetMockNodeService(string blockHash)
         {
             var mockNodeService = new Mock<IBtcNodeService>();
-            var btcBlockResponse = new BtcBlockResponse() { Hash = blockHash, Height = 0, Previousblockhash = "9999",  };
-            mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockHash).Result());
+            const int nrTransactions = 5;
+            var btcBlockResponse = _factory.BlockResponse(0, nrTransactions);
+            mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockHash)).ReturnsAsync(btcBlockResponse);
             return new Mock<IBtcNodeService>();
-
         }
     }
 }

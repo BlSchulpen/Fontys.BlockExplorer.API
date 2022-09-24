@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore
+﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcAddressResponse
     {

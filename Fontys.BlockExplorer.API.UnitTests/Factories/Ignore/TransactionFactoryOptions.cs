@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.API.UnitTests.Factories
+﻿namespace Fontys.BlockExplorer.API.UnitTests.Factories.Ignore
 {
     public class TransactionFactoryOptions
     {

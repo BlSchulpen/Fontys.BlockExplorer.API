@@ -1,15 +1,14 @@
 ﻿using Fontys.BlockExplorer.API.Dto.Response;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
-using Fontys.BlockExplorer.Domain.NodeModels.BtcCore;
+using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 using System.Collections.Generic;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Factories
+namespace Fontys.BlockExplorer.API.UnitTests.Factories.Ignore
 {
     public interface IBlockResponseDataFactory
     {
         public BtcBlockResponse CreateBlockResponse(string hash, int height, string previousHash, int nrTransactions);
 
-        public BtcTransactionResponse CreateTransactionResponse(string hash, 
+        public BtcTransactionResponse CreateTransactionResponse(string hash,
             List<BtcInputResponse> vin,
             List<BtcOutputResponse> vout);
 

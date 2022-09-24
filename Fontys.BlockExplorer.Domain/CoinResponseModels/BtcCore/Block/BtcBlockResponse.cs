@@ -1,15 +1,14 @@
-﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore;
-using Fontys.BlockExplorer.Domain.Enums;
+﻿using Fontys.BlockExplorer.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Transactions;
 
-namespace Fontys.BlockExplorer.Domain.NodeModels.BtcCore
+namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcBlockResponse
     {
         public string Hash { get; set; }
         public int Height { get; set; }
         public string? Previousblockhash { get; set; }
-        public virtual ICollection<BtcTransactionResponse> Tx { get; set; }
+        public virtual ICollection<BtcBlockTxResponse> Transactions { get; set; }
     }
 }

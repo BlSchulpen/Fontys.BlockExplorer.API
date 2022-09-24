@@ -1,7 +1,8 @@
-﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore
+﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcInputResponse
     {
+        // unspend output location
         public string TxId { get; set; }
         public int Vout { get; set; }
         public string? Coinbase { get; set; }

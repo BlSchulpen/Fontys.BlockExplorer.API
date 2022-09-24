@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore
+namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcScriptPubKeyResponse
     {
