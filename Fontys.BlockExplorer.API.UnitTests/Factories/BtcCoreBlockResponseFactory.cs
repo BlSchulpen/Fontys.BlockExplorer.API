@@ -12,7 +12,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories
         public BtcBlockResponse BlockResponse(int nrBlock, int nrTransactions)
         {
             var transactions = new List<BtcBlockTxResponse>();
-            for (int i = 0; i < nrTransactions; i++)
+            for (var i = 0; i < nrTransactions; i++)
             {
                 transactions.Add(new BtcBlockTxResponse()
                 {
