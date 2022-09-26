@@ -65,35 +65,37 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             removedBlocks.Should().BeEmpty();
         }
 
-
+        //TODO refactor smaller setup --> maybe use factories
         [Fact]
         public async Task RemoveBadBlock_BadStored_ReturnsBadBlocks()
         {
             //arrange
+            const CoinType coinType = CoinType.BTC;
             const int nrChainBlocks = 3;
             const int nrBadStored = 2;
             var chainBlocks = GetChainBlocks(nrChainBlocks);
-            var storedBlocks = new List<Block>(chainBlocks);
-            storedBlocks.RemoveRange((nrChainBlocks - nrBadStored), nrBadStored);
             var badBlocks = GetBadBlocks(nrBadStored, nrChainBlocks);
-            storedBlocks.AddRange(badBlocks);
-
+            UpdateBlockProvider(chainBlocks);
+            var storedBlocks = GetStoredBlocks(chainBlocks,badBlocks,nrChainBlocks,nrBadStored);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-
             var latestBlock = storedBlocks.Count() - 1;
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-
-
-            UpdateBlockProvider(chainBlocks);
             var mockAddressRestoreService = new Mock<IAddressRestoreService>();
             var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, mockAddressRestoreService.Object);
-            const CoinType coinType = CoinType.BTC;
 
             //act
             var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
 
             //assert
             removedBlocks.Should().HaveCount(badBlocks.Count); //TODO like ipv count
+        }
+
+        private List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
+        {
+            var storedBlocks = new List<Block>(chainBlocks);
+            storedBlocks.RemoveRange((nrChainBlocks - nrBadStored), nrBadStored);
+            storedBlocks.AddRange(badBlocks);
+            return storedBlocks;
         }
 
         private void UpdateBlockProvider(List<Block> chainBlocks)
