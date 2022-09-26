@@ -25,7 +25,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var removedBlocks = new List<Block>();
             if (!_context.Blocks.Any())
                 return removedBlocks;
-
             var storedHeight = _context.Blocks.DefaultIfEmpty().Max(x => x.Height);
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
             var chainHash = await providerService.GetHashFromHeightAsync(storedBlock.Height);

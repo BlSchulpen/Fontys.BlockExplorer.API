@@ -66,6 +66,57 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         }
 
 
+        [Fact]
+        public async Task RemoveBadBlock_BadStored_ReturnsBadBlocks()
+        {
+            //arrange
+            const int nrStored = 3;
+            const int nrBadStored = 2;
+            var stored = GetStoredBlocks(nrStored);
+            var badBlocks = GetBadBlocks(nrBadStored, nrStored);
+            badBlocks.AddRange(stored);
+            var latestBlock = badBlocks.Count() - 1;
+
+            _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
+            //            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString())).ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
+             
+            //tests
+
+
+
+            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString())).ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
+            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString())).ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
+
+            var test = 
+
+
+
+
+
+            _dbContextMock.Setup(context => context.Blocks).ReturnsDbSet(badBlocks);
+            var mockAddressRestoreService = new Mock<IAddressRestoreService>();
+            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, mockAddressRestoreService.Object);
+            const CoinType coinType = CoinType.BTC;
+
+            //act
+            var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
+
+            //assert
+            removedBlocks.Should().HaveCount(badBlocks.Count); //TODO like ipv count
+        }
+
+
+
+        private List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
+        {
+            var blocks = new List<Block>();
+            for (var i = nrBlocks ; i < (nrBadBlocks + nrBlocks) ; i++)
+            {
+                var badBlock = new Block() { Hash = "X" + i, Height = i, NetworkType = NetworkType.BtcMainet, CoinType = CoinType.BTC, PreviousBlockHash = "X" + (i -1) };
+                blocks.Add(badBlock);
+            }
+            return blocks;
+        }
 
         private List<Block> GetStoredBlocks(int nrBlocks)
         {
@@ -76,7 +127,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
                 storedBlocks.Add(block);
             }
 
-            var seqBlocks = storedBlocks.Where(b => b.Height != 0); //think of a better name
+            var seqBlocks = storedBlocks.Where(b => b.Height != 0);
             foreach (var block in seqBlocks)
             {
                 block.PreviousBlockHash = (block.Height - 1).ToString();
