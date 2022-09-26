@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Core;
 using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
@@ -28,6 +29,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _blockDataProviderResolverMock.Setup(x => x(CoinType.BTC)).Returns(_blockDataProviderServiceMock.Object);
         }
 
+        //Remove bad block tests
         [Fact]
         public async Task RemoveBadBlock_NonStored_ReturnEmptyList()
         {
@@ -89,6 +91,43 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             //assert
              removedBlocks.Should().BeEquivalentTo(badBlocks);
         }
+
+
+        //TODO Get new Blocks tests
+        public async Task GetNewBlocks_NoBlocksStored_NoBlocksInChain_ReturnEmptyList()
+        {
+            //arrange 
+            /*
+            const CoinType coinType = CoinType.BTC;
+            const int nrChainBlocks = 3;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            _dbContextMock.
+            */
+            //act
+            //assert
+
+        }
+
+        [Fact]
+        public async Task GetNewBlocks_BlocksStored_NoNewBlocksInChain_ReturnEmptyList()
+        {
+            //arrange 
+            const CoinType coinType = CoinType.BTC;
+            const int nrChainBlocks = 3;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(chainBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var mockAddressRestoreService = new Mock<IAddressRestoreService>();
+            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, mockAddressRestoreService.Object);
+
+            //act
+            var newBlocks = await service.RemoveBadBlocksAsync(coinType);
+
+            //assert
+            newBlocks.Should().BeEmpty();
+        }
+
+
 
         private List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
         {
