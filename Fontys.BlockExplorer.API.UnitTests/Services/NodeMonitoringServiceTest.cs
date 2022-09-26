@@ -87,7 +87,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
 
             //assert
-            removedBlocks.Should().HaveCount(badBlocks.Count); //TODO like ipv count
+             removedBlocks.Should().BeEquivalentTo(badBlocks);
         }
 
         private List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
