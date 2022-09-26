@@ -22,11 +22,22 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         }
         public async Task<string> GetHashFromHeightAsync(int height)
         {
-            var hash = await _nodeService.GetHashFromHeightAsync(height);
-            return hash;
+            try
+            {
+                var hash = await _nodeService.GetHashFromHeightAsync(height);
+                return hash;
+            }
+            catch (NullReferenceException e)
+            {
+                //TODO add logger
+                throw;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
         }
 
-        //120 ms
         public async Task<Block> GetBlockAsync(string hash)
         {
             var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);

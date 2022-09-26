@@ -91,6 +91,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             {
                 throw;
             }
-         }
+        }
     }
 }

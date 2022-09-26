@@ -11,8 +11,10 @@ using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
+using System;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -31,8 +33,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         public async Task GetBlock_BlockExists_ReturnBlock()
         {
             //arrange
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<BtcProfile>());
             var mapper = new Mapper(config);
+
             const int blockNr = 0;
             var mockNodeService = GetMockNodeService(blockNr);
 
@@ -42,7 +45,25 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var result = await service.GetBlockAsync(blockNr.ToString());
 
             //assert
-            mapper.Should().NotBeNull();
+            result.Hash.Should().Be(blockNr.ToString());
+        }
+
+        [Fact]
+        public async Task GetBlock_BlockNotExists_ExceptionNotFound()
+        {
+            //arrange
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<BtcProfile>());
+            var mapper = new Mapper(config);
+            const int searchBlockNr = 0;
+            const int storedBlockNr = 1;
+            var mockNodeService = GetMockNodeService(storedBlockNr);
+
+            var service = new BtcBlockProviderService(mockNodeService.Object, mapper);
+
+            var result = await service.GetBlockAsync(searchBlockNr.ToString());
+
+            //assert
+            result.Hash.Should().Be(searchBlockNr.ToString());
         }
 
         //Todo determine why excpetion instead of returning null 
@@ -62,18 +83,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             }
 
             return mockNodeService;
-        }
-
-        private MapperConfiguration BlockMapperConfig()
-        {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<BlockResponse, Block>()
-                .ForMember(dest => dest.Transactions, act => act.MapFrom(src => src.Transactions))
-                .ForMember(dest => dest.CoinType, act => act.MapFrom(src => CoinType.BTC))
-                .ForMember(dest => dest.NetworkType, act => act.MapFrom(src => NetworkType.BtcMainet))
-            
-            );
-            
-            return config;
         }
     }
 }
