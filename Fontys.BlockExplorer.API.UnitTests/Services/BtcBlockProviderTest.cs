@@ -48,23 +48,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             result.Hash.Should().Be(blockNr.ToString());
         }
 
-        [Fact]
-        public async Task GetBlock_BlockNotExists_ExceptionNotFound()
-        {
-            //arrange
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<BtcProfile>());
-            var mapper = new Mapper(config);
-            const int searchBlockNr = 0;
-            const int storedBlockNr = 1;
-            var mockNodeService = GetMockNodeService(storedBlockNr);
-
-            var service = new BtcBlockProviderService(mockNodeService.Object, mapper);
-
-            var result = await service.GetBlockAsync(searchBlockNr.ToString());
-
-            //assert
-            result.Hash.Should().Be(searchBlockNr.ToString());
-        }
 
         //Todo determine why excpetion instead of returning null 
         private Mock<IBtcNodeService> GetMockNodeService(int blockNr)

@@ -43,22 +43,5 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             //assert 
             result?.Hash.Should().Be(blockHash);
         }
-
-        [Fact]
-        public async Task GetBlock_BlockNotExists_ReturnNull()
-        {
-            // arrange
-            const string blockHash = "0";
-            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(new List<Block>());
-            var mockContext = new Mock<BlockExplorerContext>();
-            var service = new ExplorerBlockService(mockContext.Object);
-            var blockCommand = new GetBlockCommand() { Hash = blockHash };
-
-            //act
-            var result = await service.GetBlockAsync(blockCommand);
-
-            //assert 
-            result?.Should().BeNull();
-        }
     }
 }
