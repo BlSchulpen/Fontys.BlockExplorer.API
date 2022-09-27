@@ -5,11 +5,11 @@ using System.Diagnostics;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 {
-    public class AddressRestoreService : IAddressRestoreService
+    public class ExplorerAddressRestoreService : IAddressRestoreService
     {
         private readonly BlockExplorerContext _context;
 
-        public AddressRestoreService(BlockExplorerContext context)
+        public ExplorerAddressRestoreService(BlockExplorerContext context)
         { 
             _context = context;
         }
@@ -22,7 +22,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
         {
             var addresses = new List<Address>();
             var inputAddresses = block.Transactions.Where(t => t.Inputs != null).SelectMany(tx => tx.Inputs).Where(i => i.Address != null).ToList().Select(i => i.Address).ToList();
-            var outputAddresses = block.Transactions.Where(t => t.Outputs != null).SelectMany(tx => tx.Outputs).Where(i => i.Address != null).ToList().Select(i => i.Address).ToList();
+            var outputAddresses = block.Transactions.Where(t => t.Outputs != null).SelectMany(tx => tx.Outputs).Where(i => i.Address != null).ToList().Select(i => i.Address).ToList(); //TODO test if it can never be null
             addresses.AddRange(inputAddresses);
             addresses.AddRange(outputAddresses);
             var hashes = addresses.Select(a => a.Hash).ToList();

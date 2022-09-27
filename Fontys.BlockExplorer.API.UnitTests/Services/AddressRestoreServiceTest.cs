@@ -27,7 +27,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             // arrange
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new AddressRestoreService(_dbContextMock.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());
@@ -48,7 +48,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var storedAddress = new Address() { Hash = "0000" };
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>() {storedAddress});
-            var service = new AddressRestoreService(_dbContextMock.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());

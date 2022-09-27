@@ -37,7 +37,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             //arrange
             _dbContextMock.Setup(context => context.Blocks).ReturnsDbSet(new List<Block>());
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             const CoinType coinType = CoinType.BTC;
 
             //act
@@ -55,9 +55,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const int latestBlock = nrStored - 1;
             var stored = GetChainBlocks(nrStored);
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString())).ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
+            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString()))!.ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
             _dbContextMock.Setup(context => context.Blocks).ReturnsDbSet(stored);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             const CoinType coinType = CoinType.BTC;
 
             //act
@@ -82,7 +82,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
             var latestBlock = storedBlocks.Count() - 1;
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
 
             //act
             var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
@@ -103,7 +103,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var chainBlocks = GetChainBlocks(nrChainBlocks);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(chainBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
 
             //act
             var newBlocks = await service.RemoveBadBlocksAsync(coinType);
@@ -123,7 +123,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             storedBlocks.RemoveRange(1,2);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             var expectedResult = new List<Block> { chainBlocks[1], chainBlocks[2] };
 
             //act
@@ -143,7 +143,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             storedBlocks.RemoveAt(1);
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             var expectedResult = new List<Block> { chainBlocks[1] };
 
             //act

@@ -22,11 +22,9 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             if (json == null)
             {
-                //TODO log
                 throw new NullReferenceException();
-            }
-
-            var formatted = json.Substring(1, json.Length - 2);
+            } 
+            var formatted = json[1..^2];
             return formatted;
         }
 
@@ -45,8 +43,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var response = await SendMessageAsync(content);
             var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
-            hash = hash?.Substring(1, hash.Length - 2);
-            return hash;
+            var formatted = hash?[1..^2];
+            return formatted;
         }
 
         public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
