@@ -78,6 +78,13 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var newBlocks = await GetStartingBlockListAsync(coinType);
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
             var chainBlock = await GetBestBlockAsync(providerService);
+            //TODO maybe use 3excpetion handling in the provider?
+            if (chainBlock == null)
+            {
+                //log
+                throw new NullReferenceException("No blocks can be found in the chain");
+            }
+
             var latestHeight = chainBlock.Height;
             var nrStored = _context.Blocks.Count(b => b.CoinType == CoinType.BTC);
             while (storedHeight < chainBlock.Height || nrStored <= latestHeight)

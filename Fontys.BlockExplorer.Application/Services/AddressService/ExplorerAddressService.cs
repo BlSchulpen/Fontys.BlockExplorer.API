@@ -15,9 +15,9 @@
             _blockExplorerContext = blockExplorerContext;
         }
 
-        public async Task<Address?> GetAddressAsync(GetAddressCommand command)
+        public async Task<Address?> GetAddressAsync(GetAddressCommand getAddressCommand)
         {
-            var hash = command.Hash;
+            var hash = getAddressCommand.Hash;
             var stored = await _blockExplorerContext.Addresses.FirstOrDefaultAsync(b => b.Hash == hash);
             return stored;
         }

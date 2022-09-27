@@ -49,7 +49,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         }
 
 
-        //Todo determine why excpetion instead of returning null 
+        //Todo determine why exception instead of returning null 
         private Mock<IBtcNodeService> GetMockNodeService(int blockNr)
         {
             const int nrInputs = 3;

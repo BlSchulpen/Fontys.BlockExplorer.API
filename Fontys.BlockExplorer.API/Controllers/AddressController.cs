@@ -10,12 +10,10 @@
     public class AddressController : Controller
     {
         private readonly IAddressService _addressService;
-        private readonly IMapper _mapper;
 
-        public AddressController(IAddressService addressService, IMapper mapper)
+        public AddressController(IAddressService addressService)
         {
             _addressService = addressService;
-            _mapper = mapper;
         }
 
         //TODO get transactionsIds of address

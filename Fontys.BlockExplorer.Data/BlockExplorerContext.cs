@@ -24,7 +24,8 @@
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
         {
-
+            throw new NotImplementedException();
+            //This method is empty 
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

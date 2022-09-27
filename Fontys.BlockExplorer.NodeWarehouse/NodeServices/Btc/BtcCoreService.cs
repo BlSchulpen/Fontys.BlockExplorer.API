@@ -20,6 +20,12 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"; //todo improve custom content class
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
+            if (json == null)
+            {
+                //TODO log
+                throw new NullReferenceException();
+            }
+
             var formatted = json.Substring(1, json.Length - 2);
             return formatted;
         }

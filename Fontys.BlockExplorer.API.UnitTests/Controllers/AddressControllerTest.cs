@@ -18,9 +18,7 @@
             // arrange
             var hash = "Test";
             var mockService = new Mock<IAddressService>();
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
-            var mapper = new Mapper(config);
-            var controller = new AddressController(mockService.Object, mapper);
+            var controller = new AddressController(mockService.Object);
 
             // act
             await controller.GetAddress(hash);

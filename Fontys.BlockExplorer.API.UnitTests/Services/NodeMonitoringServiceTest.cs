@@ -133,49 +133,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             newBlocks.Should().BeEquivalentTo(expectedResult);
         }
 
-        /*
-        //TODO Expect exception or empty List?
-        [Fact]
-        public async Task GetNewBlocks_BlocksStored_NoBlocksInChain_ReturnEmptyList()
-        {
-            //arrange 
-            const CoinType coinType = CoinType.BTC;
-            const int nrChainBlocks = 0;
-            const int nrStoredBlocks = 1;
-            var chainBlocks = GetChainBlocks(nrChainBlocks);
-            var storedBlocks = GetChainBlocks(nrStoredBlocks);
-            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-            UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
-
-            //act
-            var newBlocks = await service.GetNewBlocksAsync(coinType);
-
-            //assert
-            newBlocks.Should().BeEmpty();
-        }
-
-
-        //TODO Expect exception or empty List?
-        [Fact]
-        public async Task GetNewBlocks_NoBlocksStored_NoBlocksInChain_ReturnEmptyList()
-        {
-            //arrange 
-            const CoinType coinType = CoinType.BTC;
-            const int nrChainBlocks = 0;
-            var chainBlocks = GetChainBlocks(nrChainBlocks);
-            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(new List<Block>());
-            UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
-
-            //act
-            var newBlocks = await service.GetNewBlocksAsync(coinType);
-
-            //assert
-            newBlocks.Should().BeEmpty();
-        }
-        */
-
         [Fact]
         public async Task GetNewBlocks_OnlyFirstAndLatestBlocksStored_ThreeBlocksInChain_ReturnNotStoredBlocks()
         {
@@ -206,7 +163,11 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
 
         private void UpdateBlockProvider(List<Block> chainBlocks)
         {
-            var latestHash = chainBlocks.FirstOrDefault(x => x.Height == chainBlocks.Max(b => b.Height)).Hash;
+            var latestHash = chainBlocks.FirstOrDefault(x => x.Height == chainBlocks.Max(b => b.Height))?.Hash;
+            if (latestHash == null)
+            {
+                return;
+            }
             _blockDataProviderServiceMock.Setup(b => b.GetBestBlockHashAsync()).ReturnsAsync(latestHash);
             foreach (var block in chainBlocks)
             {
