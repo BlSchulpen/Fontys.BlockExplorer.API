@@ -22,29 +22,28 @@
 
         public virtual DbSet<Address> Addresses { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
             throw new NotImplementedException();
-            //This method is empty 
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
 
-            builder.Entity<Block>()
+            modelBuilder.Entity<Block>()
                 .HasMany(x => x.Transactions);
             
-            builder.Entity<Transaction>()
+            modelBuilder.Entity<Transaction>()
                 .HasMany(x => x.Outputs);
 
-            builder.Entity<Transaction>()
+            modelBuilder.Entity<Transaction>()
                 .HasMany(x => x.Inputs);
 
-            builder.Entity<TxInput>()
+            modelBuilder.Entity<TxInput>()
                 .HasOne(x => x.Address);
 
-            builder.Entity<TxOutput>()
+            modelBuilder.Entity<TxOutput>()
                 .HasOne(x => x.Address);
         }
     }

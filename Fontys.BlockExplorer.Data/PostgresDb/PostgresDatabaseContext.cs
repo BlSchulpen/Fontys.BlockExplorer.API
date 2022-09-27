@@ -23,9 +23,9 @@
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder dbContextOptionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-            dbContextOptionsBuilder.UseNpgsql(_connectionString);
+            optionBuilder.UseNpgsql(_connectionString);
         }
     }
 }
