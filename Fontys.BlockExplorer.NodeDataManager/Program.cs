@@ -19,15 +19,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Inject provider types
 builder.Services.AddScoped<BtcBlockProviderService>();
 
-builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService>>(blockProviderType => key =>
+builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockProviderType => key =>
 {
-    switch (key)
+    return key switch
     {
-        case CoinType.BTC:
-            return blockProviderType.GetService<BtcBlockProviderService>();
-        default:
-            return null;
-    }
+        CoinType.BTC => blockProviderType.GetService<BtcBlockProviderService>(),
+        _ => null
+    };
 });
 
 // Add services to the container.
