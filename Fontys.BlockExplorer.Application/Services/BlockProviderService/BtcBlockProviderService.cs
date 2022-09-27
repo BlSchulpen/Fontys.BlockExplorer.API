@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
-using System.Diagnostics;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
@@ -21,33 +20,49 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             var hash = await _nodeService.GetBestBlockHashAsync();
             return hash;
         }
+        public async Task<string> GetHashFromHeightAsync(int height)
+        {
+            try
+            {
+                var hash = await _nodeService.GetHashFromHeightAsync(height);
+                return hash;
+            }
+            catch (NullReferenceException e)
+            {
+                //TODO add logger
+                throw;
+            }
+            catch(Exception e)
+            {
+                throw;
+            }
+        }
 
-        //120 ms
         public async Task<Block> GetBlockAsync(string hash)
         {
-            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash); //todo check if null
-            foreach (var transaction in blockResponse.Tx)
+            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
+            var transactionIds = blockResponse.Transactions.Select(t => t.Hash);
+            foreach (var transactionId in transactionIds)
             {
-                var usedIndexes = new List<int>();
-                foreach (var input in transaction.Vin.Where(t => t.TxId != null))
-                {
-                    var rawTransaction = await _nodeService.GetRawTransactionAsync(input.TxId);
-                    var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
-                    if (usedOutput != null)
-                    {
-                        input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve preformance...
-                        input.Value = usedOutput.Value;
-                    }
-                }
+               await RetrieveNonCoinBasedInputDataAsync(transactionId);
             }
             var block = _mapper.Map<Block>(blockResponse);
             return block;
         }
 
-        public async Task<string> GetHashFromHeightAsync(int height)
+        private async Task RetrieveNonCoinBasedInputDataAsync(string transactionId)
         {
-            var hash = await _nodeService.GetHashFromHeightAsync(height);
-            return hash;
+            var rawTransaction = await _nodeService.GetRawTransactionAsync(transactionId);
+            foreach (var input in rawTransaction.Vin.Where(t => t.TxId != null)) //todo check if it could be null
+            {
+                var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
+                if (usedOutput == null)
+                {
+                    continue;
+                }
+                input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve performance...
+                input.Value = usedOutput.Value;
+            }
         }
     }
 }

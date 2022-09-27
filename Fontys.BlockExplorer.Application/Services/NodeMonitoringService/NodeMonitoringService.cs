@@ -25,7 +25,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var removedBlocks = new List<Block>();
             if (!_context.Blocks.Any())
                 return removedBlocks;
-
             var storedHeight = _context.Blocks.DefaultIfEmpty().Max(x => x.Height);
             var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
             var chainHash = await providerService.GetHashFromHeightAsync(storedBlock.Height);
@@ -41,32 +40,77 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             return removedBlocks;
         }
 
-        //todo create a way to keep meassuring time indiviual methods....
+        //todo refactor this
+        /*
         public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
             var newBlocks = new List<Block>();
+            
             if (_context.Blocks.Where(b => b.CoinType == coinType).ToList().Count == 0)
             {
                 var firstBlock = await StoreFirstBlockAsync(coinType);
                 newBlocks.Add(firstBlock);
             }
+
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
             var chainHash = await providerService.GetBestBlockHashAsync();
             var chainBlock = await providerService.GetBlockAsync(chainHash);
             var newHeight = chainBlock.Height;
-            while (storedHeight < chainBlock.Height && _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Count() < newHeight)
+            var nrStored = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Count();
+            while (storedHeight < chainBlock.Height || nrStored <= newHeight)
             {
                 if (!_context.Blocks.Any(b => b.Height == chainBlock.Height && chainBlock.CoinType == coinType))
                 {
                     newBlocks.Add(chainBlock);
                     await StoreBlockAsync(chainBlock);
+                    nrStored += 1;
                 }
                 chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
                 chainBlock = await providerService.GetBlockAsync(chainHash);
             }
             return newBlocks;
+        }
+        */
+        public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
+        {
+            var providerService = _providerServiceResolver(coinType);
+            var newBlocks = await GetStartingBlockListAsync(coinType);
+            var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
+            var chainBlock = await GetBestBlockAsync(providerService);
+            var latestHeight = chainBlock.Height;
+            var nrStored = _context.Blocks.Count(b => b.CoinType == CoinType.BTC);
+            while (storedHeight < chainBlock.Height || nrStored <= latestHeight)
+            {
+                if (!_context.Blocks.Any(b => b.Height == chainBlock.Height && chainBlock.CoinType == coinType))
+                {
+                    newBlocks.Add(chainBlock);
+                    await StoreBlockAsync(chainBlock);
+                    nrStored += 1;
+                }
+                var chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
+                chainBlock = await providerService.GetBlockAsync(chainHash);
+            }
+            return newBlocks;
+        }
 
+        private async Task<Block> GetBestBlockAsync(IBlockDataProviderService providerService)
+        {
+            var chainHash = await providerService.GetBestBlockHashAsync();
+            var chainBlock = await providerService.GetBlockAsync(chainHash);
+            return chainBlock;
+        }
+
+        private async Task<List<Block>> GetStartingBlockListAsync(CoinType coinType)
+        {
+            var blocks = new List<Block>();
+            if (_context.Blocks.Where(b => b.CoinType == coinType).ToList().Count != 0)
+            {
+                return blocks;
+            }
+            var firstBlock = await StoreFirstBlockAsync(coinType);
+            blocks.Add(firstBlock); 
+            return blocks;
         }
 
         private async Task<Block> StoreFirstBlockAsync(CoinType coinType)
@@ -81,16 +125,16 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         private async Task StoreBlockAsync(Block block)
         {
+            await _addressRestoreService.RestoreAddressesAsync(block);
+            _context.Blocks.Add(block);
             try
             {
-                await _addressRestoreService.RestoreAddressesAsync(block);
-                _context.Blocks.Add(block);
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 throw;
             }
-         }
+        }
     }
 }

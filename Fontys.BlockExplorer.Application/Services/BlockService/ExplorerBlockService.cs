@@ -19,7 +19,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             var hash = command.Hash;
             var stored = await _blockExplorerContext.Blocks
                 .Include(b => b.Transactions)
-                    .ThenInclude(t => t.Inputs)
+                .ThenInclude(t => t.Inputs)!
                         .ThenInclude(i => i.Address)
 
                 .Include(b => b.Transactions)
