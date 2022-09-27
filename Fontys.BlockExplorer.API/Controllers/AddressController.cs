@@ -18,7 +18,7 @@
             _mapper = mapper;
         }
 
-        //TODO get transactions of address
+        //TODO get transactionsIds of address
         [HttpGet("{hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetAddress(string hash)
