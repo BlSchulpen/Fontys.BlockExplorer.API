@@ -56,7 +56,6 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         private async Task<string?> SendMessageAsync(string json)
         {
-            
             try
             {
                 var response = await _client.PostAsync(_client.BaseAddress, new StringContent(json));
@@ -66,11 +65,11 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             catch (NullReferenceException exception)
             {
                 _logger.LogError(exception, "Connection to Btc Core could not be made"); 
-                //TODO log
                 throw;
             }
             catch(Exception exception) 
             {
+                _logger.Log(exception); 
                 //TODO Log
                 throw;
             }

@@ -20,7 +20,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
         }
 
         [Fact]
-        public async Task GetBestBlock_NoConnectionMade_ThrowException()
+        public async Task GetBestBlock_NoConnectionMade_LogNullException()
         {
             // arrange
             var service = new BtcCoreService(_mockHttpClientFactory.Object, _mockLogger.Object);
@@ -38,6 +38,28 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
                         It.IsAny<NullReferenceException>(),
                         (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                     Times.Once
+            );
+        }
+
+        [Fact]
+        public async Task GetBestBlock_ConnectionCanBeMade_SuccesReturnHash()
+        {
+            // arrange
+            var service = new BtcCoreService(_mockHttpClientFactory.Object, _mockLogger.Object);
+
+            // act
+            Func<Task> f = async () => { await service.GetBestBlockHashAsync(); };
+
+
+            // assert
+            await f.Should().ThrowAsync<NullReferenceException>();
+            _mockLogger.Verify(x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((o, t) => string.Equals("Connection to Btc Core could not be made", o.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+                    It.IsAny<NullReferenceException>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once
             );
         }
     }
