@@ -25,7 +25,6 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
                 .Include(b => b.Transactions)
                 .ThenInclude(t => t.Inputs)!
                         .ThenInclude(i => i.Address)
-
                 .Include(b => b.Transactions)
                     .ThenInclude(t => t.Outputs)
                         .ThenInclude(o => o.Address)

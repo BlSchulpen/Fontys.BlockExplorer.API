@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FluentAssertions;
-using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
 using System.Threading.Tasks;
+using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services

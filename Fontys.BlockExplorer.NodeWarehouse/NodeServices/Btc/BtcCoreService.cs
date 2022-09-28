@@ -69,7 +69,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             }
             catch(Exception exception) 
             {
-                _logger.Log(exception); 
+                _logger.LogError(exception, "test"); 
                 //TODO Log
                 throw;
             }

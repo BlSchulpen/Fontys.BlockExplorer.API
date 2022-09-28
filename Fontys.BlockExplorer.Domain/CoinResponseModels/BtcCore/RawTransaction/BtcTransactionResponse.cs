@@ -1,4 +1,6 @@
-﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction;
+
+namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcTransactionResponse
     {

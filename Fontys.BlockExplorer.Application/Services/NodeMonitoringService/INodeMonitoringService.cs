@@ -1,6 +1,5 @@
 ﻿using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
-using System.Threading.Tasks;
 
 namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 {   

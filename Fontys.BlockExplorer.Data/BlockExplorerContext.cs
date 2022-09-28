@@ -2,7 +2,6 @@
 {
     using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.EntityFrameworkCore;
-
     public class BlockExplorerContext: DbContext
     {
         public BlockExplorerContext(DbContextOptions options) : base(options)
@@ -13,13 +12,9 @@
         }
 
         public virtual DbSet<Block> Blocks { get; set; }
-        
         public virtual DbSet<Transaction> Transactions { get; set; }
-
         public virtual DbSet<TxInput> TxInputs { get; set; }
         public virtual DbSet<TxOutput> TxOutputs { get; set; }
-
-
         public virtual DbSet<Address> Addresses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
