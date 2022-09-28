@@ -1,20 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using BenchmarkDotNet.Configs;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
-using Xunit;
-using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
-using Fontys.BlockExplorer.Domain.Enums;
-using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
-using System;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -50,13 +42,13 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
 
 
         //Todo determine why exception instead of returning null 
-        private Mock<IBtcNodeService> GetMockNodeService(int blockNr)
+        private Mock<INodeService> GetMockNodeService(int blockNr)
         {
             const int nrInputs = 3;
             const int nrOutputs = 3;
             const int nrTransactions = 1; //TODO Find a way to give unique mock responses for different parameters
             var btcBlockResponse = _blockFactory.BlockResponse(blockNr, nrTransactions);
-            var mockNodeService = new Mock<IBtcNodeService>();
+            var mockNodeService = new Mock<INodeService>();
             mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockNr.ToString())).ReturnsAsync(btcBlockResponse);
             for (var i = 0; i < nrTransactions; i++)
             {

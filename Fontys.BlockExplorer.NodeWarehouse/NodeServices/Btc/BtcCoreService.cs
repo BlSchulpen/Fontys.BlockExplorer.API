@@ -1,18 +1,19 @@
 ﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
-    public class BtcCoreService : IBtcNodeService
+    public class BtcCoreService : INodeService
     {
         private static HttpClient _client;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<BtcCoreService> _logger;
 
-        public BtcCoreService(IHttpClientFactory httpClientFactory)
+        public BtcCoreService(IHttpClientFactory httpClientFactory, ILogger<BtcCoreService> logger)
         {
-            _httpClientFactory = httpClientFactory;
-            _client = _httpClientFactory.CreateClient("BtcCore");
+            _client = httpClientFactory.CreateClient("BtcCore");
+            _logger = logger;
         }
 
         public async Task<string> GetBestBlockHashAsync()
@@ -20,11 +21,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"; //todo improve custom content class
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
-            if (json == null)
-            {
-                throw new NullReferenceException();
-            } 
-            var formatted = json[1..^2];
+            var formatted = json?[1..^2];
             return formatted;
         }
 
@@ -57,11 +54,26 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             return responseObject;
         }
 
-        private static async Task<string> SendMessageAsync(string json)
+        private async Task<string?> SendMessageAsync(string json)
         {
-            var response = await _client.PostAsync(_client.BaseAddress ,new StringContent(json));
-            var content = await response.Content.ReadAsStringAsync();
-            return content;
+            
+            try
+            {
+                var response = await _client.PostAsync(_client.BaseAddress, new StringContent(json));
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
+            }
+            catch (NullReferenceException exception)
+            {
+                _logger.LogError(exception, "Connection to Btc Core could not be made"); 
+                //TODO log
+                throw;
+            }
+            catch(Exception exception) 
+            {
+                //TODO Log
+                throw;
+            }
         }
     }
 }

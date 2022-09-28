@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac.Core;
 using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
@@ -80,7 +79,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             UpdateBlockProvider(chainBlocks);
             var storedBlocks = GetStoredBlocks(chainBlocks,badBlocks,nrChainBlocks,nrBadStored);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-            var latestBlock = storedBlocks.Count() - 1;
+            var latestBlock = storedBlocks.Count - 1;
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
             var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
 
@@ -153,7 +152,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             newBlocks.Should().BeEquivalentTo(expectedResult);
         }
 
-        private List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
+        private static List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
         {
             var storedBlocks = new List<Block>(chainBlocks);
             storedBlocks.RemoveRange((nrChainBlocks - nrBadStored), nrBadStored);
@@ -177,7 +176,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         }
 
 
-        private List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
+        private static List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
         {
             var blocks = new List<Block>();
             for (var i = (nrBlocks - nrBadBlocks); i < nrBlocks ; i++)
@@ -188,7 +187,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             return blocks;
         }
 
-        private List<Block> GetChainBlocks(int nrBlocks)
+        private static List<Block> GetChainBlocks(int nrBlocks)
         {
             var storedBlocks = new List<Block>();
             for (var i = 0; i < nrBlocks; i++)

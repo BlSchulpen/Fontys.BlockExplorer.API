@@ -38,7 +38,7 @@ namespace MyBenchmarks
             var newAddresses = NewAddresses(nrStoredAddresses, nrNewAddresses);
             var addresses = oldAddresses.Concat(newAddresses).ToList();
             var block = NewBlock(addresses);
-            var addressRestorer = new AddressRestoreService(_dbContextMock.Object);
+            var addressRestorer = new ExplorerAddressRestoreService(_dbContextMock.Object);
 
             //act
             await addressRestorer.RestoreAddressesAsync(block);

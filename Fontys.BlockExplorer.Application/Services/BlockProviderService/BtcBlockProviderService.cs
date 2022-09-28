@@ -6,10 +6,10 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
     public class BtcBlockProviderService : IBlockDataProviderService
     {
-        private readonly IBtcNodeService _nodeService;
+        private readonly INodeService _nodeService;
         private readonly IMapper _mapper;
 
-        public BtcBlockProviderService(IBtcNodeService nodeService, IMapper mapper)
+        public BtcBlockProviderService(INodeService nodeService, IMapper mapper)
         {
             _nodeService = nodeService;
             _mapper = mapper;
