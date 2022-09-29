@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac.Core;
 using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
@@ -37,7 +36,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             //arrange
             _dbContextMock.Setup(context => context.Blocks).ReturnsDbSet(new List<Block>());
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             const CoinType coinType = CoinType.BTC;
 
             //act
@@ -55,9 +54,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const int latestBlock = nrStored - 1;
             var stored = GetChainBlocks(nrStored);
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString())).ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
+            _blockDataProviderServiceMock.Setup(b => b.GetBlockAsync(latestBlock.ToString()))!.ReturnsAsync(stored.FirstOrDefault(b => b.Hash == latestBlock.ToString()));
             _dbContextMock.Setup(context => context.Blocks).ReturnsDbSet(stored);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             const CoinType coinType = CoinType.BTC;
 
             //act
@@ -80,9 +79,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             UpdateBlockProvider(chainBlocks);
             var storedBlocks = GetStoredBlocks(chainBlocks,badBlocks,nrChainBlocks,nrBadStored);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-            var latestBlock = storedBlocks.Count() - 1;
+            var latestBlock = storedBlocks.Count - 1;
             _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
 
             //act
             var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
@@ -103,7 +102,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var chainBlocks = GetChainBlocks(nrChainBlocks);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(chainBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
 
             //act
             var newBlocks = await service.RemoveBadBlocksAsync(coinType);
@@ -123,7 +122,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             storedBlocks.RemoveRange(1,2);
             _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             var expectedResult = new List<Block> { chainBlocks[1], chainBlocks[2] };
 
             //act
@@ -132,49 +131,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             //assert
             newBlocks.Should().BeEquivalentTo(expectedResult);
         }
-
-        /*
-        //TODO Expect exception or empty List?
-        [Fact]
-        public async Task GetNewBlocks_BlocksStored_NoBlocksInChain_ReturnEmptyList()
-        {
-            //arrange 
-            const CoinType coinType = CoinType.BTC;
-            const int nrChainBlocks = 0;
-            const int nrStoredBlocks = 1;
-            var chainBlocks = GetChainBlocks(nrChainBlocks);
-            var storedBlocks = GetChainBlocks(nrStoredBlocks);
-            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-            UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
-
-            //act
-            var newBlocks = await service.GetNewBlocksAsync(coinType);
-
-            //assert
-            newBlocks.Should().BeEmpty();
-        }
-
-
-        //TODO Expect exception or empty List?
-        [Fact]
-        public async Task GetNewBlocks_NoBlocksStored_NoBlocksInChain_ReturnEmptyList()
-        {
-            //arrange 
-            const CoinType coinType = CoinType.BTC;
-            const int nrChainBlocks = 0;
-            var chainBlocks = GetChainBlocks(nrChainBlocks);
-            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(new List<Block>());
-            UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
-
-            //act
-            var newBlocks = await service.GetNewBlocksAsync(coinType);
-
-            //assert
-            newBlocks.Should().BeEmpty();
-        }
-        */
 
         [Fact]
         public async Task GetNewBlocks_OnlyFirstAndLatestBlocksStored_ThreeBlocksInChain_ReturnNotStoredBlocks()
@@ -186,7 +142,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             storedBlocks.RemoveAt(1);
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
             UpdateBlockProvider(chainBlocks);
-            var service = new NodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
             var expectedResult = new List<Block> { chainBlocks[1] };
 
             //act
@@ -196,7 +152,49 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             newBlocks.Should().BeEquivalentTo(expectedResult);
         }
 
-        private List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
+        [Fact]
+        public async Task GetNewBlocks_OnlyLatestStored_ReturnNewBlock()
+        {
+            // arrange
+            const int nrChainBlocks = 5;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            var storedBlocks = new List<Block>(chainBlocks);
+            var nonStored = storedBlocks.GetRange(0,4).ToList();
+            storedBlocks.RemoveRange(0,4);
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var expectedResult = new List<Block>(nonStored);
+
+            // act
+            var newBlocks = await service.GetNewBlocksAsync(CoinType.BTC);
+
+            // assert
+            newBlocks.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task GetNewBlocks_OnlyFirstStored_ReturnNewBlock()
+        {
+            // arrange
+            const int nrChainBlocks = 5;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            var storedBlocks = new List<Block>(chainBlocks);
+            var nonStored = storedBlocks.GetRange(1, 4).ToList();
+            storedBlocks.RemoveRange(1, 4);
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var expectedResult = new List<Block>(nonStored);
+
+            // act
+            var newBlocks = await service.GetNewBlocksAsync(CoinType.BTC);
+
+            // assert
+            newBlocks.Should().BeEquivalentTo(expectedResult);
+        }
+
+        private static List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
         {
             var storedBlocks = new List<Block>(chainBlocks);
             storedBlocks.RemoveRange((nrChainBlocks - nrBadStored), nrBadStored);
@@ -206,7 +204,11 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
 
         private void UpdateBlockProvider(List<Block> chainBlocks)
         {
-            var latestHash = chainBlocks.FirstOrDefault(x => x.Height == chainBlocks.Max(b => b.Height)).Hash;
+            var latestHash = chainBlocks.FirstOrDefault(x => x.Height == chainBlocks.Max(b => b.Height))?.Hash;
+            if (latestHash == null)
+            {
+                return;
+            }
             _blockDataProviderServiceMock.Setup(b => b.GetBestBlockHashAsync()).ReturnsAsync(latestHash);
             foreach (var block in chainBlocks)
             {
@@ -216,7 +218,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         }
 
 
-        private List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
+        private static List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
         {
             var blocks = new List<Block>();
             for (var i = (nrBlocks - nrBadBlocks); i < nrBlocks ; i++)
@@ -227,7 +229,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             return blocks;
         }
 
-        private List<Block> GetChainBlocks(int nrBlocks)
+        private static List<Block> GetChainBlocks(int nrBlocks)
         {
             var storedBlocks = new List<Block>();
             for (var i = 0; i < nrBlocks; i++)

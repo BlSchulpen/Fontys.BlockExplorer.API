@@ -6,19 +6,18 @@ using Fontys.BlockExplorer.Domain.Models;
 
 namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 {
-    public class NodeMonitoringService : INodeMonitoringService
+    public class ExplorerNodeMonitoringService : INodeMonitoringService
     {
         private readonly BlockExplorerContext _context;
         private readonly IAddressRestoreService _addressRestoreService;
         private readonly Func<CoinType, IBlockDataProviderService> _providerServiceResolver;
 
-        public NodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IAddressRestoreService addressRestoreService)
+        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IAddressRestoreService addressRestoreService)
         {
             _context = blockExplorerContext;
             _providerServiceResolver = providerServiceResolver;
             _addressRestoreService = addressRestoreService;
         }
-
         public async Task<ICollection<Block>> RemoveBadBlocksAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
@@ -40,44 +39,19 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             return removedBlocks;
         }
 
-        //todo refactor this
-        /*
-        public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
-        {
-            var providerService = _providerServiceResolver(coinType);
-            var newBlocks = new List<Block>();
-            
-            if (_context.Blocks.Where(b => b.CoinType == coinType).ToList().Count == 0)
-            {
-                var firstBlock = await StoreFirstBlockAsync(coinType);
-                newBlocks.Add(firstBlock);
-            }
-
-            var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
-            var chainHash = await providerService.GetBestBlockHashAsync();
-            var chainBlock = await providerService.GetBlockAsync(chainHash);
-            var newHeight = chainBlock.Height;
-            var nrStored = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Count();
-            while (storedHeight < chainBlock.Height || nrStored <= newHeight)
-            {
-                if (!_context.Blocks.Any(b => b.Height == chainBlock.Height && chainBlock.CoinType == coinType))
-                {
-                    newBlocks.Add(chainBlock);
-                    await StoreBlockAsync(chainBlock);
-                    nrStored += 1;
-                }
-                chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
-                chainBlock = await providerService.GetBlockAsync(chainHash);
-            }
-            return newBlocks;
-        }
-        */
         public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
             var newBlocks = await GetStartingBlockListAsync(coinType);
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
             var chainBlock = await GetBestBlockAsync(providerService);
+            //TODO maybe use 3excpetion handling in the provider?
+            if (chainBlock == null)
+            {
+                //log
+                throw new NullReferenceException("No blocks can be found in the chain");
+            }
+
             var latestHeight = chainBlock.Height;
             var nrStored = _context.Blocks.Count(b => b.CoinType == CoinType.BTC);
             while (storedHeight < chainBlock.Height || nrStored <= latestHeight)
@@ -88,6 +62,9 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                     await StoreBlockAsync(chainBlock);
                     nrStored += 1;
                 }
+
+                if (chainBlock.Height == 0)
+                    continue;
                 var chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
                 chainBlock = await providerService.GetBlockAsync(chainHash);
             }

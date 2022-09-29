@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
+using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Factories
 {
@@ -33,7 +30,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories
                 {
                     TxId = txId,
                     Coinbase = i.ToString(),
-                    Addresses = new List<string>() { nrInputs.ToString()},
+                    Addresses = new List<string>() { nrInputs.ToString() },
                 });
             }
             return inputs;
@@ -48,7 +45,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories
                 {
                     Value = 500, //TODO add settings file
                     N = i,
-                    ScriptPubKey = new BtcScriptPubKeyResponse() { Addresses = new List<string>() {i.ToString()} },
+                    ScriptPubKey = new BtcScriptPubKeyResponse() { Addresses = new List<string>() { i.ToString() } },
                 });
             }
             return outputs;

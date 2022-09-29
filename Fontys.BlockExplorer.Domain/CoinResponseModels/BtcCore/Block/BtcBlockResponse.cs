@@ -1,8 +1,4 @@
-﻿using Fontys.BlockExplorer.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
-using System.Transactions;
-
-namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
+﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcBlockResponse
     {

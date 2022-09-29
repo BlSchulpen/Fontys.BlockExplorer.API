@@ -1,22 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using BenchmarkDotNet.Configs;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
-using Xunit;
-using Fontys.BlockExplorer.API.Dto.Response;
-using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
-using Fontys.BlockExplorer.Domain.Enums;
-using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
-using System;
+using System.Threading.Tasks;
+using Fontys.BlockExplorer.API.UnitTests.Factories;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Xunit;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Services
+namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviders
 {
     public class BtcBlockProviderTest
     {
@@ -28,7 +20,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _blockFactory = new BtcCoreBlockResponseFactory();
             _transactionFactory = new BtcCoreTransactionResponseFactory();
         }
-        
+
         [Fact]
         public async Task GetBlock_BlockExists_ReturnBlock()
         {
@@ -39,7 +31,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const int blockNr = 0;
             var mockNodeService = GetMockNodeService(blockNr);
 
-            var service = new BtcBlockProviderService(mockNodeService.Object,mapper);
+            var service = new BtcBlockProviderService(mockNodeService.Object, mapper);
 
             //act
             var result = await service.GetBlockAsync(blockNr.ToString());
@@ -49,7 +41,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         }
 
 
-        //Todo determine why excpetion instead of returning null 
+        //Todo determine why exception instead of returning null 
         private Mock<IBtcNodeService> GetMockNodeService(int blockNr)
         {
             const int nrInputs = 3;
@@ -60,11 +52,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockNr.ToString())).ReturnsAsync(btcBlockResponse);
             for (var i = 0; i < nrTransactions; i++)
             {
-                var transactionResponse = _transactionFactory.BtcTransactionResponse(nrInputs,nrOutputs,i);
-                var test = i.ToString();
-                mockNodeService.Setup(nodeService => nodeService.GetRawTransactionAsync(test)).ReturnsAsync(transactionResponse);
+                var transactionResponse = _transactionFactory.BtcTransactionResponse(nrInputs, nrOutputs, i);
+                mockNodeService.Setup(nodeService => nodeService.GetRawTransactionAsync(i.ToString())).ReturnsAsync(transactionResponse);
             }
-
             return mockNodeService;
         }
     }

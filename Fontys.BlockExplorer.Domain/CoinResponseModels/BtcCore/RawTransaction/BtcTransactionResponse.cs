@@ -1,13 +1,12 @@
-﻿using Fontys.BlockExplorer.Domain.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction;
 
 namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block
 {
     public class BtcTransactionResponse
     {
         public string Hash { get; set; }
-        public virtual ICollection<BtcInputResponse> Vin { get; set; }
-        public virtual ICollection<BtcOutputResponse> Vout { get; set; }
+        public virtual ICollection<BtcInputResponse>? Vin { get; set; }
+        public virtual ICollection<BtcOutputResponse>? Vout { get; set; }
 
     }
 }
