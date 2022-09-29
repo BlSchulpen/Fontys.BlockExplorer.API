@@ -45,13 +45,18 @@ builder.Services.AddHostedService<NodeDataWorker>();
 // Automappers
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 
-// Http Clients
+//TODO place in keyvault
 builder.Services.AddHttpClient("BtcCore", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["BtcCoreSettings:BaseUrl"]);
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["BtcCoreSettings:Username"]}:{builder.Configuration["BtcCoreSettings:Password"]}")));
 });
 
+builder.Services.AddHttpClient("EthGeth", httpClient =>
+{
+    httpClient.BaseAddress = new Uri(builder.Configuration["EthGethSettings:BaseUrl"]);
+    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["EthGethSettings:Username"]}:{builder.Configuration["EthGethSettings:Password"]}")));
+});
 
 var app = builder.Build();
 app.Run();

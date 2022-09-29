@@ -1,10 +1,20 @@
 ﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
 {
     //TODO
     public class EthGethService : IEthNodeService
     {
+        private static HttpClient _client;
+        private readonly ILogger<EthGethService> _logger;
+
+        public EthGethService(IHttpClientFactory httpClientFactory, ILogger<EthGethService> logger)
+        {
+            _client = httpClientFactory.CreateClient("BtcCore");
+            _logger = logger;
+        }
         public Task<EthBlockResponse> GetBlockByHashAsync(string hash)
         {
             throw new NotImplementedException();
