@@ -1,5 +1,4 @@
-﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
 {

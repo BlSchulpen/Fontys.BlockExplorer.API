@@ -21,7 +21,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             var block = _mapper.Map<Block>(blockResponse);
             return block;
         }
-        //TODO Eth can get block directly?
+
         public async Task<string> GetHashFromHeightAsync(int height)
         {
             var blockResponse = await _ethNodeService.GetBlockByNumberAsync(height);

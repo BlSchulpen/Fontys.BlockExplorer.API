@@ -2,13 +2,13 @@
 using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Moq;
 using System.Threading.Tasks;
 using Fontys.BlockExplorer.API.UnitTests.Factories;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Xunit;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Services
+namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviders
 {
     public class BtcBlockProviderTest
     {
@@ -20,7 +20,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _blockFactory = new BtcCoreBlockResponseFactory();
             _transactionFactory = new BtcCoreTransactionResponseFactory();
         }
-        
+
         [Fact]
         public async Task GetBlock_BlockExists_ReturnBlock()
         {
@@ -31,7 +31,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const int blockNr = 0;
             var mockNodeService = GetMockNodeService(blockNr);
 
-            var service = new BtcBlockProviderService(mockNodeService.Object,mapper);
+            var service = new BtcBlockProviderService(mockNodeService.Object, mapper);
 
             //act
             var result = await service.GetBlockAsync(blockNr.ToString());
@@ -52,7 +52,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockNr.ToString())).ReturnsAsync(btcBlockResponse);
             for (var i = 0; i < nrTransactions; i++)
             {
-                var transactionResponse = _transactionFactory.BtcTransactionResponse(nrInputs,nrOutputs,i);
+                var transactionResponse = _transactionFactory.BtcTransactionResponse(nrInputs, nrOutputs, i);
                 mockNodeService.Setup(nodeService => nodeService.GetRawTransactionAsync(i.ToString())).ReturnsAsync(transactionResponse);
             }
             return mockNodeService;
