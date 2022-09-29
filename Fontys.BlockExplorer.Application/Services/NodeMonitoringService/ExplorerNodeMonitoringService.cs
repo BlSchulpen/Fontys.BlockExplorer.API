@@ -62,6 +62,9 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                     await StoreBlockAsync(chainBlock);
                     nrStored += 1;
                 }
+
+                if (chainBlock.Height == 0)
+                    continue;
                 var chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
                 chainBlock = await providerService.GetBlockAsync(chainHash);
             }

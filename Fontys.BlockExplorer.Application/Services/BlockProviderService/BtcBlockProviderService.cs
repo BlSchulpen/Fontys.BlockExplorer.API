@@ -1,30 +1,30 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Domain.Models;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
     public class BtcBlockProviderService : IBlockDataProviderService
     {
-        private readonly INodeService _nodeService;
+        private readonly IBtcNodeService _btcNodeService;
         private readonly IMapper _mapper;
 
-        public BtcBlockProviderService(INodeService nodeService, IMapper mapper)
+        public BtcBlockProviderService(IBtcNodeService btcNodeService, IMapper mapper)
         {
-            _nodeService = nodeService;
+            _btcNodeService = btcNodeService;
             _mapper = mapper;
         }
 
         public async Task<string> GetBestBlockHashAsync()
         {
-            var hash = await _nodeService.GetBestBlockHashAsync();
+            var hash = await _btcNodeService.GetBestBlockHashAsync();
             return hash;
         }
         public async Task<string> GetHashFromHeightAsync(int height)
         {
             try
             {
-                var hash = await _nodeService.GetHashFromHeightAsync(height);
+                var hash = await _btcNodeService.GetHashFromHeightAsync(height);
                 return hash;
             }
             catch (NullReferenceException e)
@@ -40,7 +40,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 
         public async Task<Block> GetBlockAsync(string hash)
         {
-            var blockResponse = await _nodeService.GetBlockFromHashAsync(hash);
+            var blockResponse = await _btcNodeService.GetBlockFromHashAsync(hash);
             var transactionIds = blockResponse.Transactions.Select(t => t.Hash);
             foreach (var transactionId in transactionIds)
             {
@@ -52,7 +52,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 
         private async Task RetrieveNonCoinBasedInputDataAsync(string transactionId)
         {
-            var rawTransaction = await _nodeService.GetRawTransactionAsync(transactionId);
+            var rawTransaction = await _btcNodeService.GetRawTransactionAsync(transactionId);
             foreach (var input in rawTransaction.Vin.Where(t => t.TxId != null)) //todo check if it could be null
             {
                 var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction

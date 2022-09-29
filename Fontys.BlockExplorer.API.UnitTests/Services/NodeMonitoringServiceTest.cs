@@ -152,6 +152,48 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             newBlocks.Should().BeEquivalentTo(expectedResult);
         }
 
+        [Fact]
+        public async Task GetNewBlocks_OnlyLatestStored_ReturnNewBlock()
+        {
+            // arrange
+            const int nrChainBlocks = 5;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            var storedBlocks = new List<Block>(chainBlocks);
+            var nonStored = storedBlocks.GetRange(0,4).ToList();
+            storedBlocks.RemoveRange(0,4);
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var expectedResult = new List<Block>(nonStored);
+
+            // act
+            var newBlocks = await service.GetNewBlocksAsync(CoinType.BTC);
+
+            // assert
+            newBlocks.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public async Task GetNewBlocks_OnlyFirstStored_ReturnNewBlock()
+        {
+            // arrange
+            const int nrChainBlocks = 5;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            var storedBlocks = new List<Block>(chainBlocks);
+            var nonStored = storedBlocks.GetRange(1, 4).ToList();
+            storedBlocks.RemoveRange(1, 4);
+            _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderResolverMock.Object, _mockAddressRestoreService.Object);
+            var expectedResult = new List<Block>(nonStored);
+
+            // act
+            var newBlocks = await service.GetNewBlocksAsync(CoinType.BTC);
+
+            // assert
+            newBlocks.Should().BeEquivalentTo(expectedResult);
+        }
+
         private static List<Block> GetStoredBlocks(List<Block> chainBlocks, List<Block> badBlocks, int nrChainBlocks, int nrBadStored)
         {
             var storedBlocks = new List<Block>(chainBlocks);

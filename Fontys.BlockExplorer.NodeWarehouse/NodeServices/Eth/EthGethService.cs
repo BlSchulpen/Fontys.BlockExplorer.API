@@ -1,27 +1,25 @@
 ﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
+using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
 {
-    public class EthGethService : INodeService
+    //TODO
+    public class EthGethService : IEthNodeService
     {
-        public Task<string> GetBestBlockHashAsync()
+        public Task<EthBlockResponse> GetBlockByHashAsync(string hash)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GetHashFromHeightAsync(int height)
+        public Task<EthBlockResponse> GetBlockByNumberAsync(int number)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
+        public Task<int> GetLatestNumber()
         {
             throw new NotImplementedException();
         }
-
-        public Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
-        {
-            throw new NotImplementedException();
-        }
+    }
     }
 }

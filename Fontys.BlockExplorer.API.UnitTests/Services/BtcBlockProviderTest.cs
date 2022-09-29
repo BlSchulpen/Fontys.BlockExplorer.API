@@ -42,21 +42,19 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
 
 
         //Todo determine why exception instead of returning null 
-        private Mock<INodeService> GetMockNodeService(int blockNr)
+        private Mock<IBtcNodeService> GetMockNodeService(int blockNr)
         {
             const int nrInputs = 3;
             const int nrOutputs = 3;
             const int nrTransactions = 1; //TODO Find a way to give unique mock responses for different parameters
             var btcBlockResponse = _blockFactory.BlockResponse(blockNr, nrTransactions);
-            var mockNodeService = new Mock<INodeService>();
+            var mockNodeService = new Mock<IBtcNodeService>();
             mockNodeService.Setup(nodeService => nodeService.GetBlockFromHashAsync(blockNr.ToString())).ReturnsAsync(btcBlockResponse);
             for (var i = 0; i < nrTransactions; i++)
             {
                 var transactionResponse = _transactionFactory.BtcTransactionResponse(nrInputs,nrOutputs,i);
-                var test = i.ToString();
-                mockNodeService.Setup(nodeService => nodeService.GetRawTransactionAsync(test)).ReturnsAsync(transactionResponse);
+                mockNodeService.Setup(nodeService => nodeService.GetRawTransactionAsync(i.ToString())).ReturnsAsync(transactionResponse);
             }
-
             return mockNodeService;
         }
     }

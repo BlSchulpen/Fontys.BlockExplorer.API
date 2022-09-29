@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockP
     return key switch
     {
         CoinType.BTC => blockProviderType.GetService<BtcBlockProviderService>(),
+        CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
         _ => null
     };
 });
@@ -31,7 +33,8 @@ builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockP
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.Configure<PostgresDbOptions>(builder.Configuration.GetRequiredSection(nameof(PostgresDbOptions)));
-builder.Services.AddScoped<INodeService, BtcCoreService>();
+builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
+builder.Services.AddScoped<IEthNodeService, EthGethService>();
 builder.Services.AddScoped<INodeMonitoringService, ExplorerNodeMonitoringService>();
 builder.Services.AddScoped<IAddressRestoreService, ExplorerAddressRestoreService>();
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
