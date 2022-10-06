@@ -42,7 +42,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             await _context.SaveChangesAsync(); 
 
 
-            /*
+            
             foreach (var input in block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null))
             {
                 input.Address = _context.Addresses.FirstOrDefault(x => x.Hash == input.Address.Hash);
@@ -52,7 +52,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             {
                 output.Address = _context.Addresses.FirstOrDefault(x => x.Hash == output.Address.Hash);
             }
-            */
+            
 
             return distinctNewAddresses;
         }
