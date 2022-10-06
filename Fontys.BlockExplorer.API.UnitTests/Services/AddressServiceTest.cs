@@ -3,6 +3,8 @@ using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -14,10 +16,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
     public class AddressServiceTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<ILogger<ExplorerAddressService>> _mockLogger;
 
         public AddressServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _mockLogger = new Mock<ILogger<ExplorerAddressService>>();
         }
 
         [Fact]
@@ -30,7 +34,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var storedAddresses = new List<Address>() { storedAddress };
             
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(storedAddresses);
-            var service = new ExplorerAddressService(_dbContextMock.Object);
+            var service = new ExplorerAddressService(_dbContextMock.Object,_mockLogger.Object);
 
             // act
             var returnedAddress = await service.GetAddressAsync(addressCommand);
@@ -46,7 +50,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const string addressHash = "0000";
             var addressCommand = new GetAddressCommand{ Hash = addressHash };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new ExplorerAddressService(_dbContextMock.Object);
+            var service = new ExplorerAddressService(_dbContextMock.Object, _mockLogger.Object);
 
             // act
             var returnedAddress = await service.GetAddressAsync(addressCommand);

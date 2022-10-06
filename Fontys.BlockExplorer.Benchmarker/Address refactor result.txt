@@ -1,0 +1,6 @@
+﻿Main test takes ~18min
+
+-Getting the addresses hashes from the block takes ~15ms (Not a problem)
+-Getting distinct addresses takes  ~ 3seconds (A bit to large)
+-Save distinct addresses  ~3seconds (No meaningfull change)
+- Do all but return list, thus overide addresses: Likely seems to be about 17 seonds ased on before run

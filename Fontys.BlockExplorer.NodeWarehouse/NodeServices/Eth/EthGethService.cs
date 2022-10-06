@@ -30,5 +30,4 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
             throw new NotImplementedException();
         }
     }
-    }
 }

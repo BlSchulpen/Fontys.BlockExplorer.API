@@ -25,7 +25,7 @@ builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockP
     return key switch
     {
         CoinType.BTC => blockProviderType.GetService<BtcBlockProviderService>(),
-        CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
+  //      CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
         _ => null
     };
 });
@@ -44,6 +44,8 @@ builder.Services.AddHostedService<NodeDataWorker>();
 
 // Automappers
 builder.Services.AddAutoMapper(typeof(BtcProfile));
+builder.Services.AddAutoMapper(typeof(EthProfile));
+
 
 //TODO place in keyvault
 builder.Services.AddHttpClient("BtcCore", httpClient =>

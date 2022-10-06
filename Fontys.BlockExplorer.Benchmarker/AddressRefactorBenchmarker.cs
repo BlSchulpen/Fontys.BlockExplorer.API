@@ -1,14 +1,13 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Running;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
+using System.Collections.Generic;
+using System;
 
 namespace MyBenchmarks
 {
@@ -23,14 +22,15 @@ namespace MyBenchmarks
             _dbContextMock = new Mock<BlockExplorerContext>();
         }
 
+        
         //17 seconds
         [Benchmark]
         public async Task RestoreAddresses()
         {
             // arrange
-            int nrStoredAddresses = 100000;
-            int nrOldAddresses = 2000;
-            int nrNewAddresses = 10000;
+            const int nrStoredAddresses = 100000;
+            const int  nrOldAddresses = 2000;
+            const int  nrNewAddresses = 7000;
 
             var storedAddresses = StoredAddresses(nrStoredAddresses);
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(storedAddresses);
@@ -47,7 +47,7 @@ namespace MyBenchmarks
         private List<Address> StoredAddresses(int nrAddresses)
         {
             var addresses = new List<Address>();
-            for (int i = 0; i < nrAddresses; i++)
+            for (var i = 0; i < nrAddresses; i++)
             {
                 addresses.Add(new Address() { Hash = i.ToString() });
             }
@@ -57,7 +57,7 @@ namespace MyBenchmarks
         private List<Address> NewAddresses(int nrStoredAddresses, int nrNewAddresses)
         {
             var addresses = new List<Address>();
-            for (int i = nrStoredAddresses; i < (nrStoredAddresses + nrNewAddresses); i++)
+            for (var i = nrStoredAddresses; i < (nrStoredAddresses + nrNewAddresses); i++)
             {
                 addresses.Add(new Address() { Hash = i.ToString() });
             }
@@ -66,14 +66,43 @@ namespace MyBenchmarks
 
         private Block NewBlock(List<Address> addresses)
         {
-            var inputs = new List<TxInput>();
-            foreach (var address in addresses)
+            var nonPickedAddresses = new List<Address>(addresses);
+            const int avgNrTransactions = 2000;
+            var transactions = new List<Transaction>();
+
+            for (var i = 0; i < avgNrTransactions; i++)
             {
-                inputs.Add(new TxInput() { Id = new Guid("3f78316e-3ff9-46c7-ae2d-660f4516c2c6"), Address = address, IsNewlyGenerated = false, Value = 0 });
+                var transaction = new Transaction() { Hash = i.ToString(), Inputs = GetAddressInputs(addresses, nonPickedAddresses), Outputs = new List<TxOutput>() };
+                transactions.Add(transaction);
             }
-            var transaction = new Transaction() { Hash = "0", Inputs = inputs, Outputs = new List<TxOutput>() };
-            var block = new Block() { Hash = "0", CoinType = CoinType.BTC, NetworkType = NetworkType.BtcMainet, Height = 0, PreviousBlockHash = "0", Transactions = new List<Transaction>() { transaction } };
+            var block = new Block() { Hash = "0", CoinType = CoinType.BTC, NetworkType = NetworkType.BtcMainet, Height = 0, PreviousBlockHash = "0", Transactions = new List<Transaction>(transactions)};
             return block;
+        }
+
+        private List<TxInput> GetAddressInputs(List<Address> addresses, List<Address> nonPickedAddresses)
+        {
+            var inputs = new List<TxInput>();
+            var possibilities = new List<Address>(addresses);
+            var random = new Random();
+            int nrInputs = random.Next(1, 5);
+            for (var i = 0; i < nrInputs; i++)
+            {
+                Address address;
+                if (nonPickedAddresses.Count != 0)
+                {
+                    var index = random.Next(nonPickedAddresses.Count);
+                    address = nonPickedAddresses[index];
+                }
+                else
+                {
+                    var index = random.Next(addresses.Count);
+                    address = possibilities[index];
+                }
+
+                possibilities.Remove(address);
+                inputs.Add(new TxInput() { Id = new Guid("3f78316e-3ff9-46c7-ae2d-660f4516c2c6"), Address = address, IsNewlyGenerated = false, Value = 10 });
+            }
+            return inputs;
         }
     }
 }
