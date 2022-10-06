@@ -23,7 +23,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
             _mockHttpClientFactory.Setup(x => x.CreateClient("ethGeth")).Returns(mockClient.Object);
             _mockLogger = new Mock<ILogger<EthGethService>>();
         }
-
+        
+        /*
         [Fact]
         public async Task GetLatestNr_ConnectionNotEstablished_LogConnectionError()
         {
@@ -45,5 +46,6 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
                 Times.Once
             );
         }
+        */
     }
 }

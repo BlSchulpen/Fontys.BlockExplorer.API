@@ -13,10 +13,9 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             _context = context;
         }
 
-        //TODO check on network type not cointype ---> for example btc cash 
-        //TODO update this to make it way more readable
-        //TODO maybe research other way to handle this... (maybe consider first creating address, then transfer etc...)
-        //18 s
+        //TODO Get all addresses that have been stored yet and just assign the context address
+            // Issue => sometimes new addresses are in multiple transacions this causes an dupplicate primary key error when adding the block in the DB 
+
         public async Task<List<Address>> RestoreAddressesAsync(Block block)
         {
             var addresses = new List<Address>();
@@ -28,8 +27,6 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             addresses.AddRange(inputAddresses);
             addresses.AddRange(outputAddresses);
             var hashes = addresses.Select(a => a.Hash).ToList();
-
-
             var alreadyStoredAddresses = _context.Addresses.Where(a => hashes.Contains(a.Hash)).ToList();
             var alreadyStoredAddressesHashes = alreadyStoredAddresses.Select(a => a.Hash).ToList();
             var newAddressesHashes = hashes.Except(alreadyStoredAddressesHashes).ToList();
@@ -38,11 +35,23 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
                 .GroupBy(i => i.Hash)
                 .Select(i => i.First())
                 .ToList();
-            _context.Addresses.AddRange(distinctNewAddresses);
+            _context.Addresses.AddRange(distinctNewAddresses); 
             await _context.SaveChangesAsync(); 
 
 
-            
+           var blockStoredAddresses = _context.Addresses.Where(x => hashes.Contains(x.Hash));
+           var inputs = block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null).ToList();
+           var outputs = block.Transactions.ToList().SelectMany(t => t.Outputs).Where(a => a.Address != null).ToList();
+
+
+           //Think this mostly solves the performance issues (from ~7sec to ~2secs)
+            foreach (var address in blockStoredAddresses)
+            {
+                inputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
+                outputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
+            }
+
+            /*
             foreach (var input in block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null))
             {
                 input.Address = _context.Addresses.FirstOrDefault(x => x.Hash == input.Address.Hash);
@@ -52,7 +61,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             {
                 output.Address = _context.Addresses.FirstOrDefault(x => x.Hash == output.Address.Hash);
             }
-            
+            */
 
             return distinctNewAddresses;
         }
