@@ -42,7 +42,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             var newBlock = BlockFactory.NewBlock(newAddresses);
 
             // act
-            var test = _inMemoryContext.Addresses.ToList();
             var newlyStored = await service.RestoreAddressesAsync(newBlock);
 
             // assert

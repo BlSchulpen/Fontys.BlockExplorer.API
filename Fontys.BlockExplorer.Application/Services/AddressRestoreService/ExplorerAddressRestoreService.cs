@@ -17,7 +17,6 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
         public async Task<List<Address>> RestoreAddressesAsync(Block block)
         {
             var addressesInBlock = GetAllAddressesOfBlock(block); //todo check
-            var storedAddresses2 = _context.Addresses.Where(a => addressesInBlock.Any(x => x.Hash == a.Hash)).ToList();
             var distinctNewAddresses = GetDistinctNewAddresses(addressesInBlock);
             _context.Addresses.AddRange(distinctNewAddresses);
             await _context.SaveChangesAsync();
