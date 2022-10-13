@@ -4,9 +4,9 @@ using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Moq;
 using System.Threading.Tasks;
-using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Xunit;
+using Fontys.BlockExplorer.API.UnitTests.Factories.ResponseFactories;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviders
 {

@@ -1,7 +1,7 @@
 ﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 using System.Collections.Generic;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Factories
+namespace Fontys.BlockExplorer.API.UnitTests.Factories.ResponseFactories
 {
     public class BtcCoreBlockResponseFactory
     {

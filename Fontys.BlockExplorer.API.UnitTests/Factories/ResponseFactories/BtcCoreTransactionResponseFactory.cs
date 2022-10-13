@@ -2,7 +2,7 @@
 using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction;
 using System.Collections.Generic;
 
-namespace Fontys.BlockExplorer.API.UnitTests.Factories
+namespace Fontys.BlockExplorer.API.UnitTests.Factories.ResponseFactories
 {
     public class BtcCoreTransactionResponseFactory
     {
