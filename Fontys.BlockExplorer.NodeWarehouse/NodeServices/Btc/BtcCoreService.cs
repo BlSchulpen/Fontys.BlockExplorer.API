@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
@@ -40,7 +41,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var response = await SendMessageAsync(content);
             var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
-            var formatted = hash?[1..^2];
+            var formatted =  Regex.Replace(hash, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
             return formatted;
         }
 
@@ -58,6 +59,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         {
             try
             {
+                var test2 = new StringContent(json);
+                var test = _client.BaseAddress;
                 var response = await _client.PostAsync(_client.BaseAddress, new StringContent(json));
                 var content = await response.Content.ReadAsStringAsync();
                 return content;

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Fontys.BlockExplorer.API.Migrations
 {
     [DbContext(typeof(PostgresDatabaseContext))]
-    [Migration("20220909121400_initialDb")]
+    [Migration("20221014075319_initialDb")]
     partial class initialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace Fontys.BlockExplorer.API.Migrations
 
                     b.HasIndex("BlockHash");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Tx");
                 });
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.TxInput", b =>
@@ -125,7 +125,7 @@ namespace Fontys.BlockExplorer.API.Migrations
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>
                 {
                     b.HasOne("Fontys.BlockExplorer.Domain.Models.Block", null)
-                        .WithMany("Transactions")
+                        .WithMany("Tx")
                         .HasForeignKey("BlockHash");
                 });
 
@@ -157,7 +157,7 @@ namespace Fontys.BlockExplorer.API.Migrations
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Block", b =>
                 {
-                    b.Navigation("Transactions");
+                    b.Navigation("Tx");
                 });
 
             modelBuilder.Entity("Fontys.BlockExplorer.Domain.Models.Transaction", b =>

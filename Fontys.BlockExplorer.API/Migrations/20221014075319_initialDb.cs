@@ -36,7 +36,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "Tx",
                 columns: table => new
                 {
                     Hash = table.Column<string>(type: "text", nullable: false),
@@ -73,7 +73,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                     table.ForeignKey(
                         name: "FK_TxInputs_Transactions_TransactionHash",
                         column: x => x.TransactionHash,
-                        principalTable: "Transactions",
+                        principalTable: "Tx",
                         principalColumn: "Hash");
                 });
 
@@ -97,13 +97,13 @@ namespace Fontys.BlockExplorer.API.Migrations
                     table.ForeignKey(
                         name: "FK_TxOutputs_Transactions_TransactionHash",
                         column: x => x.TransactionHash,
-                        principalTable: "Transactions",
+                        principalTable: "Tx",
                         principalColumn: "Hash");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_BlockHash",
-                table: "Transactions",
+                table: "Tx",
                 column: "BlockHash");
 
             migrationBuilder.CreateIndex(
@@ -139,7 +139,7 @@ namespace Fontys.BlockExplorer.API.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "Tx");
 
             migrationBuilder.DropTable(
                 name: "Blocks");

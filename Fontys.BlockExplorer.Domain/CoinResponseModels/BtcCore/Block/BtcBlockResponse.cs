@@ -5,6 +5,6 @@
         public string Hash { get; set; }
         public int Height { get; set; }
         public string? Previousblockhash { get; set; }
-        public virtual ICollection<BtcBlockTxResponse> Transactions { get; set; }
+        public virtual ICollection<BtcBlockTxResponse> Tx { get; set; }
     }
 }

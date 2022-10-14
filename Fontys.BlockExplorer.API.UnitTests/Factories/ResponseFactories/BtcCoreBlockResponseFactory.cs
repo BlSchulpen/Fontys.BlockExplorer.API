@@ -15,7 +15,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Factories.ResponseFactories
                     Hash = i.ToString()
                 });
             }
-            return new BtcBlockResponse() { Hash = nrBlock.ToString(), Height = nrBlock, Transactions = transactions };
+            return new BtcBlockResponse() { Hash = nrBlock.ToString(), Height = nrBlock, Tx = transactions };
         }
     }
 }

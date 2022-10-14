@@ -11,11 +11,11 @@ namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
         public BtcProfile()
         {
             CreateMap<BtcBlockResponse, Block>()
-                .ForMember(dest => dest.Transactions, act => act.MapFrom(src => src.Transactions))
+                .ForMember(dest => dest.Transactions, act => act.MapFrom(src => src.Tx))
                 .ForMember(dest => dest.CoinType, act => act.MapFrom(src => CoinType.BTC))
                 .ForMember(dest => dest.NetworkType, act => act.MapFrom(src => NetworkType.BtcMainet));
             CreateMap<BtcBlockTxResponse, Transaction>()
-                .ForMember(dest => dest.Hash, act => act.MapFrom(scr => scr.Hash));
+                .ForMember(dest => dest.Hash, act => act.MapFrom(scr => scr.hash));
             CreateMap<BtcInputResponse, TxInput>()
                      .ForMember(dest => dest.IsNewlyGenerated, act => act.MapFrom(src => src.Coinbase != null))
                      .ForMember(dest => dest.Address, act => act.MapFrom(src => new Address() { Hash = src.Addresses.FirstOrDefault() })); //todo maybe change
