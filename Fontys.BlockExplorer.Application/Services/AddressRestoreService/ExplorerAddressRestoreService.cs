@@ -20,8 +20,11 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             var distinctNewAddresses = GetDistinctNewAddresses(addressesInBlock);
             _context.Addresses.AddRange(distinctNewAddresses);
             await _context.SaveChangesAsync();
-            var storedAddresses = _context.Addresses.Where(a => addressesInBlock.Any(x => x.Hash == a.Hash)).ToList();
-            await UpdateTransferAddressesAsync(block,storedAddresses);
+            var test = _context.Addresses.ToList();
+            var test2 = _context.Addresses.Where(t => t.Hash == "0").ToList();
+      //      var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Any(x => x.Hash == a.Hash)).ToList();
+            var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Contains(a)).ToList(); 
+            UpdateTransferAddressesAsync(block,dbAddressesInBlock);
             return distinctNewAddresses;
         }
 
@@ -52,12 +55,12 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             return distinctNewAddresses;
         }
 
-        private async Task UpdateTransferAddressesAsync(Block block, List<Address> storedAddresses)
+        private void UpdateTransferAddressesAsync(Block block, List<Address> dbAddressesInBlock)
         {
             var inputs = block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null).ToList();
             var outputs = block.Transactions.ToList().SelectMany(t => t.Outputs).Where(a => a.Address != null).ToList();
-            foreach (var address in storedAddresses)
-            {
+            foreach (var address in dbAddressesInBlock)
+            { 
                 inputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
                 outputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
             }

@@ -17,7 +17,7 @@
         }
 
         //TODO get transactionsIds of address
-        [HttpGet("{hash}")]
+        [HttpGet("{Hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetAddress(string hash)
         {

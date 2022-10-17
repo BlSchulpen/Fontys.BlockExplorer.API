@@ -2,6 +2,6 @@
 {
     public class BtcBlockTxResponse
     {
-        public string hash { get; set; }
+        public string Hash { get; set; }
     }
 }

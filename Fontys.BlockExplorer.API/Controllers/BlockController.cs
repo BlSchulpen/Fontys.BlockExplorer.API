@@ -22,7 +22,7 @@
             _mapper = mapper;   
         }
 
-        [HttpGet ("{hash}")]
+        [HttpGet ("{Hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetBlockAsync(string hash)
         {

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
 {
-    // Address restore service is also tested with an in memmory DB
+    // Address restore service is also tested with an in memory DB
     // It is best practice not to use In memory DB for most unit tests but I needed to test if dupplicates could be added to the DB 
     public class AddressRestoreServiceInMemoryTest
     {

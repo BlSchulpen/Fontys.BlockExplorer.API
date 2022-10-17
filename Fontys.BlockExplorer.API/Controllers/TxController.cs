@@ -21,7 +21,7 @@ namespace Fontys.BlockExplorer.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{hash}")]
+        [HttpGet("{Hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetTransaction(string hash)
         {

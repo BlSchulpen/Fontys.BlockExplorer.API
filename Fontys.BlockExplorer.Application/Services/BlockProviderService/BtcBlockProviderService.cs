@@ -41,7 +41,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         public async Task<Block> GetBlockAsync(string hash)
         {
             var blockResponse = await _btcNodeService.GetBlockFromHashAsync(hash);
-            var transactionIds = blockResponse.Tx.Select(t => t.hash);
+            var transactionIds = blockResponse.Tx.Select(t => t.Hash);
             foreach (var transactionId in transactionIds)
             {
                await RetrieveNonCoinBasedInputDataAsync(transactionId);
