@@ -19,23 +19,14 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
     {
         private readonly BlockExplorerContext _inMemoryContext;
         private const int NrStored = 100;
+        private InMemoryDatabaseContext _inMemoryDatabaseContext;
+    
 
-        public AddressRestoreServiceInMemoryTest()
-        {
-            var options = new DbContextOptionsBuilder<InMemoryDatabaseContext>()
-                .UseInMemoryDatabase(databaseName: "BlockDatabase") 
-                .Options;
-            _inMemoryContext = new InMemoryDatabaseContext(options);
-            var storedAddresses = BlockFactory.StoredAddresses(NrStored);
-            _inMemoryContext.Addresses.AddRange(storedAddresses);
-            _inMemoryContext.SaveChanges();
-        }
-
-        //TODO check if fault is due to use of in memory DB or if production also throws an could not translate error.
         [Fact]
         public async Task TestRestoreAddresses_SomeAlreadyInDB_ReturnNonStoredAddresses()
         {
             // arrange
+            SetUpDb(); //TODO no Setup and TearDown function in NUnit consider creating a disposable base class
             const int nrNewAddresses = 10;
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
             var service = new ExplorerAddressRestoreService(_inMemoryContext);
@@ -45,7 +36,42 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             var newlyStored = await service.RestoreAddressesAsync(newBlock);
 
             // assert
-            newlyStored.Should().HaveCount(nrNewAddresses);
+            newlyStored.Should().BeEquivalentTo(newAddresses);
+            TearDownDb();
+        }
+
+        [Fact]
+        public async Task TestRestoreAddresses_NoAddressesInDb_ReturnNonStoredAddresses()
+        {
+            // arrange
+            SetUpDb();
+            const int nrNewAddresses = 10;
+            var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
+            var service = new ExplorerAddressRestoreService(_inMemoryContext);
+            var newBlock = BlockFactory.NewBlock(newAddresses);
+            
+            // act
+
+
+            // assert
+            TearDownDb();
+
+        }
+
+        private void SetUpDb()
+        {
+            var options = new DbContextOptionsBuilder<InMemoryDatabaseContext>()
+                .UseInMemoryDatabase(databaseName: "BlockDatabase")
+                .Options;
+            _inMemoryDatabaseContext = new InMemoryDatabaseContext(options);
+            var storedAddresses = BlockFactory.StoredAddresses(NrStored);
+            _inMemoryContext.Addresses.AddRange(storedAddresses);
+            _inMemoryContext.SaveChanges();
+        }
+
+        private void TearDownDb()
+        {
+            _inMemoryDatabaseContext.Database.EnsureDeleted();
         }
     }
 }
