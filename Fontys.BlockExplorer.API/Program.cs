@@ -7,6 +7,12 @@ using Fontys.BlockExplorer.Data.PostgresDb;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// keep local appsettings file
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) //load base settings
+    .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true); //load local settings
+
 // Add services to the container.
 builder.Services.Configure<PostgresDbOptions>(builder.Configuration.GetRequiredSection(nameof(PostgresDbOptions)));
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
