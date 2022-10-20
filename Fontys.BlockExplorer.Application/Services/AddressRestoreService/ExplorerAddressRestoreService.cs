@@ -1,6 +1,5 @@
 ﻿using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 {

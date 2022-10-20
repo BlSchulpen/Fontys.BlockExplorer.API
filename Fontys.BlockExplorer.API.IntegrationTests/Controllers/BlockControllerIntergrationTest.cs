@@ -27,7 +27,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         {
             // arrange
             var nrBlocks = 0;
-            string hash = "0";
+            var hash = "0";
             var controller = SetupController(nrBlocks);
 
             // act
@@ -52,7 +52,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         private List<Block> MockBlocks(int nrTransactions)
         {
             var newBlocks = new List<Block>();
-            for (int i = 0; i < nrTransactions; i++)
+            for (var i = 0; i < nrTransactions; i++)
             {
                 var transaction = new Transaction() { Hash = "0", Inputs = new List<TxInput>(), Outputs = new List<TxOutput>() };
                 var transactions = new List<Transaction>() { transaction };

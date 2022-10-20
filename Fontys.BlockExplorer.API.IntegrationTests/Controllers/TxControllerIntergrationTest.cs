@@ -27,7 +27,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         {
             // arrange
             var nrTransactions = 1;
-            string hash = "0";
+            var hash = "0";
             var controller = SetupController(nrTransactions);
 
             // act
@@ -43,7 +43,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         {
             // arrange
             var nrTransactions = 0;
-            string hash = "0";
+            var hash = "0";
             var controller = SetupController(nrTransactions);
 
             // act
