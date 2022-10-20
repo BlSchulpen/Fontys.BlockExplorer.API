@@ -1,6 +1,6 @@
 ﻿namespace Fontys.BlockExplorer.Data
 {
-    using Fontys.BlockExplorer.Domain.Models;
+    using Domain.Models;
     using Microsoft.EntityFrameworkCore;
     public class BlockExplorerContext : DbContext
     {

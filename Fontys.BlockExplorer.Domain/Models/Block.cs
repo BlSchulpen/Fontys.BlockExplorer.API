@@ -1,6 +1,6 @@
 ﻿namespace Fontys.BlockExplorer.Domain.Models
 {
-    using Fontys.BlockExplorer.Domain.Enums;
+    using Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class Block

@@ -1,12 +1,11 @@
-﻿namespace Fontys.BlockExplorer.API.Controllers
+﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Application.Services.BlockService;
+using Fontys.BlockExplorer.Domain.CQS;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Fontys.BlockExplorer.API.Controllers
 {
-    using AutoMapper;
-    using Fontys.BlockExplorer.API.Dto.Response;
-    using Fontys.BlockExplorer.Application.Services.BlockService;
-    using Fontys.BlockExplorer.Domain.CQS;
-    using Microsoft.AspNetCore.Mvc;
-
-
     [ApiController]
     [Route("api/[controller]")]
     public class BlockController : Controller

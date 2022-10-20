@@ -1,7 +1,7 @@
-﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
-{
-    using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
 
+namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
+{
     public interface IBtcNodeService
     {
         Task<string> GetBestBlockHashAsync();

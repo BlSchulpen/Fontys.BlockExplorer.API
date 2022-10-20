@@ -1,9 +1,9 @@
-﻿namespace Fontys.BlockExplorer.API.Profiles
-{
-    using AutoMapper;
-    using Domain.Models;
-    using Dto.Response;
+﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Domain.Models;
 
+namespace Fontys.BlockExplorer.API.Profiles
+{
     public class ExplorerProfile : Profile
     {
         public ExplorerProfile()

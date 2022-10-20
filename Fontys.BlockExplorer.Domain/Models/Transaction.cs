@@ -11,7 +11,5 @@
 
         [Required]
         public virtual ICollection<TxOutput> Outputs { get; set; }
-
-
     }
 }

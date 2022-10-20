@@ -21,6 +21,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             {
                 return null;
             }
+
             var stored = await _blockExplorerContext.Blocks
                 .Include(b => b.Transactions)
                 .ThenInclude(t => t.Inputs)!
