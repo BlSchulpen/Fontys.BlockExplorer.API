@@ -19,7 +19,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<string> GetBestBlockHashAsync()
         {
-            const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"; //todo improve custom content class
+            const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             var formatted = json?[1..^2];
@@ -28,7 +28,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            const int verbosity = 2; //block data with transaction data - todo custom class 
+            const int verbosity = 2;
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity + "]}"; 
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
@@ -47,7 +47,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
         {
-            const bool returnObject = true; //block data with transaction data - todo custom class 
+            const bool returnObject = true;
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
@@ -73,7 +73,6 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             catch(Exception exception) 
             {
                 _logger.LogError(exception, "test"); 
-                //TODO Log
                 throw;
             }
         }
