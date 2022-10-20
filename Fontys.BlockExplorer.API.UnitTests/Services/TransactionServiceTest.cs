@@ -3,10 +3,7 @@ using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq.EntityFrameworkCore;
@@ -18,7 +15,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
     public class TransactionServiceTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
-
         public TransactionServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
@@ -41,7 +37,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             txResult.Should().BeEquivalentTo(transaction);
         }
 
-        //TODO maybe it is better to return exception ==> services do exception handling
         [Fact]
         public async Task GetTransaction_TransactionExists_ReturnNull()
         {

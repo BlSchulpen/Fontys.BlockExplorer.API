@@ -1,30 +1,27 @@
-﻿namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
-{
-    using AutoMapper;
-    using Fontys.BlockExplorer.API.Controllers;
-    using Fontys.BlockExplorer.Application.Services.TxService;
-    using Fontys.BlockExplorer.Data;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Moq;
-    using Moq.EntityFrameworkCore;
-    using System.Collections.Generic;
-    using Xunit;
-    using Microsoft.AspNetCore.Mvc;
-    using FluentAssertions;
-    using Fontys.BlockExplorer.API.Profiles;
+﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Controllers;
+using Moq;
+using Moq.EntityFrameworkCore;
+using System.Collections.Generic;
+using Xunit;
+using Microsoft.AspNetCore.Mvc;
+using FluentAssertions;
+using Fontys.BlockExplorer.API.Profiles;
+using Fontys.BlockExplorer.Application.Services.TxService;
+using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Models;
 
+namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
+{
     public class TxControllerIntergrationTest
     {
-        private readonly MockDbFactory _dbFactory;
         private readonly Mock<BlockExplorerContext> _dbContextMock;
 
         public TxControllerIntergrationTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
-            _dbFactory = new MockDbFactory();
         }
 
-        //todo maybe add new intergration test with database connectivity --> API request        
         [Fact]
         public void Get_Transaction_Existing()
         {

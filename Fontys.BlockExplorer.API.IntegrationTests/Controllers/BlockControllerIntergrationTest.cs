@@ -1,19 +1,18 @@
-﻿namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
-{
-    using FluentAssertions;
-    using Fontys.BlockExplorer.API.Controllers;
-    using Fontys.BlockExplorer.Data;
-    using Moq;
-    using Moq.EntityFrameworkCore;
-    using Xunit;
-    using Fontys.BlockExplorer.Application.Services.BlockService;
-    using AutoMapper;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Fontys.BlockExplorer.API.Dto.Response;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using Fontys.BlockExplorer.API.Profiles;
+﻿using FluentAssertions;
+using Fontys.BlockExplorer.API.Controllers;
+using Moq;
+using Moq.EntityFrameworkCore;
+using Xunit;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Application.Services.BlockService;
+using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Models;
 
+namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
+{
     public class BlockControllerIntergrationTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
@@ -22,7 +21,6 @@
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
         }
-
 
         [Fact]
         public void Get_Block_Not_Found()
@@ -40,7 +38,6 @@
             result.Should().NotBeNull();
         }
 
-        //todo make factory? 
         private BlockController SetupController(int nrBlocks) 
         {
             var blocks = MockBlocks(nrBlocks);

@@ -1,10 +1,9 @@
-﻿namespace Fontys.BlockExplorer.API.Controllers
-{
-    using AutoMapper;
-    using Fontys.BlockExplorer.Application.Services.AddressService;
-    using Fontys.BlockExplorer.Domain.CQS;
-    using Microsoft.AspNetCore.Mvc;
+﻿using Fontys.BlockExplorer.Application.Services.AddressService;
+using Fontys.BlockExplorer.Domain.CQS;
+using Microsoft.AspNetCore.Mvc;
 
+namespace Fontys.BlockExplorer.API.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : Controller
@@ -16,7 +15,6 @@
             _addressService = addressService;
         }
 
-        //TODO get transactionsIds of address
         [HttpGet("{Hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetAddress(string hash)

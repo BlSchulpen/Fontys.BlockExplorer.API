@@ -16,13 +16,10 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 
         public async Task<List<Address>> RestoreAddressesAsync(Block block)
         {
-            var addressesInBlock = GetAllAddressesOfBlock(block); //todo check
+            var addressesInBlock = GetAllAddressesOfBlock(block);
             var distinctNewAddresses = GetDistinctNewAddresses(addressesInBlock);
             _context.Addresses.AddRange(distinctNewAddresses);
             await _context.SaveChangesAsync();
-            var test = _context.Addresses.ToList();
-            var test2 = _context.Addresses.Where(t => t.Hash == "0").ToList();
-      //      var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Any(x => x.Hash == a.Hash)).ToList();
             var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Contains(a)).ToList(); 
             UpdateTransferAddressesAsync(block,dbAddressesInBlock);
             return distinctNewAddresses;
@@ -55,7 +52,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             return distinctNewAddresses;
         }
 
-        private void UpdateTransferAddressesAsync(Block block, List<Address> dbAddressesInBlock)
+        private static void UpdateTransferAddressesAsync(Block block, List<Address> dbAddressesInBlock)
         {
             var inputs = block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null).ToList();
             var outputs = block.Transactions.ToList().SelectMany(t => t.Outputs).Where(a => a.Address != null).ToList();

@@ -19,7 +19,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             var hash = getBlockCommand.Hash;
             if (await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == getBlockCommand.Hash) == null)
             {
-                return null; //TODO maybe log and throw?
+                return null;
             }
             var stored = await _blockExplorerContext.Blocks
                 .Include(b => b.Transactions)

@@ -21,6 +21,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         private readonly Mock<Func<CoinType, IBlockDataProviderService>> _blockDataProviderResolverMock;
         private readonly Mock<IBlockDataProviderService> _blockDataProviderServiceMock;
         private readonly Mock<IAddressRestoreService> _mockAddressRestoreService;
+
         public NodeMonitoringServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
@@ -30,7 +31,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             _mockAddressRestoreService = new Mock<IAddressRestoreService>();
         }
 
-        //Remove bad block tests
         [Fact]
         public async Task RemoveBadBlock_NonStored_ReturnEmptyList()
         {
@@ -66,7 +66,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             removedBlocks.Should().BeEmpty();
         }
 
-        //TODO refactor smaller setup --> maybe use factories
         [Fact]
         public async Task RemoveBadBlock_BadStored_ReturnsBadBlocks()
         {
@@ -89,9 +88,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             //assert
              removedBlocks.Should().BeEquivalentTo(badBlocks);
         }
-
-
-        //Get new Blocks tests
 
         [Fact]
         public async Task GetNewBlocks_BlocksStored_NoNewBlocksInChain_ReturnEmptyList()
@@ -216,8 +212,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
                 _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(block.Height)).ReturnsAsync(block.Hash);
             }
         }
-
-
         private static List<Block> GetBadBlocks(int nrBadBlocks, int nrBlocks)
         {
             var blocks = new List<Block>();
@@ -237,7 +231,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
                 var block = new Block() { Hash = i.ToString(), CoinType = CoinType.BTC, Height = i, NetworkType = NetworkType.BtcMainet};
                 storedBlocks.Add(block);
             }
-
             var seqBlocks = storedBlocks.Where(b => b.Height != 0);
             foreach (var block in seqBlocks)
             {

@@ -29,7 +29,6 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             }
             catch (NullReferenceException e)
             {
-                //TODO add logger
                 throw;
             }
             catch(Exception e)
@@ -53,14 +52,14 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         private async Task RetrieveNonCoinBasedInputDataAsync(string transactionId)
         {
             var rawTransaction = await _btcNodeService.GetRawTransactionAsync(transactionId);
-            foreach (var input in rawTransaction.Vin.Where(t => t.TxId != null)) //todo check if it could be null
+            foreach (var input in rawTransaction.Vin.Where(t => t.TxId != null))
             {
-                var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout); //inputs of this transaction are the outputs of another transaction
+                var usedOutput = rawTransaction.Vout.FirstOrDefault(v => v.N == input.Vout);
                 if (usedOutput == null)
                 {
                     continue;
                 }
-                input.Addresses = usedOutput.ScriptPubKey.Addresses; //maybe try ti get this info from key instead to improve performance...
+                input.Addresses = usedOutput.ScriptPubKey.Addresses;
                 input.Value = usedOutput.Value;
             }
         }

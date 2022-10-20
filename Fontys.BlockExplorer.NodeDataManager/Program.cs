@@ -46,8 +46,6 @@ builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 builder.Services.AddAutoMapper(typeof(EthProfile));
 
-
-//TODO place in keyvault
 builder.Services.AddHttpClient("BtcCore", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["BtcCoreSettings:BaseUrl"]);
