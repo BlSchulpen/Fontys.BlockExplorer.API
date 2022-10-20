@@ -22,10 +22,14 @@ builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockP
     return key switch
     {
         CoinType.BTC => blockProviderType.GetService<BtcBlockProviderService>(),
-        //      CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
         _ => null
     };
 });
+
+// keep local app-settings file
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
 
 // Add services to the container.
 builder.Services.AddHttpClient();
