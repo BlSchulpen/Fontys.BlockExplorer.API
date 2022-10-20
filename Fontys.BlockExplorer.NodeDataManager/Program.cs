@@ -1,4 +1,3 @@
-using AutoMapper;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
@@ -7,13 +6,11 @@ using Fontys.BlockExplorer.Data.PostgresDb;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeDataManager.Workers;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
-using System.Security.Cryptography;
 using System.Text;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +22,7 @@ builder.Services.AddTransient<Func<CoinType, IBlockDataProviderService?>>(blockP
     return key switch
     {
         CoinType.BTC => blockProviderType.GetService<BtcBlockProviderService>(),
-  //      CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
+        //      CoinType.ETH => blockProviderType.GetService<EthBlockProviderService>(),
         _ => null
     };
 });

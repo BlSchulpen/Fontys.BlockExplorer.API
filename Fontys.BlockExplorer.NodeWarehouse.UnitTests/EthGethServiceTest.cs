@@ -1,13 +1,6 @@
-﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
+﻿using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 using Microsoft.Extensions.Logging;
-using Xunit;
+using Moq;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 {
@@ -23,7 +16,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
             _mockHttpClientFactory.Setup(x => x.CreateClient("ethGeth")).Returns(mockClient.Object);
             _mockLogger = new Mock<ILogger<EthGethService>>();
         }
-        
+
         /*
         [Fact]
         public async Task GetLatestNr_ConnectionNotEstablished_LogConnectionError()

@@ -1,7 +1,7 @@
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
-using Moq;
 using FluentAssertions;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests

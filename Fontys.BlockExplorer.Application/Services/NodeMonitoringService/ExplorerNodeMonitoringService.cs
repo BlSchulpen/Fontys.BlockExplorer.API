@@ -44,7 +44,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var providerService = _providerServiceResolver(coinType);
             var newBlocks = await GetStartingBlockListAsync(coinType);
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
-            var chainBlock = await GetBestBlockAsync(providerService); 
+            var chainBlock = await GetBestBlockAsync(providerService);
             if (chainBlock == null)
             {
                 //log
@@ -85,7 +85,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                 return blocks;
             }
             var firstBlock = await StoreFirstBlockAsync(coinType);
-            blocks.Add(firstBlock); 
+            blocks.Add(firstBlock);
             return blocks;
         }
 

@@ -6,9 +6,7 @@ using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests

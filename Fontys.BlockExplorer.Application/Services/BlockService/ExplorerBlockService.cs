@@ -8,7 +8,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
     public class ExplorerBlockService : IBlockService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
-        
+
         public ExplorerBlockService(BlockExplorerContext blockExplorerContext)
         {
             _blockExplorerContext = blockExplorerContext;

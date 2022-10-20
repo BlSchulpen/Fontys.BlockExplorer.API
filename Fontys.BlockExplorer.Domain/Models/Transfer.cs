@@ -1,6 +1,5 @@
 ﻿namespace Fontys.BlockExplorer.Domain.Models
 {
-    using Fontys.BlockExplorer.Domain.Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class Transfer
@@ -10,7 +9,7 @@
 
         [Required]
         public double Value { get; set; }
-        
-        public virtual Address? Address { get; set; } 
+
+        public virtual Address? Address { get; set; }
     }
 }

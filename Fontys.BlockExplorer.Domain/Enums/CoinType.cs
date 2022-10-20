@@ -2,7 +2,7 @@
 {
     public enum CoinType
     {
-        BTC  = 0,
+        BTC = 0,
         ETH = 1,
     }
 }

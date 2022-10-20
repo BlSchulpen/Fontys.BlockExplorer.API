@@ -4,8 +4,6 @@
     using Fontys.BlockExplorer.API.Dto.Response;
     using Fontys.BlockExplorer.Application.Services.BlockService;
     using Fontys.BlockExplorer.Domain.CQS;
-    using Fontys.BlockExplorer.Domain.Enums;
-    using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.AspNetCore.Mvc;
 
 
@@ -14,15 +12,15 @@
     public class BlockController : Controller
     {
         private readonly IBlockService _blockService;
-        private readonly IMapper _mapper; 
+        private readonly IMapper _mapper;
 
         public BlockController(IBlockService blockService, IMapper mapper)
         {
-            _blockService = blockService;    
-            _mapper = mapper;   
+            _blockService = blockService;
+            _mapper = mapper;
         }
 
-        [HttpGet ("{Hash}")]
+        [HttpGet("{Hash}")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetBlockAsync(string hash)
         {
@@ -33,7 +31,7 @@
                 return NotFound();
             }
             var response = _mapper.Map<BlockResponse>(blockResult);
-            return Ok(response);         
+            return Ok(response);
         }
     }
 }

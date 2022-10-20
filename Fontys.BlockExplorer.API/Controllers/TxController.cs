@@ -3,7 +3,6 @@ using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fontys.BlockExplorer.API.Controllers

@@ -2,6 +2,6 @@
 {
     public class PostgresDbOptions
     {
-        public string ConnectionsString { get; set; } 
+        public string ConnectionsString { get; set; }
     }
 }

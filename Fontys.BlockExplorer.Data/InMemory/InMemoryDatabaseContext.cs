@@ -1,11 +1,4 @@
-﻿using Fontys.BlockExplorer.Data.PostgresDb;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Fontys.BlockExplorer.Data.InMemory
 {
@@ -25,7 +18,7 @@ namespace Fontys.BlockExplorer.Data.InMemory
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
         {
-          //  optionBuilder.UseNpgsql(_connectionString);
+            //  optionBuilder.UseNpgsql(_connectionString);
         }
     }
 }

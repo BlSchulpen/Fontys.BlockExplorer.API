@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using Fontys.BlockExplorer.API.Controllers;
-using Moq;
-using Moq.EntityFrameworkCore;
-using System.Collections.Generic;
-using Xunit;
-using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
+using Fontys.BlockExplorer.API.Controllers;
 using Fontys.BlockExplorer.API.Profiles;
 using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Moq.EntityFrameworkCore;
+using System.Collections.Generic;
+using Xunit;
 
 namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
 {
@@ -65,7 +65,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
             return newTransactions;
         }
 
-        private TxController SetupController(int nrTransactions) 
+        private TxController SetupController(int nrTransactions)
         {
             var transactions = MockTransactions(nrTransactions);
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);

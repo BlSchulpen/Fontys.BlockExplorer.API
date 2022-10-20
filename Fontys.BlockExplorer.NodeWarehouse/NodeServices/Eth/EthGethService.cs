@@ -1,5 +1,4 @@
 ﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth

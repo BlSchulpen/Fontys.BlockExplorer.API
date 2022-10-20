@@ -1,6 +1,5 @@
 ﻿using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
@@ -20,8 +19,8 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             var distinctNewAddresses = GetDistinctNewAddresses(addressesInBlock);
             _context.Addresses.AddRange(distinctNewAddresses);
             await _context.SaveChangesAsync();
-            var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Contains(a)).ToList(); 
-            UpdateTransferAddressesAsync(block,dbAddressesInBlock);
+            var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Contains(a)).ToList();
+            UpdateTransferAddressesAsync(block, dbAddressesInBlock);
             return distinctNewAddresses;
         }
 
@@ -57,7 +56,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             var inputs = block.Transactions.ToList().SelectMany(t => t.Inputs).Where(a => a.Address != null).ToList();
             var outputs = block.Transactions.ToList().SelectMany(t => t.Outputs).Where(a => a.Address != null).ToList();
             foreach (var address in dbAddressesInBlock)
-            { 
+            {
                 inputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
                 outputs.Where(x => x.Address.Hash == address.Hash).ToList().ForEach(i => i.Address = address);
             }

@@ -1,7 +1,6 @@
 ﻿namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
     using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
-    using Fontys.BlockExplorer.Domain.Models;
 
     public interface IBtcNodeService
     {

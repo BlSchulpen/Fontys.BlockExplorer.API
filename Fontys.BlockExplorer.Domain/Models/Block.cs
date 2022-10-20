@@ -20,7 +20,7 @@
         [Required]
         public NetworkType NetworkType { get; set; }
 
-       [Required]
-       public virtual ICollection<Transaction> Transactions { get; set; }
+        [Required]
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

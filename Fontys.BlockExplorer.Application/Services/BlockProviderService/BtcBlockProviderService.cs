@@ -31,7 +31,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             {
                 throw;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw;
             }
@@ -43,7 +43,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             var transactionIds = blockResponse.Tx.Select(t => t.Hash);
             foreach (var transactionId in transactionIds)
             {
-               await RetrieveNonCoinBasedInputDataAsync(transactionId);
+                await RetrieveNonCoinBasedInputDataAsync(transactionId);
             }
             var block = _mapper.Map<Block>(blockResponse);
             return block;

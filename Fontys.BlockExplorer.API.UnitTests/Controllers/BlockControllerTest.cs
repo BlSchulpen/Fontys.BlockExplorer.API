@@ -1,14 +1,14 @@
 ﻿namespace Fontys.BlockExplorer.API.UnitTests.Controllers
 {
-    using Xunit;
-    using Fontys.BlockExplorer.Application.Services.BlockService;
-    using Moq;
+    using AutoMapper;
     using Fontys.BlockExplorer.API.Controllers;
-    using System.Threading.Tasks;
+    using Fontys.BlockExplorer.API.Dto.Response;
+    using Fontys.BlockExplorer.Application.Services.BlockService;
     using Fontys.BlockExplorer.Domain.CQS;
     using Fontys.BlockExplorer.Domain.Models;
-    using Fontys.BlockExplorer.API.Dto.Response;
-    using AutoMapper;
+    using Moq;
+    using System.Threading.Tasks;
+    using Xunit;
 
     public class BlockControllerTest
     {

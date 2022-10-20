@@ -24,7 +24,7 @@ namespace Fontys.BlockExplorer.API.Controllers
             if (results == null)
             {
                 return NotFound();
-            } 
+            }
             return Ok(hash);
         }
     }

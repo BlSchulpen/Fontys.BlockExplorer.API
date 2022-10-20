@@ -2,7 +2,7 @@
 {
     using Fontys.BlockExplorer.Domain.Models;
     using Microsoft.EntityFrameworkCore;
-    public class BlockExplorerContext: DbContext
+    public class BlockExplorerContext : DbContext
     {
         public BlockExplorerContext(DbContextOptions options) : base(options)
         {
@@ -28,7 +28,7 @@
 
             modelBuilder.Entity<Block>()
                 .HasMany(x => x.Transactions);
-            
+
             modelBuilder.Entity<Transaction>()
                 .HasMany(x => x.Outputs);
 

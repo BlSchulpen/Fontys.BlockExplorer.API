@@ -29,10 +29,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
             const int verbosity = 2;
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity + "]}"; 
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity + "]}";
             var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
-            var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);  
+            var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);
             return responseObject;
         }
 
@@ -41,7 +41,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var response = await SendMessageAsync(content);
             var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
-            var formatted =  Regex.Replace(hash, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+            var formatted = Regex.Replace(hash, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
             return formatted;
         }
 
@@ -67,12 +67,12 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             }
             catch (NullReferenceException exception)
             {
-                _logger.LogError(exception, "Connection to Btc Core could not be made"); 
+                _logger.LogError(exception, "Connection to Btc Core could not be made");
                 throw;
             }
-            catch(Exception exception) 
+            catch (Exception exception)
             {
-                _logger.LogError(exception, "test"); 
+                _logger.LogError(exception, "test");
                 throw;
             }
         }

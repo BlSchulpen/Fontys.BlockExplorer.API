@@ -6,8 +6,6 @@ using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
-using System.Collections.Generic;
-using System;
 
 namespace MyBenchmarks
 {
@@ -22,15 +20,15 @@ namespace MyBenchmarks
             _dbContextMock = new Mock<BlockExplorerContext>();
         }
 
-        
+
         //17 seconds
         [Benchmark]
         public async Task RestoreAddresses()
         {
             // arrange
             const int nrStoredAddresses = 100000;
-            const int  nrOldAddresses = 2000;
-            const int  nrNewAddresses = 7000;
+            const int nrOldAddresses = 2000;
+            const int nrNewAddresses = 7000;
 
             var storedAddresses = StoredAddresses(nrStoredAddresses);
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(storedAddresses);
@@ -75,7 +73,7 @@ namespace MyBenchmarks
                 var transaction = new Transaction() { Hash = i.ToString(), Inputs = GetAddressInputs(addresses, nonPickedAddresses), Outputs = new List<TxOutput>() };
                 transactions.Add(transaction);
             }
-            var block = new Block() { Hash = "0", CoinType = CoinType.BTC, NetworkType = NetworkType.BtcMainet, Height = 0, PreviousBlockHash = "0", Transactions = new List<Transaction>(transactions)};
+            var block = new Block() { Hash = "0", CoinType = CoinType.BTC, NetworkType = NetworkType.BtcMainet, Height = 0, PreviousBlockHash = "0", Transactions = new List<Transaction>(transactions) };
             return block;
         }
 

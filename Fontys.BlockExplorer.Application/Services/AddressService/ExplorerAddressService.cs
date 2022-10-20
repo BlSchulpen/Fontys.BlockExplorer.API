@@ -9,7 +9,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
     public class ExplorerAddressService : IAddressService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
-        private  ILogger<ExplorerAddressService> _logger;
+        private ILogger<ExplorerAddressService> _logger;
 
         public ExplorerAddressService(BlockExplorerContext blockExplorerContext, ILogger<ExplorerAddressService> logger)
         {

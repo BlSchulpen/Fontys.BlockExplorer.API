@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
+﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
 {

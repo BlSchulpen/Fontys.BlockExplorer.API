@@ -1,14 +1,13 @@
-﻿using Fontys.BlockExplorer.Application.Services.AddressService;
+﻿using FluentAssertions;
+using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
+using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Moq.EntityFrameworkCore;
 using Xunit;
-using Fontys.BlockExplorer.Application.Services.TxService;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -25,7 +24,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             // arrange
             const string hash = "1";
-            var transaction = new Transaction() { Hash = hash};
+            var transaction = new Transaction() { Hash = hash };
             var transactionCommand = new GetTxCommand() { Hash = hash };
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction> { transaction });
             var service = new ExplorerTxService(_dbContextMock.Object);

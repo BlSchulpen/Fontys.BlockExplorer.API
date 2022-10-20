@@ -1,16 +1,12 @@
-﻿using Fontys.BlockExplorer.Application.Services.AddressService;
+﻿using FluentAssertions;
+using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Fontys.BlockExplorer.Application.Services.BlockService;
 using Moq.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
@@ -35,8 +31,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
             var service = new ExplorerBlockService(_dbContextMock.Object);
-            var blockCommand = new GetBlockCommand() {Hash = blockHash};
-            
+            var blockCommand = new GetBlockCommand() { Hash = blockHash };
+
             //act
             var result = await service.GetBlockAsync(blockCommand);
 

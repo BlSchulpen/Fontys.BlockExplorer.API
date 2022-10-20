@@ -32,7 +32,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         {
             var latestNumber = await _ethNodeService.GetLatestNumber();
             var blockResponse = await _ethNodeService.GetBlockByNumberAsync(latestNumber);
-            return blockResponse.Hash; 
+            return blockResponse.Hash;
         }
     }
 }
