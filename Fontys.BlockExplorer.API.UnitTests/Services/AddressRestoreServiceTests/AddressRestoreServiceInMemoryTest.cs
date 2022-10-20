@@ -61,24 +61,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             TearDownDb();
         }
 
-        [Fact] //TODO double check block factory
-        public async Task TestRestoreAddresses_AddressesInDb_NoNewInBlock_ReturnEmpty()
-        {
-            // arrange
-            SetUpDb();
-            AddAddressesInDb();
-            var newAddresses = new List<Address>();
-            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext);
-            var newBlock = BlockFactory.NewBlock(newAddresses);
-
-            // act
-            var newlyStored = await service.RestoreAddressesAsync(newBlock);
-
-            // assert
-            newlyStored.Should().BeEmpty();
-            TearDownDb();
-        }
-
         private void SetUpDb()
         {
             var options = new DbContextOptionsBuilder<InMemoryDatabaseContext>()
