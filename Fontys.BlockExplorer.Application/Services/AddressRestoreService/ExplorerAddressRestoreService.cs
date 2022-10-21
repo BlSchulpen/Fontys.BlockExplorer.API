@@ -28,13 +28,12 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 
         private List<Address> GetAllAddressesOfBlock(Block block)
         {
-            var addresses = new List<Address>();
             var inputAddresses = block.Transactions.Where(t => t.Inputs != null).SelectMany(tx => tx.Inputs)
                 .Where(i => i.Address != null).ToList().Select(i => i.Address).ToList();
             var outputAddresses = block.Transactions.Where(t => t.Outputs != null).SelectMany(tx => tx.Outputs)
                 .Where(i => i.Address != null).ToList().Select(i => i.Address)
                 .ToList();
-            addresses.AddRange(inputAddresses);
+            var addresses = new List<Address>(inputAddresses);
             addresses.AddRange(outputAddresses);
             return addresses;
         }

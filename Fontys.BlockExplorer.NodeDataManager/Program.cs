@@ -1,3 +1,6 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Fontys.BlockExplorer.API.Modules;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
@@ -34,19 +37,12 @@ builder.Configuration
 // Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.Configure<PostgresDbOptions>(builder.Configuration.GetRequiredSection(nameof(PostgresDbOptions)));
-builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
-builder.Services.AddScoped<IEthNodeService, EthGethService>();
-builder.Services.AddScoped<INodeMonitoringService, ExplorerNodeMonitoringService>();
-builder.Services.AddScoped<IAddressRestoreService, ExplorerAddressRestoreService>();
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new MonitoringModule()));
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
 builder.Services.AddHostedService<NodeDataWorker>();
-
-
-
-// Automappers
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 builder.Services.AddAutoMapper(typeof(EthProfile));
-
 builder.Services.AddHttpClient("BtcCore", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["BtcCoreSettings:BaseUrl"]);

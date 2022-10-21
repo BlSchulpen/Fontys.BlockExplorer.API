@@ -11,16 +11,20 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         private static HttpClient _client;
         private readonly ILogger<BtcCoreService> _logger;
 
+        //TODO fix code quality, factory for request content
         public BtcCoreService(IHttpClientFactory httpClientFactory, ILogger<BtcCoreService> logger)
         {
             _client = httpClientFactory.CreateClient("BtcCore");
             _logger = logger;
         }
 
-        public async Task<string> GetBestBlockHashAsync()
+        //TODO how to handle not found exceptions after sending message
+        public async Task<string?> GetBestBlockHashAsync()
         {
             const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
             var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             var formatted = json?[1..^2];
             return formatted;
@@ -28,9 +32,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            const int verbosity = 2;
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + verbosity + "]}";
+            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + 2 + "]}";
             var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcBlockResponse>(json);
             return responseObject;
@@ -40,6 +45,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         {
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
             var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
             var formatted = Regex.Replace(hash, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
             return formatted;
@@ -50,6 +57,8 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             const bool returnObject = true;
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
             var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcTransactionResponse>(json);
             return responseObject;

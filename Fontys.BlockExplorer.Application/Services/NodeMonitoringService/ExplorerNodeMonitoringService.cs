@@ -29,7 +29,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var toRemoveBlocks = new List<Block>();
             if (!_context.Blocks.Any())
             {
-                _logger.LogInformation("No bad blocks are found");
+                _logger.LogInformation("Couldn't find any bad blocks, no blocks are stored");
                 return toRemoveBlocks;
             }
 
