@@ -8,6 +8,7 @@ using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -26,8 +27,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const string hash = "1";
             var transaction = new Transaction() { Hash = hash };
             var transactionCommand = new GetTxCommand() { Hash = hash };
+            var mockLogger = new Mock<ILogger<ExplorerTxService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction> { transaction });
-            var service = new ExplorerTxService(_dbContextMock.Object);
+            var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var txResult = await service.GetTransactionAsync(transactionCommand);
@@ -42,8 +44,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             // arrange
             const string hash = "1";
             var transactionCommand = new GetTxCommand() { Hash = hash };
+            var mockLogger = new Mock<ILogger<ExplorerTxService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction>());
-            var service = new ExplorerTxService(_dbContextMock.Object);
+            var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var txResult = await service.GetTransactionAsync(transactionCommand);

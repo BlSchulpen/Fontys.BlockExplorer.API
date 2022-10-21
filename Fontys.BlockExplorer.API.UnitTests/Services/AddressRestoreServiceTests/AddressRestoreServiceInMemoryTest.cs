@@ -4,6 +4,9 @@ using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Data.InMemory;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Fontys.BlockExplorer.Application.Services.AddressService;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
@@ -20,8 +23,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             SetUpDb();
             AddAddressesInDb();
             const int nrNewAddresses = 10;
+            var mockAddressService = new Mock<ExplorerAddressService>();
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
-            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext);
+            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, mockAddressService.Object);
             var newBlock = BlockFactory.NewBlock(newAddresses);
 
             // act
@@ -38,8 +42,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             // arrange
             SetUpDb();
             const int nrNewAddresses = 10;
+            var mockAddressService = new Mock<ExplorerAddressService>();
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
-            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext);
+            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, mockAddressService.Object);
             var newBlock = BlockFactory.NewBlock(newAddresses);
 
             // act

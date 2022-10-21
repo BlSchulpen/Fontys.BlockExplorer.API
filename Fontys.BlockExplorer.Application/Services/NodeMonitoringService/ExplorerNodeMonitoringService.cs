@@ -4,42 +4,47 @@ using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 {
     public class ExplorerNodeMonitoringService : INodeMonitoringService
     {
         private readonly BlockExplorerContext _context;
-        private readonly IAddressRestoreService _addressRestoreService;
         private readonly IBlockService _blockService;
+        private readonly ILogger<ExplorerNodeMonitoringService> _logger;
         private readonly Func<CoinType, IBlockDataProviderService> _providerServiceResolver;
 
-        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IAddressRestoreService addressRestoreService, IBlockService blockService)
+        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IBlockService blockService, ILogger<ExplorerNodeMonitoringService> logger)
         {
             _context = blockExplorerContext;
+            _logger = logger;
             _providerServiceResolver = providerServiceResolver;
-            _addressRestoreService = addressRestoreService;
             _blockService = blockService;
         }
+
         public async Task<ICollection<Block>> RemoveBadBlocksAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
-            var removedBlocks = new List<Block>();
+            var toRemoveBlocks = new List<Block>();
             if (!_context.Blocks.Any())
-                return removedBlocks;
-            var storedHeight = _context.Blocks.DefaultIfEmpty().Max(x => x.Height);
-            var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == storedHeight);
-            var chainHash = await providerService.GetHashFromHeightAsync(storedBlock.Height);
-            while (storedBlock.Hash != chainHash)
             {
-                _context.Blocks.Remove(storedBlock);
-                removedBlocks.Add(storedBlock);
-                storedHeight -= 1;
-                storedBlock = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).FirstOrDefault(b => b.Height == storedHeight);
-                chainHash = await providerService.GetHashFromHeightAsync(storedBlock.Height);
+                _logger.LogInformation("No bad blocks are found");
+                return toRemoveBlocks;
             }
-            await _context.SaveChangesAsync();
-            return removedBlocks;
+
+            var heightStoredBlock = _context.Blocks.DefaultIfEmpty().Max(x => x.Height);
+            var storedBlock = _context.Blocks.FirstOrDefault(b => b.Height == heightStoredBlock);
+            var hashBlockInBlockchain = await providerService.GetHashFromHeightAsync(storedBlock.Height);
+            while (storedBlock.Hash != hashBlockInBlockchain)
+            {
+                toRemoveBlocks.Add(storedBlock);
+                heightStoredBlock -= 1;
+                storedBlock = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).FirstOrDefault(b => b.Height == heightStoredBlock);
+                hashBlockInBlockchain = await providerService.GetHashFromHeightAsync(storedBlock.Height);
+            }
+            await _blockService.RemoveBlocksAsync(toRemoveBlocks);
+            return toRemoveBlocks;
         }
 
         public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
@@ -50,6 +55,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var chainBlock = await GetBestBlockAsync(providerService);
             if (chainBlock == null)
             {
+                
                 throw new NullReferenceException("No blocks can be found in the chain");
             }
 

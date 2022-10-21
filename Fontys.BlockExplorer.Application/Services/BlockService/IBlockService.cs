@@ -7,5 +7,6 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
     {
         public Task<Block?> GetBlockAsync(GetBlockCommand getBlockCommand);
         public Task AddBlockAsync(Block block);
+        public Task RemoveBlocksAsync(List<Block> blocks);
     }
 }

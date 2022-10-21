@@ -55,24 +55,26 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             return responseObject;
         }
 
+        //!TODO clean way of doing this
+        private string RpcContent(Dictionary<string, string> dictArgumentsValue,
+            Dictionary<string, string> dictParamsValue)
+        {
+            return "test";
+        }
+
         private async Task<string?> SendMessageAsync(string json)
         {
+            _logger.LogInformation("sending the following json message to client: {Json}", json);
             try
             {
-                var test2 = new StringContent(json);
-                var test = _client.BaseAddress;
                 var response = await _client.PostAsync(_client.BaseAddress, new StringContent(json));
+                _logger.LogInformation("Response message: {Response}", response);
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
             catch (NullReferenceException exception)
             {
-                _logger.LogError(exception, "Connection to Btc Core could not be made");
-                throw;
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, "test");
+                _logger.LogError("Message could not be send the following error was thrown {Exception}", exception); // change "Thrown"
                 throw;
             }
         }

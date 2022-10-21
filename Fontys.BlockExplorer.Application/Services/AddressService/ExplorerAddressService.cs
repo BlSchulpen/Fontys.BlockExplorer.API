@@ -18,6 +18,21 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
             _logger = logger;
         }
 
+        public async Task StoreAddressesAsync(List<Address> addresses)
+        {   
+            _logger.LogInformation("Storing the following addresses: {addresses}", addresses);
+            try
+            {
+                _blockExplorerContext.Addresses.AddRange(addresses);
+                await _blockExplorerContext.SaveChangesAsync();
+                _logger.LogInformation("Stored addresses successfully");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Failed to store addresses, the following exception was thrown {Exception}", exception);
+            }
+        }
+
         public async Task<Address?> GetAddressAsync(GetAddressCommand getAddressCommand)
         {
             var hash = getAddressCommand.Hash;
@@ -25,8 +40,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
             try
             {
                 var stored = await _blockExplorerContext.Addresses.FirstOrDefaultAsync(b => b.Hash == hash);
-                _logger.LogInformation("Retrieved object is: {Address}", stored);
-
+                _logger.LogInformation("Retrieved address is: {Address}", stored);
                 return stored;
             }
             catch (Exception exception)

@@ -31,9 +31,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var storedAddress = new Address() { Hash = storedAddressHash };
             var addressCommand = new GetAddressCommand() { Hash = storedAddressHash };
             var storedAddresses = new List<Address>() { storedAddress };
-
+            var mockLogger = new Mock<ILogger<ExplorerAddressService>>();
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(storedAddresses);
-            var service = new ExplorerAddressService(_dbContextMock.Object);
+            var service = new ExplorerAddressService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var returnedAddress = await service.GetAddressAsync(addressCommand);
@@ -49,7 +49,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const string addressHash = "0000";
             var addressCommand = new GetAddressCommand { Hash = addressHash };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new ExplorerAddressService(_dbContextMock.Object);
+            var mockLogger = new Mock<ILogger<ExplorerAddressService>>();
+            var service = new ExplorerAddressService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var returnedAddress = await service.GetAddressAsync(addressCommand);

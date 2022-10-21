@@ -4,6 +4,7 @@ using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockService
 {
@@ -11,7 +12,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
         private readonly IAddressRestoreService _addressRestoreService;
-        private ILogger<ExplorerBlockService> _logger;
+        private readonly ILogger<ExplorerBlockService> _logger;
 
         public ExplorerBlockService(BlockExplorerContext blockExplorerContext, IAddressRestoreService addressRestoreService, ILogger<ExplorerBlockService> logger)
         {
@@ -43,18 +44,32 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
         {
             await _addressRestoreService.RestoreAddressesAsync(block);
             
-            _logger.LogInformation("Storing block: {block}", block);
-            _blockExplorerContext.Add(block);
+            _logger.LogInformation("Storing blocks: {Block}", block);
             try
             {
+                _blockExplorerContext.Add(block);
                 await _blockExplorerContext.SaveChangesAsync();
-                _logger.LogInformation("Stored block successfully");
+                _logger.LogInformation("Stored blocks successfully");
             }
             catch (Exception exception)
             {
-                _logger.LogError("Failed to store block, the following exception was thrown {Exception}", exception);
+                _logger.LogError("Failed to store blocks, the following exception was thrown {Exception}", exception);
             }
         }
 
+        public async Task RemoveBlocksAsync(List<Block> blocks)
+        {
+            _logger.LogInformation("Removing blocks: {Block}", blocks);
+            try
+            {
+                _blockExplorerContext.Remove(blocks);
+                await _blockExplorerContext.SaveChangesAsync();
+                _logger.LogInformation("Removed blocks successfully");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError("Failed to remove blocks, the following exception was thrown {Exception}", exception);
+            }
+        }
     }
 }
