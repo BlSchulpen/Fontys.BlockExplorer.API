@@ -1,5 +1,6 @@
 ﻿using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
+using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
@@ -10,13 +11,15 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
     {
         private readonly BlockExplorerContext _context;
         private readonly IAddressRestoreService _addressRestoreService;
+        private readonly IBlockService _blockService;
         private readonly Func<CoinType, IBlockDataProviderService> _providerServiceResolver;
 
-        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IAddressRestoreService addressRestoreService)
+        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IAddressRestoreService addressRestoreService, IBlockService blockService)
         {
             _context = blockExplorerContext;
             _providerServiceResolver = providerServiceResolver;
             _addressRestoreService = addressRestoreService;
+            _blockService = blockService;
         }
         public async Task<ICollection<Block>> RemoveBadBlocksAsync(CoinType coinType)
         {
@@ -47,7 +50,6 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             var chainBlock = await GetBestBlockAsync(providerService);
             if (chainBlock == null)
             {
-                //log
                 throw new NullReferenceException("No blocks can be found in the chain");
             }
 
@@ -58,7 +60,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                 if (!_context.Blocks.Any(b => b.Height == chainBlock.Height && chainBlock.CoinType == coinType))
                 {
                     newBlocks.Add(chainBlock);
-                    await StoreBlockAsync(chainBlock);
+                    await _blockService.AddBlockAsync(chainBlock);
                     nrStored += 1;
                 }
 
@@ -84,33 +86,19 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
             {
                 return blocks;
             }
-            var firstBlock = await StoreFirstBlockAsync(coinType);
+            var firstBlock = await GetFirstBlockAsync(coinType);
+            await _blockService.AddBlockAsync(firstBlock);
             blocks.Add(firstBlock);
             return blocks;
         }
 
-        private async Task<Block> StoreFirstBlockAsync(CoinType coinType)
+        private async Task<Block> GetFirstBlockAsync(CoinType coinType)
         {
             var providerService = _providerServiceResolver(coinType);
             var firstBlockHeight = 0;
             var firstBlockHash = await providerService.GetHashFromHeightAsync(firstBlockHeight);
             var firstBlock = await providerService.GetBlockAsync(firstBlockHash);
-            await StoreBlockAsync(firstBlock);
             return firstBlock;
-        }
-
-        private async Task StoreBlockAsync(Block block)
-        {
-            await _addressRestoreService.RestoreAddressesAsync(block);
-            _context.Blocks.Add(block);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
         }
     }
 }
