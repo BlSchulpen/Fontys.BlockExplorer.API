@@ -72,10 +72,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
                 var content = await response.Content.ReadAsStringAsync();
                 return content;
             }
-            catch (NullReferenceException exception)
+            catch (Exception exception)
             {
                 _logger.LogError("Message could not be send the following error was thrown {Exception}", exception); // change "Thrown"
-                throw;
+                return null;
             }
         }
     }

@@ -15,6 +15,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
     {
         private const int NrStored = 100;
         private InMemoryDatabaseContext _inMemoryDatabaseContext;
+        private readonly Mock<IAddressService> _mockExplorerAddressService;
+
+        public AddressRestoreServiceInMemoryTest()
+        {
+            _mockExplorerAddressService = new Mock<IAddressService>();
+        }
 
         [Fact]
         public async Task TestRestoreAddresses_SomeAlreadyInDB_ReturnNonStoredAddresses()
@@ -23,9 +29,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             SetUpDb();
             AddAddressesInDb();
             const int nrNewAddresses = 10;
-            var mockAddressService = new Mock<ExplorerAddressService>();
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
-            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, mockAddressService.Object);
+            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, _mockExplorerAddressService.Object);
             var newBlock = BlockFactory.NewBlock(newAddresses);
 
             // act
@@ -42,9 +47,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             // arrange
             SetUpDb();
             const int nrNewAddresses = 10;
-            var mockAddressService = new Mock<ExplorerAddressService>();
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
-            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, mockAddressService.Object);
+            var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, _mockExplorerAddressService.Object);
             var newBlock = BlockFactory.NewBlock(newAddresses);
 
             // act

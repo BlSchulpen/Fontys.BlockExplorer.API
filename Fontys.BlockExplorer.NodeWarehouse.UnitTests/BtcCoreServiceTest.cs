@@ -30,12 +30,12 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 
 
             // assert
-            await f.Should().ThrowAsync<NullReferenceException>();
+            await f.Should().ThrowAsync<Exception>();
             _mockLogger.Verify(x => x.Log(
                         LogLevel.Error,
                         It.IsAny<EventId>(),
-                        It.Is<It.IsAnyType>((o, t) => string.Equals("Connection to Btc Core could not be made", o.ToString(), StringComparison.InvariantCultureIgnoreCase)),
-                        It.IsAny<NullReferenceException>(),
+                        It.Is<It.IsAnyType>((o, t) => string.Equals("Message could not be send the following error was thrown ", o.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+                        It.IsAny<Exception>(),
                         (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                     Times.Once
             );

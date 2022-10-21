@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
@@ -16,10 +17,12 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
     public class TxControllerIntergrationTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<ILogger<ExplorerTxService>> _logger;
 
         public TxControllerIntergrationTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _logger = new Mock<ILogger<ExplorerTxService>>();
         }
 
         [Fact]
@@ -69,7 +72,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         {
             var transactions = MockTransactions(nrTransactions);
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);
-            var service = new ExplorerTxService(_dbContextMock.Object);
+            var service = new ExplorerTxService(_dbContextMock.Object, _logger.Object);
             var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
             var mapper = new Mapper(config);
             var controller = new TxController(service, mapper);

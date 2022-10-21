@@ -7,17 +7,24 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Loggers;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
     public class BlockServiceTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<IAddressRestoreService> _mockAddressRestoreService;
+        private readonly Mock<ILogger<ExplorerBlockService>> _logger; 
 
         public BlockServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _mockAddressRestoreService = new Mock<IAddressRestoreService>();
+            _logger = new Mock<ILogger<ExplorerBlockService>>();
         }
 
         [Fact]
@@ -27,10 +34,10 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             const string blockHash = "0";
             var storedBlocks = new List<Block>
             {
-                new Block() { Hash = blockHash }
+                new() { Hash = blockHash }
             };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
-            var service = new ExplorerBlockService(_dbContextMock.Object);
+            var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
             var blockCommand = new GetBlockCommand() { Hash = blockHash };
 
             //act
@@ -50,7 +57,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
                 new Block() { Hash = blockHash }
             };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
-            var service = new ExplorerBlockService(_dbContextMock.Object);
+            var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
             var blockCommand = new GetBlockCommand() { Hash = blockHash };
 
             //act
