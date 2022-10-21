@@ -18,7 +18,7 @@ builder.Services.Configure<PostgresDbOptions>(builder.Configuration.GetRequiredS
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
 builder.Services.AddAutoMapper(typeof(ExplorerProfile));
 
-//Autofac
+//Auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ExplorerModule()));
 
