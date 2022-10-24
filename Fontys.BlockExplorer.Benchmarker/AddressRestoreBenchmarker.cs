@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
+using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
@@ -11,13 +12,15 @@ namespace MyBenchmarks
 {
     [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
-    public class AddressRefactorBenchmarker
+    public class AddressRestoreBenchmarker
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<IAddressService> _mockAddressService;
 
-        public AddressRefactorBenchmarker()
+        public AddressRestoreBenchmarker()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _mockAddressService = new Mock<IAddressService>();
         }
 
 
@@ -36,7 +39,7 @@ namespace MyBenchmarks
             var newAddresses = NewAddresses(nrStoredAddresses, nrNewAddresses);
             var addresses = oldAddresses.Concat(newAddresses).ToList();
             var block = NewBlock(addresses);
-            var addressRestorer = new ExplorerAddressRestoreService(_dbContextMock.Object);
+            var addressRestorer = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
 
             //act
             await addressRestorer.RestoreAddressesAsync(block);

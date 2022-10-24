@@ -7,7 +7,7 @@ namespace Fontys.BlockExplorer.Benchmarker
     {
         static void Main(string[] args)
         {
-            var results = BenchmarkRunner.Run<AddressRefactorBenchmarker>();
+            var results = BenchmarkRunner.Run<AddressRestoreBenchmarker>();
         }
     }
 }
