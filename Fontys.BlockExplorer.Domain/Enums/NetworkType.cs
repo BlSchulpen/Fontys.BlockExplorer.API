@@ -3,5 +3,10 @@
     public enum NetworkType
     {
         BtcMainet,
+        BtcTestnet,
+        BchMainet,
+        BchTestnet,
+        EthMainet,
+        EthTestnet
     }
 }

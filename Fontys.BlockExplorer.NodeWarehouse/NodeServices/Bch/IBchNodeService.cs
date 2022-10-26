@@ -8,9 +8,9 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
         Task<string?> GetBestBlockHashAsync();
 
         Task<string?> GetHashFromHeightAsync(int height);
-        Task<BchNodeBlock?> GetBlockFromHash(string hash);
+        Task<BchNodeBlock?> GetBlockFromHashAsync(string hash);
 
-        Task<BchNodeRawTransaction?> GetRawTransaction(string txId);
+        Task<BchNodeRawTransaction?> GetRawTransactionAsync(string txId);
 
     }
 }

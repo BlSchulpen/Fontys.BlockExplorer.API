@@ -10,7 +10,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
             throw new NotImplementedException();
         }
 
-        public Task<BchNodeBlock?> GetBlockFromHash(string hash)
+        public Task<BchNodeBlock?> GetBlockFromHashAsync(string hash)
         {
             throw new NotImplementedException();
         }
@@ -20,7 +20,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
             throw new NotImplementedException();
         }
 
-        public Task<BchNodeRawTransaction?> GetRawTransaction(string txId)
+        public Task<BchNodeRawTransaction?> GetRawTransactionAsync(string txId)
         {
             throw new NotImplementedException();
         }

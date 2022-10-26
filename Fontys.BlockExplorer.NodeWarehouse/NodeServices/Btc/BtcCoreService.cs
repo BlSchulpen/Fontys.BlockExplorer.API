@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {
+
     public class BtcCoreService : IBtcNodeService
     {
         private static HttpClient _client;
@@ -16,7 +17,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         public BtcCoreService(IHttpClientFactory httpClientFactory, ILogger<BtcCoreService> logger)
         {
             _client = httpClientFactory.CreateClient("BtcCore");
-            _logger = logger;
+            _logger = logger;//todo move logging
         }
 
         //TODO how to handle not found exceptions after sending message
