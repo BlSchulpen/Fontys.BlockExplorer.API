@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Application.Services.BlockService;
-using Fontys.BlockExplorer.Domain.CQS;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fontys.BlockExplorer.API.Controllers
@@ -23,8 +22,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetBlockAsync(string hash)
         {
-            var command = new GetBlockCommand() { Hash = hash };
-            var blockResult = await _blockService.GetBlockAsync(command);
+            var blockResult = await _blockService.GetBlockAsync(hash);
             if (blockResult == null)
             {
                 return NotFound();

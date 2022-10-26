@@ -2,7 +2,6 @@
 {
     using Fontys.BlockExplorer.API.Controllers;
     using Fontys.BlockExplorer.Application.Services.AddressService;
-    using Fontys.BlockExplorer.Domain.CQS;
     using Moq;
     using System.Threading.Tasks;
     using Xunit;
@@ -21,7 +20,7 @@
             await controller.GetAddress(hash);
 
             // assert
-            mockService.Verify(x => x.GetAddressAsync(It.Is<GetAddressCommand>(x => x.Hash == hash)));
+            mockService.Verify(x => x.GetAddressAsync(It.Is<string>(x => x == hash)));
             mockService.VerifyNoOtherCalls();
         }
     }

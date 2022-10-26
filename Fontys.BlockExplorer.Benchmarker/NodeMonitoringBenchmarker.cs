@@ -23,7 +23,7 @@ namespace Fontys.BlockExplorer.Benchmarker
         public NodeMonitoringBenchmarker()
         {
             var mockContext = new Mock<BlockExplorerContext>();
-            mockContext.Setup(x => x.Blocks).ReturnsDbSet();
+          //  mockContext.Setup(x => x.Blocks).ReturnsDbSet();
             var mockResolver = new Mock<Func<CoinType, IBlockDataProviderService>>();
             var mockBlockService = new Mock<IBlockService>();
             var logger = new Mock<ILogger<ExplorerNodeMonitoringService>>();
@@ -41,7 +41,7 @@ namespace Fontys.BlockExplorer.Benchmarker
             // act
             await _nodeMonitoringService.RemoveBadBlocksAsync(coinType);
         }
-
+        /*
         private List<Block> StoredBlocks(int nrStored)
         {
             var blocks = new List<Block>();
@@ -51,5 +51,6 @@ namespace Fontys.BlockExplorer.Benchmarker
                 var block = new Block() {CoinType = CoinType.BTC, Hash = i.ToString(), Height = i, NetworkType = NetworkType.BtcMainet, PreviousBlockHash = i.ToString(), Transactions = new List<Transaction>()};
             }
         }
+        */
     }
 }

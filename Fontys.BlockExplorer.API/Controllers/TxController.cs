@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Application.Services.TxService;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +23,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetTransaction(string hash)
         {
-            var command = new GetTxCommand() { Hash = hash };
-            var result = await _txService.GetTransactionAsync(command);
+            var result = await _txService.GetTransactionAsync(hash);
             if (result == null)
             {
                 return NotFound();

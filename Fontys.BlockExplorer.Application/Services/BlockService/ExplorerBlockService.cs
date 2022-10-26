@@ -1,6 +1,5 @@
 ﻿using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,10 +20,9 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             _logger = logger;
         }
 
-        public async Task<Block?> GetBlockAsync(GetBlockCommand getBlockCommand)
+        public async Task<Block?> GetBlockAsync(string hash)
         {
-            var hash = getBlockCommand.Hash;
-            if (await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == getBlockCommand.Hash) == null) //TODO
+            if (await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash) == null) //TODO
             {
                 return null;
             }

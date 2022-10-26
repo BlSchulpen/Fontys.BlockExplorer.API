@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -38,10 +37,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
             var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
-            var blockCommand = new GetBlockCommand() { Hash = blockHash };
 
             //act
-            var result = await service.GetBlockAsync(blockCommand);
+            var result = await service.GetBlockAsync(blockHash);
 
             //assert 
             result?.Hash.Should().Be(blockHash);
@@ -58,10 +56,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             };
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(storedBlocks);
             var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
-            var blockCommand = new GetBlockCommand() { Hash = blockHash };
 
             //act
-            var result = await service.GetBlockAsync(blockCommand);
+            var result = await service.GetBlockAsync(blockHash);
 
             //assert 
             result?.Hash.Should().Be(blockHash);

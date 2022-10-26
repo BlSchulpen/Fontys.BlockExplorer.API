@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -29,14 +28,13 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             // arrange
             const string storedAddressHash = "0000";
             var storedAddress = new Address() { Hash = storedAddressHash };
-            var addressCommand = new GetAddressCommand() { Hash = storedAddressHash };
             var storedAddresses = new List<Address>() { storedAddress };
             var mockLogger = new Mock<ILogger<ExplorerAddressService>>();
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(storedAddresses);
             var service = new ExplorerAddressService(_dbContextMock.Object, mockLogger.Object);
 
             // act
-            var returnedAddress = await service.GetAddressAsync(addressCommand);
+            var returnedAddress = await service.GetAddressAsync(storedAddressHash);
 
             // assert
             returnedAddress.Should().BeEquivalentTo(storedAddress);
@@ -47,13 +45,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             // arrange
             const string addressHash = "0000";
-            var addressCommand = new GetAddressCommand { Hash = addressHash };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
             var mockLogger = new Mock<ILogger<ExplorerAddressService>>();
             var service = new ExplorerAddressService(_dbContextMock.Object, mockLogger.Object);
 
             // act
-            var returnedAddress = await service.GetAddressAsync(addressCommand);
+            var returnedAddress = await service.GetAddressAsync(addressHash);
 
             // assert
             returnedAddress.Should().BeNull();

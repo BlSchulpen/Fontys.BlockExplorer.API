@@ -1,15 +1,14 @@
-﻿namespace Fontys.BlockExplorer.API.UnitTests.Controllers
-{
-    using AutoMapper;
-    using Fontys.BlockExplorer.API.Controllers;
-    using Fontys.BlockExplorer.API.Dto.Response;
-    using Fontys.BlockExplorer.Application.Services.BlockService;
-    using Fontys.BlockExplorer.Domain.CQS;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Moq;
-    using System.Threading.Tasks;
-    using Xunit;
+﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Controllers;
+using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Application.Services.BlockService;
+using Fontys.BlockExplorer.Domain.Models;
+using Moq;
+using System.Threading.Tasks;
+using Xunit;
 
+namespace Fontys.BlockExplorer.API.UnitTests.Controllers
+{
     public class BlockControllerTest
     {
         [Fact]
@@ -26,7 +25,7 @@
             await controller.GetBlockAsync(hash);
 
             // assert
-            mockService.Verify(f => f.GetBlockAsync(It.Is<GetBlockCommand>(x => x.Hash == hash)));
+            mockService.Verify(f => f.GetBlockAsync(It.Is<string>(x => x == hash)));
             mockService.VerifyNoOtherCalls();
         }
     }

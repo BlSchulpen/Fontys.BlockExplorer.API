@@ -1,5 +1,4 @@
 ﻿using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -33,9 +32,8 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
             }
         }
 
-        public async Task<Address?> GetAddressAsync(GetAddressCommand getAddressCommand)
+        public async Task<Address?> GetAddressAsync(string hash)
         {
-            var hash = getAddressCommand.Hash;
             _logger.LogInformation("Retrieving address with hash {Hash}", hash);
             try
             {

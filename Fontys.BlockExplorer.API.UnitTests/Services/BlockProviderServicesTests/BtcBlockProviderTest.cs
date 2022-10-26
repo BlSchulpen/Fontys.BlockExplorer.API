@@ -34,33 +34,53 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
 
 
         [Fact]
-        public async Task RequestGenesisBlock_BlockExcists_ReturnBlockSuccess()
+        public async Task RequestGenesisBlock_BlockExists_ReturnBlockSuccess()
         {
             // arrange
-            var genesis_block = GenerateBlockResponse(0);
+            var genesisBlock = GenerateBlockResponse(0);
             var nodeService = new Mock<IBtcNodeService>();
-            nodeService.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync(genesis_block.Hash);
-            nodeService.Setup(x => x.GetHashFromHeightAsync(genesis_block.Height)).ReturnsAsync(genesis_block.Hash);
-            nodeService.Setup(x => x.GetBlockFromHashAsync(genesis_block.Hash)).ReturnsAsync(genesis_block);
+            nodeService.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync(genesisBlock.Hash);
+            nodeService.Setup(x => x.GetHashFromHeightAsync(genesisBlock.Height)).ReturnsAsync(genesisBlock.Hash);
+            nodeService.Setup(x => x.GetBlockFromHashAsync(genesisBlock.Hash)).ReturnsAsync(genesisBlock);
 
             var service = new BtcBlockProviderService(nodeService.Object,_mapper,_logger.Object);
 
             // act
-            var result = service.GetBlockAsync(genesis_block.Hash);
+            var result = await service.GetBlockAsync(genesisBlock.Hash);
 
             // assert
-            result.Should().BeEquivalentTo(genesis_block);
+            result.Should().BeEquivalentTo(genesisBlock);
         }
+
+        [Fact]
+        public async Task RequestGenesisBlock_BlockNotExists_ThrowsNotFoundError()
+        {
+            // arrange
+            var genesisBlock = GenerateBlockResponse(0);
+            var nodeService = new Mock<IBtcNodeService>();
+            nodeService.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync(genesisBlock.Hash);
+            nodeService.Setup(x => x.GetHashFromHeightAsync(genesisBlock.Height)).ReturnsAsync(genesisBlock.Hash);
+            nodeService.Setup(x => x.GetBlockFromHashAsync(genesisBlock.Hash)).ReturnsAsync(genesisBlock);
+
+            var service = new BtcBlockProviderService(nodeService.Object, _mapper, _logger.Object);
+
+            // act
+            var result = await service.GetBlockAsync(genesisBlock.Hash);
+
+            // assert
+            result.Should().BeEquivalentTo(genesisBlock);
+        }
+
 
         public BtcBlockResponse GenerateBlockResponse(int nr)
         {
+
             var block = new BtcBlockResponse()
             {
                 Hash = nr.ToString(),
                 Height = nr,
-                Previousblockhash = (nr-1).ToString(),
+                Previousblockhash = nr > 0 ? (nr-1).ToString() : null,
                 Tx = new List<BtcBlockTxResponse>()
-
             };
             return block;
         }

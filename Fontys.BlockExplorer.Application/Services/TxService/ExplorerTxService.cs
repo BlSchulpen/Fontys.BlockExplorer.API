@@ -1,5 +1,4 @@
 ﻿using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,9 +16,8 @@ namespace Fontys.BlockExplorer.Application.Services.TxService
             _logger = logger;
         }
 
-        public async Task<Transaction?> GetTransactionAsync(GetTxCommand command)
+        public async Task<Transaction?> GetTransactionAsync(string hash)
         {
-            var hash = command.Hash;
             _logger.LogInformation("Retrieving transaction with hash: {Hash}", hash);
             try
             {

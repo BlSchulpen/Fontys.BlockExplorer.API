@@ -1,15 +1,14 @@
-﻿namespace Fontys.BlockExplorer.API.UnitTests.Controllers
-{
-    using AutoMapper;
-    using Fontys.BlockExplorer.API.Controllers;
-    using Fontys.BlockExplorer.API.Dto.Response;
-    using Fontys.BlockExplorer.Application.Services.TxService;
-    using Fontys.BlockExplorer.Domain.CQS;
-    using Fontys.BlockExplorer.Domain.Models;
-    using Moq;
-    using System.Threading.Tasks;
-    using Xunit;
+﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Controllers;
+using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Application.Services.TxService;
+using Fontys.BlockExplorer.Domain.Models;
+using Moq;
+using System.Threading.Tasks;
+using Xunit;
 
+namespace Fontys.BlockExplorer.API.UnitTests.Controllers
+{
     public class TxControllerTest
     {
         [Fact]
@@ -26,7 +25,7 @@
             await controller.GetTransaction(hash);
 
             // assert
-            mockService.Verify(x => x.GetTransactionAsync(It.Is<GetTxCommand>(x => x.Hash == hash)));
+            mockService.Verify(x => x.GetTransactionAsync(It.Is<string>(x => x == hash)));
             mockService.VerifyNoOtherCalls();
         }
     }

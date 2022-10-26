@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Data;
-using Fontys.BlockExplorer.Domain.CQS;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -26,13 +25,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             // arrange
             const string hash = "1";
             var transaction = new Transaction() { Hash = hash };
-            var transactionCommand = new GetTxCommand() { Hash = hash };
             var mockLogger = new Mock<ILogger<ExplorerTxService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction> { transaction });
             var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
 
             // act
-            var txResult = await service.GetTransactionAsync(transactionCommand);
+            var txResult = await service.GetTransactionAsync(hash);
 
             // assert
             txResult.Should().BeEquivalentTo(transaction);
@@ -43,13 +41,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             // arrange
             const string hash = "1";
-            var transactionCommand = new GetTxCommand() { Hash = hash };
             var mockLogger = new Mock<ILogger<ExplorerTxService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction>());
             var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
 
             // act
-            var txResult = await service.GetTransactionAsync(transactionCommand);
+            var txResult = await service.GetTransactionAsync(hash);
 
             // assert
             txResult.Should().BeNull();
