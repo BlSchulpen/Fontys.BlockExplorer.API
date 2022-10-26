@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction;
 
 namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
 {

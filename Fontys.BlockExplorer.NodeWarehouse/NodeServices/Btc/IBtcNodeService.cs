@@ -1,4 +1,5 @@
-﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.Block;
+﻿using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 {

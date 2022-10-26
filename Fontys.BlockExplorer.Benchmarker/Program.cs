@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Running;
-using MyBenchmarks;
 
 namespace Fontys.BlockExplorer.Benchmarker
 {

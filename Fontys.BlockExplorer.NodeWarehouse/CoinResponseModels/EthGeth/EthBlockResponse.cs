@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth
+﻿namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.EthGeth
 {
     public class EthBlockResponse
     {

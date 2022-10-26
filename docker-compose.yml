@@ -23,3 +23,9 @@ services:
       -server
     ports:
       - "18332:18332"
+  
+  bitcoincash-node:
+    image: zquestz/bitcoin-cash-node
+    command: 
+    ports:
+      - "18342:18342"

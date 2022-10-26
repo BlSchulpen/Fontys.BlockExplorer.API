@@ -1,4 +1,4 @@
-﻿namespace Fontys.BlockExplorer.Domain.CoinResponseModels.BtcCore.RawTransaction
+﻿namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction
 {
     public class BtcInputResponse
     {

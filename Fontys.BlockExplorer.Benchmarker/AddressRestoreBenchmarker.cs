@@ -8,7 +8,7 @@ using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using Moq.EntityFrameworkCore;
 
-namespace MyBenchmarks
+namespace Fontys.BlockExplorer.Benchmarker
 {
     [SimpleJob(RuntimeMoniker.Net60)]
     [MemoryDiagnoser]
@@ -58,7 +58,7 @@ namespace MyBenchmarks
         private List<Address> NewAddresses(int nrStoredAddresses, int nrNewAddresses)
         {
             var addresses = new List<Address>();
-            for (var i = nrStoredAddresses; i < (nrStoredAddresses + nrNewAddresses); i++)
+            for (var i = nrStoredAddresses; i < nrStoredAddresses + nrNewAddresses; i++)
             {
                 addresses.Add(new Address() { Hash = i.ToString() });
             }
