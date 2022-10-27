@@ -34,6 +34,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
+            var content2 = "{\"jsonrpc\":{JsonRpc},  }";
             var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + 2 + "]}";
             var response = await SendMessageAsync(content);
             if (response == null)
