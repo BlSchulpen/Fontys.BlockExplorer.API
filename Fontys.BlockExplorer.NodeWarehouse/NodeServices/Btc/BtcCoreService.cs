@@ -1,5 +1,6 @@
 ﻿using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction;
+using Fontys.BlockExplorer.NodeWarehouse.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,10 +21,16 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
             _logger = logger;//todo move logging
         }
 
-        //TODO how to handle not found exceptions after sending message
         public async Task<string?> GetBestBlockHashAsync()
         {
-            const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}";
+            var arguments = new Dictionary<string, string> {
+                ["jsonrpc"] = "1.0",
+                ["id"] =  "1",
+                ["method"] = "getbestblockhash"
+            };
+            var contentParams = new List<string>();
+            //   const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"
+            var content = RpcContentBuilderExtension.RpcContent(arguments,contentParams);
             var response = await SendMessageAsync(content);
             if (response == null)
                 return null;
@@ -34,8 +41,15 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<BtcBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            var content2 = "{\"jsonrpc\":{JsonRpc},  }";
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + 2 + "]}";
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "1",
+                ["method"] = "getblock"
+            };
+            var contentParams = new List<string> { hash, "2"};
+            //            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + 2 + "]}";
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
             var response = await SendMessageAsync(content);
             if (response == null)
                 return null;
@@ -46,7 +60,16 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
 
         public async Task<string> GetHashFromHeightAsync(int height)
         {
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "1",
+                ["method"] = "getblockhash"
+            };
+            var contentParams = new List<string> { height.ToString() };
+//            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+
             var response = await SendMessageAsync(content);
             if (response == null)
                 return null;
@@ -58,20 +81,21 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         public async Task<BtcTransactionResponse> GetRawTransactionAsync(string txId)
         {
             const bool returnObject = true;
-            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "1",
+                ["method"] = "getrawtransaction"
+            };
+            var contentParams = new List<string> { txId, returnObject.ToString().ToLower() };
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+            //    var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getrawtransaction\",\"params\":[\"" + txId + "\"," + returnObject.ToString().ToLower() + "]}";
             var response = await SendMessageAsync(content);
             if (response == null)
                 return null;
             var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
             var responseObject = JsonConvert.DeserializeObject<BtcTransactionResponse>(json);
             return responseObject;
-        }
-
-        //!TODO clean way of doing this
-        private string RpcContent(Dictionary<string, string> dictArgumentsValue,
-            Dictionary<string, string> dictParamsValue)
-        {
-            return "test";
         }
 
         private async Task<string?> SendMessageAsync(string json)
