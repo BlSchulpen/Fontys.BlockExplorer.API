@@ -43,6 +43,8 @@ builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(opt
 builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 builder.Services.AddAutoMapper(typeof(EthProfile));
+
+//HttpClients
 builder.Services.AddHttpClient("BtcCore", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["BtcCoreSettings:BaseUrl"]);
@@ -53,6 +55,12 @@ builder.Services.AddHttpClient("EthGeth", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["EthGethSettings:BaseUrl"]);
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["EthGethSettings:Username"]}:{builder.Configuration["EthGethSettings:Password"]}")));
+});
+
+builder.Services.AddHttpClient("BchNode", httpClient =>
+{
+    httpClient.BaseAddress = new Uri(builder.Configuration["BchNodeSettings:BaseUrl"]);
+    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["BchNodeSettings:Username"]}:{builder.Configuration["BchNodeSettings:Password"]}")));
 });
 
 var app = builder.Build();

@@ -1,7 +1,7 @@
 ﻿namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.RawTransaction
 {
-    public class BchNodeScriptPubKey
+    public class BchAddressResponse
     {
-        public List<BchNodeAddress> Addresses { get; set; }
+        public string Address { get; set; }
     }
 }

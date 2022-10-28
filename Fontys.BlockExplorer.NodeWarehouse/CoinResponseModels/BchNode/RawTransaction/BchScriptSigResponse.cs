@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.RawTransaction
 {
-    public class BchNodeScriptSig
+    public class BchScriptSigResponse
     {
         public string Hex { get; set; }
     }

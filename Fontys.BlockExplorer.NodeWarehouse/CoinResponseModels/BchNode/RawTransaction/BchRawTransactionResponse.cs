@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.RawTransaction
 {
-    public class BchNodeVin
+    public class BchRawTransactionResponse
     {
-        public int Vout { get; set; }
-        public BchNodeScriptSig ScriptSig { get; set; }
+        public string TxId { get; set; }
+        public List<BchVinResponse> Vin { get; set; }
+        public List<BchVoutResponse> Vout { get; set; }
+
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.Block
 {
-    public class BchNodeBlock
+    public class BchBlockResponse
     {
         public string Hash { get; set; }
 
-        public List<BchNodeBlockTransaction> Tx { get; set; }
+        public List<BchBlockTxResponse> Tx { get; set; }
     }
 }

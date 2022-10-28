@@ -26,7 +26,6 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             if (response == null)
             {
                 _logger.LogError("Could not retrieve BCH block {Hash}", hash);
-                //TODO find best practice --> shouldnt throw --> how to handle if block is null
             }
             var rawTransactions = await GetRawTransactionsAsync(response);
             var transactions = new List<Transaction>();
@@ -58,9 +57,9 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             return hash;
         }
 
-        private async Task<List<BchNodeRawTransaction>> GetRawTransactionsAsync(BchNodeBlock block)
+        private async Task<List<BchRawTransactionResponse>> GetRawTransactionsAsync(BchBlockResponse block)
         {
-            var rawTransactionResponses = new List<BchNodeRawTransaction>();
+            var rawTransactionResponses = new List<BchRawTransactionResponse>();
             foreach (var transactionResponse in block.Tx)
             {
                 var rawTransactionResponse = await _nodeService.GetRawTransactionAsync(transactionResponse.Hash);
