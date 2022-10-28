@@ -3,6 +3,7 @@ using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.EthGeth;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -59,6 +60,76 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             // assert
             await f.Should().ThrowAsync<DllNotFoundException>();
         }
+
+
+
+
+        [Fact]
+        public async Task RequestBestBlock_OneExists_ReturnBlockSuccessfully()
+        {
+            // arrange
+            const int blockNr = 0;
+            var expectedResponse = GenerateBlockResponse(blockNr);
+            var mockNodeService = new Mock<IEthNodeService>();
+            mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
+
+            //todo setup
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+
+            // act
+            var responseHash = await blockProvider.GetBestBlockHashAsync();
+
+            // assert
+            responseHash.Should().Be(expectedResponse.Hash);
+        }
+
+        [Fact]
+        public async Task RequestBestBlock_MultipleExists_ReturnBlockSuccessfully()
+        {
+            // arrange
+            const int blockNr = 5;
+            var expectedResponse = GenerateBlockResponse(blockNr);
+            var mockNodeService = new Mock<IEthNodeService>();
+            mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
+
+            //todo setup
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+
+            // act
+            var responseHash = await blockProvider.GetBestBlockHashAsync();
+
+            // assert
+            responseHash.Should().Be(expectedResponse.Hash);
+        }
+
+
+        //TODO is this edge case an issue --> will now return old block but new blocks are gathered ~1 minute after
+        [Fact]
+        public async Task RequestBestBlock_BlockAddedAfterRequestingLatestNumber_ReturnOldBlock()
+        {
+            // arrange
+            const int oldLatest = 5;
+            const int newLatest = oldLatest+1;
+
+            var expectedResponse = GenerateBlockResponse(oldLatest);
+            var newLatestResponse = GenerateBlockResponse(newLatest);
+
+            var mockNodeService = new Mock<IEthNodeService>();
+            mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(oldLatest);
+            mockNodeService.Setup(x => x.GetBlockByNumberAsync(newLatest)).ReturnsAsync(newLatestResponse);
+            mockNodeService.Setup(x => x.GetBlockByNumberAsync(oldLatest)).ReturnsAsync(expectedResponse);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+
+            // act
+            var responseHash = await blockProvider.GetBestBlockHashAsync();
+
+            // assert
+            responseHash.Should().Be(expectedResponse.Hash);
+        }
+
+
+
+
 
         public EthBlockResponse GenerateBlockResponse(int nr)
         {
