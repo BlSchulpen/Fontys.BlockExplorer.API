@@ -1,6 +1,12 @@
 ﻿using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.Block;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.RawTransaction;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction;
+using Fontys.BlockExplorer.NodeWarehouse.Extensions;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
 {
@@ -16,25 +22,76 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
         }
 
         public async Task<string> GetBestBlockHashAsync()
-        {                
-
-            throw new NotImplementedException();
-        }
-
-        public Task<BchBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "curltest",
+                ["method"] = "getbestblockhash"
+            };
+            var contentParams = new List<string>();
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+            var response = await SendMessageAsync(content);            
+            var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
+            var formatted = json?[1..^2];
+            return formatted;
         }
 
-        public Task<string> GetHashFromHeightAsync(int height)
+        public async Task<BchBlockResponse> GetBlockFromHashAsync(string hash)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "curltest",
+                ["method"] = "getblock"
+            };
+            var contentParams = new List<string> { 
+                hash
+            };
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+            var response = await SendMessageAsync(content);
+            var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
+            var responseObject = JsonConvert.DeserializeObject<BchBlockResponse>(json);
+            return responseObject;
         }
 
-        public Task<BchRawTransactionResponse> GetRawTransactionAsync(string txId)
+        public async Task<string> GetHashFromHeightAsync(int height)
         {
-            throw new NotImplementedException();
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "curltest",
+                ["method"] = "getblockhash"
+            };
+            var contentParams = new List<string> { height.ToString() };
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+            var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
+            var hash = JObject.Parse(response)["result"]?.ToString(Formatting.None);
+            var formatted = Regex.Replace(hash, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+            return formatted;
         }
+
+        public async Task<BchRawTransactionResponse> GetRawTransactionAsync(string txId)
+        {
+            const bool returnObject = true;
+            var arguments = new Dictionary<string, string>
+            {
+                ["jsonrpc"] = "1.0",
+                ["id"] = "curltest",
+                ["method"] = "getrawtransaction"
+            };
+            var contentParams = new List<string> { txId, returnObject.ToString().ToLower(), true.ToString() }; //TODO it is possible not all params are stored as string
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
+            var response = await SendMessageAsync(content);
+            if (response == null)
+                return null;
+            var json = JObject.Parse(response)["result"].ToString(Formatting.Indented);
+            var responseObject = JsonConvert.DeserializeObject<BchRawTransactionResponse>(json);
+            return responseObject;
+        }
+
 
         private async Task<string?> SendMessageAsync(string json)
         {

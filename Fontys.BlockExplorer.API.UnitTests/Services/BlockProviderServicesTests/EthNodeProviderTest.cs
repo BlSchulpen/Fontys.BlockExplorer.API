@@ -3,7 +3,6 @@ using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.EthGeth;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 using Microsoft.Extensions.Logging;
 using Moq;
