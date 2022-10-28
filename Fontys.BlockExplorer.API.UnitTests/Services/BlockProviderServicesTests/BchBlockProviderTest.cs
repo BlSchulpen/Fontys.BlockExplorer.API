@@ -68,7 +68,81 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             await f.Should().ThrowAsync<DllNotFoundException>();
         }
 
-        public BchBlockResponse GenerateBlockResponse(int nr)
+        [Fact]
+        public async Task RequestBestBlock_OneExists_ReturnBlockSuccessfully()
+        {
+            // arrange
+            const int blockNr = 0;
+            var expectedResponse = GenerateBlockResponse(blockNr);
+            var mockNodeService = new Mock<IBchNodeService>();
+            mockNodeService.Setup(x => x.GetBestBlockHashAsync()).ReturnsAsync(expectedResponse.Hash);
+
+            //todo setup
+            var blockProvider = new BchBlockProviderService(mockNodeService.Object, _logger.Object, _mapper);
+
+            // act
+            var responseHash = await blockProvider.GetBestBlockHashAsync();
+
+            // assert
+            responseHash.Should().Be(expectedResponse.Hash);
+        }
+
+        [Fact]
+        public async Task RequestBestBlock_NoneExists_ThrowNotFoundError()
+        {
+            // arrange
+            var mockNodeService = new Mock<IBchNodeService>();
+
+            //todo setup
+            var blockProvider = new BchBlockProviderService(mockNodeService.Object, _logger.Object, _mapper);
+
+            // act
+            Func<Task> f = async () => { await blockProvider.GetBestBlockHashAsync(); };
+
+            // assert
+            await f.Should().ThrowAsync<DllNotFoundException>();
+        }
+
+        //hash from height
+        [Fact]
+        public async Task GetHashFromHeight_HashExists_ReturnHash()
+        {
+            // arrange
+            const int blockNr = 0;
+            var expectedResponse = GenerateBlockResponse(blockNr);
+            var mockNodeService = new Mock<IBchNodeService>();
+            mockNodeService.Setup(x => x.GetHashFromHeightAsync(blockNr)).ReturnsAsync(blockNr.ToString);
+
+            //todo setup
+            var blockProvider = new BchBlockProviderService(mockNodeService.Object, _logger.Object, _mapper);
+
+            // act
+            var responseHash = await blockProvider.GetHashFromHeightAsync(blockNr);
+
+            // assert
+            responseHash.Should().Be(expectedResponse.Hash);
+        }
+
+        [Fact]
+        public async Task GetHashFromHeigh_HashNotExists_ThrowNotFoundError()
+        {
+            // arrange
+            var mockNodeService = new Mock<IBchNodeService>();
+            const int blockNr = 0;
+
+            //todo setup
+            var blockProvider = new BchBlockProviderService(mockNodeService.Object, _logger.Object, _mapper);
+
+            // act
+            Func<Task> f = async () => { await blockProvider.GetHashFromHeightAsync(blockNr); };
+
+            // assert
+            await f.Should().ThrowAsync<DllNotFoundException>();
+        }
+
+
+
+        private BchBlockResponse GenerateBlockResponse(int nr)
         {
             var block = new BchBlockResponse()
             {
