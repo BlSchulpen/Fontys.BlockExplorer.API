@@ -1,13 +1,13 @@
 version: '3.8'
 services:
-  # db:
-  #   image: postgres
-  #   restart: always
-  #   environment:
-  #     POSTGRES_PASSWORD: Explorer
-  #     POSTGRES_DB: ExplorerDb
-  #   ports:
-  #     - 5432:5432
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: Explorer
+      POSTGRES_DB: ExplorerDb
+    ports:
+      - 5432:5432
       
   bitcoin-core:
     image: ruimarinho/bitcoin-core:0.17
@@ -24,8 +24,3 @@ services:
     ports:
       - "18332:18332"
   
-  bitcoincash-node:
-    image: zquestz/bitcoin-cash-node
-    command: 
-    ports:
-      - "18342:18342"

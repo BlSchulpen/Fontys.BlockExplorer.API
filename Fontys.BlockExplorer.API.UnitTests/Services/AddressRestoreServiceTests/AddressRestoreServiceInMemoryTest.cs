@@ -46,6 +46,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
         {
             // arrange
             SetUpDb();
+            AddAddressesInDb();
             const int nrNewAddresses = 10;
             var newAddresses = BlockFactory.NewAddresses(NrStored, nrNewAddresses);
             var service = new ExplorerAddressRestoreService(_inMemoryDatabaseContext, _mockExplorerAddressService.Object);
@@ -58,6 +59,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             newlyStored.Should().BeEquivalentTo(newAddresses);
             TearDownDb();
         }
+
         private void SetUpDb()
         {
             var options = new DbContextOptionsBuilder<InMemoryDatabaseContext>()
