@@ -52,7 +52,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task RequestGenesisBlock_BlockNotExists_ThrowsNotFoundException()
+        public async Task RequestGenesisBlock_BlockNotExists_ThrowsNullRefrencesException()
         {
             // arrange
             const int blockNr = 0;
@@ -65,7 +65,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             Func<Task> f = async () => { await blockProvider.GetBlockAsync(blockNr.ToString()); };
 
             // assert
-            await f.Should().ThrowAsync<DllNotFoundException>();
+            await f.Should().ThrowAsync<NullReferenceException>();
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task RequestBestBlock_NoneExists_ThrowNotFoundError()
+        public async Task RequestBestBlock_NoneExists_ThrowNullRefrenceException()
         {
             // arrange
             var mockNodeService = new Mock<IBchNodeService>();
@@ -100,7 +100,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             Func<Task> f = async () => { await blockProvider.GetBestBlockHashAsync(); };
 
             // assert
-            await f.Should().ThrowAsync<DllNotFoundException>();
+            await f.Should().ThrowAsync<NullReferenceException>();
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task GetHashFromHeigh_HashNotExists_ThrowNotFoundError()
+        public async Task GetHashFromHeigh_HashNotExists_ThrowNullReferenceException()
         {
             // arrange
             var mockNodeService = new Mock<IBchNodeService>();
@@ -136,7 +136,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             Func<Task> f = async () => { await blockProvider.GetHashFromHeightAsync(blockNr); };
 
             // assert
-            await f.Should().ThrowAsync<DllNotFoundException>();
+            await f.Should().ThrowAsync<NullReferenceException>();
         }
 
 

@@ -10,6 +10,7 @@ using Fontys.BlockExplorer.NodeDataManager.Workers;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(opt
 builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 //builder.Services.AddAutoMapper(typeof(EthProfile));
+builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
 
 //HttpClients
 builder.Services.AddHttpClient("BtcCore", httpClient =>
@@ -53,13 +55,14 @@ builder.Services.AddHttpClient("EthGeth", httpClient =>
     httpClient.BaseAddress = new Uri(builder.Configuration["EthGethSettings:BaseUrl"]);
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["EthGethSettings:Username"]}:{builder.Configuration["EthGethSettings:Password"]}")));
 });
+*/
 
 builder.Services.AddHttpClient("BchNode", httpClient =>
 {
     httpClient.BaseAddress = new Uri(builder.Configuration["BchNodeSettings:BaseUrl"]);
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["BchNodeSettings:Username"]}:{builder.Configuration["BchNodeSettings:Password"]}")));
 });
-*/
+
 
 var app = builder.Build();
 app.Run();

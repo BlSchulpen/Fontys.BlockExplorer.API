@@ -26,6 +26,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             if (response == null)
             {
                 _logger.LogError("Could not retrieve BCH block {Hash}", hash);
+                throw new NullReferenceException();
             }
             var rawTransactions = await GetRawTransactionsAsync(response);
             var transactions = new List<Transaction>();
@@ -41,7 +42,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             if (hash == null)
             {
                 _logger.LogError("Could not retrieve hash for BCH block with height: {height}", height); //TOOD you might want to log error but the error is thrown in the infrastructure layer in the bchNodeService
-                //TODO find best practice --> shouldnt throw --> how to handle if block is null
+                throw new NullReferenceException();
             }
             return hash;
         }
@@ -52,7 +53,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
             if (hash == null)
             {
                 _logger.LogError("Could not retrieve best BCH block"); //TOOD you might want to log error but the error is thrown in the infrastructure layer in the bchNodeService
-                //TODO find best practice --> shouldnt throw --> how to handle if block is null
+                throw new NullReferenceException();
             }
             return hash;
         }
@@ -66,7 +67,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
                 if (rawTransactionResponse == null)
                 {
                     _logger.LogError("Could not retrieve raw for transaction with BCH hash: {Hash}", transactionResponse.Hash); //TOOD you might want to log error but the error is thrown in the infrastructure layer in the bchNodeService
-                    //TODO how to handle this
+                    throw new NullReferenceException();
                 }
                 rawTransactionResponses.Add(rawTransactionResponse);
             }

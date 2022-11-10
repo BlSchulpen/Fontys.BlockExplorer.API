@@ -93,6 +93,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             var expectedResponse = GenerateBlockResponse(blockNr);
             var mockNodeService = new Mock<IEthNodeService>();
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
+            var responseBlock = GenerateBlockResponse(blockNr);
+            mockNodeService.Setup(x => x.GetBlockByNumberAsync(blockNr)).ReturnsAsync(responseBlock); 
 
             //todo setup
             var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);

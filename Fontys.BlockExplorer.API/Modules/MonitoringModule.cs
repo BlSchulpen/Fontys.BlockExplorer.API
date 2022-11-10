@@ -10,7 +10,7 @@ namespace Fontys.BlockExplorer.API.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<IBtcNodeService>().As<BtcCoreService>();
+          //  builder.RegisterType<IBtcNodeService>().As<BtcCoreService>();
      //       builder.RegisterType<IEthNodeService>().As<EthGethService>();
             builder.RegisterType<INodeMonitoringService>().As<ExplorerNodeMonitoringService>();
             builder.RegisterType<IAddressRestoreService>().As<ExplorerAddressRestoreService>();

@@ -53,7 +53,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task RequestGenesisBlock_BlockNotExists_ThrowsNotFoundError()
+        public async Task RequestGenesisBlock_BlockNotExists__NullRefrenceException()
         {
             // arrange
             var genesisBlock = GenerateBlockResponse(0);
