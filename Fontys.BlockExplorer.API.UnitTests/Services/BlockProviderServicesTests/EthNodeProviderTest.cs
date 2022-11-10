@@ -34,7 +34,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             mockNodeService.Setup(x => x.GetBlockByHashAsync(blockNr.ToString())).ReturnsAsync(expectedResponse);
 
             //todo setup
-            var blockProvider = new EthBlockProviderService(mockNodeService.Object,_mapper);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
 
             // act
             var responseBlock = await blockProvider.GetBlockAsync(blockNr.ToString());
@@ -44,24 +44,25 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task RequestGenesisBlock_BlockNotExists_ThrowsNotFoundException()
+        public async Task RequestGenesisBlock_BlockNotExists_LogsError()
         {
             // arrange
             const int blockNr = 0;
             var mockNodeService = new Mock<IEthNodeService>();
-
-            //todo setup
-            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
 
             // act
             Func<Task> f = async () => { await blockProvider.GetBlockAsync(blockNr.ToString()); };
 
             // assert
-            await f.Should().ThrowAsync<DllNotFoundException>();
+            _logger.Verify(x => x.Log(
+            LogLevel.Error,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((o, t) => string.Equals("Could not retrieve ETH block {Nr}", blockNr.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+            It.IsAny<Exception>(),
+            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),Times.Once);
+             await f.Should().ThrowAsync<NullReferenceException>();
         }
-
-
-
 
         [Fact]
         public async Task RequestBestBlock_OneExists_ReturnBlockSuccessfully()
@@ -69,11 +70,13 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             // arrange
             const int blockNr = 0;
             var expectedResponse = GenerateBlockResponse(blockNr);
-            var mockNodeService = new Mock<IEthNodeService>();
+            var mockNodeService = new Mock<IEthNodeService>();         
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
+            var responseBlock = GenerateBlockResponse(blockNr);
+            mockNodeService.Setup(x => x.GetBlockByNumberAsync(blockNr)).ReturnsAsync(responseBlock);
 
             //todo setup
-            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
 
             // act
             var responseHash = await blockProvider.GetBestBlockHashAsync();
@@ -92,7 +95,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
 
             //todo setup
-            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
 
             // act
             var responseHash = await blockProvider.GetBestBlockHashAsync();
@@ -117,7 +120,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(oldLatest);
             mockNodeService.Setup(x => x.GetBlockByNumberAsync(newLatest)).ReturnsAsync(newLatestResponse);
             mockNodeService.Setup(x => x.GetBlockByNumberAsync(oldLatest)).ReturnsAsync(expectedResponse);
-            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper);
+            var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
 
             // act
             var responseHash = await blockProvider.GetBestBlockHashAsync();
