@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Fontys.BlockExplorer.API.Modules;
 using Fontys.BlockExplorer.API.Profiles;
+using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Data.PostgresDb;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // keep local app-settings file
+builder.Services.AddScoped<IBlockDataProviderService,BtcBlockProviderService>();
+
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) 
     .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
@@ -21,7 +24,6 @@ builder.Services.AddAutoMapper(typeof(ExplorerProfile));
 //Auto fac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ExplorerModule()));
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

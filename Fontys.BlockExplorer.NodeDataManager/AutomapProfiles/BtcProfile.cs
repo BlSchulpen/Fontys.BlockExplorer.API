@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
@@ -13,6 +14,7 @@ namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
             CreateMap<BtcBlockResponse, Block>()
                 .ForMember(dest => dest.Transactions, act => act.MapFrom(src => src.Tx))
                 .ForMember(dest => dest.CoinType, act => act.MapFrom(src => CoinType.BTC))
+                .ForMember(dest => dest.CreationDateTime, act => act.MapFrom(src => src.Time))
                 .ForMember(dest => dest.NetworkType, act => act.MapFrom(src => NetworkType.BtcMainet));
             CreateMap<BtcBlockTxResponse, Transaction>()
                 .ForMember(dest => dest.Hash, act => act.MapFrom(scr => scr.Hash));

@@ -10,6 +10,7 @@ using BenchmarkDotNet.Loggers;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
 using Microsoft.Extensions.Logging;
+using Fontys.BlockExplorer.Domain.Enums;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -39,7 +40,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
 
             //act
-            var result = await service.GetBlockAsync(blockHash);
+            var result = await service.GetBlockAsync(blockHash, CoinType.BTC);
 
             //assert 
             result?.Hash.Should().Be(blockHash);
@@ -58,7 +59,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _logger.Object);
 
             //act
-            var result = await service.GetBlockAsync(blockHash);
+            var result = await service.GetBlockAsync(blockHash, CoinType.BTC);
 
             //assert 
             result?.Hash.Should().Be(blockHash);

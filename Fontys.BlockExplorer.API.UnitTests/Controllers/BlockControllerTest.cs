@@ -2,6 +2,7 @@
 using Fontys.BlockExplorer.API.Controllers;
 using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Application.Services.BlockService;
+using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Moq;
 using System.Threading.Tasks;
@@ -22,10 +23,10 @@ namespace Fontys.BlockExplorer.API.UnitTests.Controllers
             var controller = new BlockController(mockService.Object, mapper);
 
             // act
-            await controller.GetBlockAsync(hash);
+            await controller.GetBlockAsync(CoinType.BTC, hash);
 
             // assert
-            mockService.Verify(f => f.GetBlockAsync(It.Is<string>(x => x == hash)));
+            mockService.Verify(f => f.GetBlockAsync(It.Is<string>(x => x == hash), CoinType.BTC));
             mockService.VerifyNoOtherCalls();
         }
     }

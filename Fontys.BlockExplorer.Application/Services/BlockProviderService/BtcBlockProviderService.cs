@@ -21,6 +21,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         public async Task<string> GetBestBlockHashAsync()
         {
             var hash = await _btcNodeService.GetBestBlockHashAsync();
+
             return hash;
         }
         public async Task<string> GetHashFromHeightAsync(int height)

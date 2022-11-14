@@ -1,5 +1,6 @@
 ﻿using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,9 +21,16 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             _logger = logger;
         }
 
-        public async Task<Block?> GetBlockAsync(string hash)
+        public List<Block> GetBlocks(CoinType coinType)
         {
-            if (await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash) == null) //TODO
+            const int number = 10; //TODO consider how to indicate this...
+            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(number).ToList();
+            return blocks;
+        }
+
+        public async Task<Block?> GetBlockAsync(string hash, CoinType coinType)
+        {
+            if (await _blockExplorerContext.Blocks.FirstOrDefaultAsync(b => b.Hash == hash && b.CoinType == coinType) == null)
             {
                 return null;
             }
@@ -34,7 +42,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
                 .Include(b => b.Transactions)
                     .ThenInclude(t => t.Outputs)
                         .ThenInclude(o => o.Address)
-                .FirstOrDefaultAsync(b => b.Hash == hash);
+                .FirstOrDefaultAsync(b => b.Hash == hash && b.CoinType == coinType);
             return stored;
         }
 

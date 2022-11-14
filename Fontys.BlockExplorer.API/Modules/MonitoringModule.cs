@@ -12,8 +12,8 @@ namespace Fontys.BlockExplorer.API.Modules
         {
           //  builder.RegisterType<IBtcNodeService>().As<BtcCoreService>();
      //       builder.RegisterType<IEthNodeService>().As<EthGethService>();
-            builder.RegisterType<INodeMonitoringService>().As<ExplorerNodeMonitoringService>();
-            builder.RegisterType<IAddressRestoreService>().As<ExplorerAddressRestoreService>();
+            builder.RegisterType<ExplorerNodeMonitoringService>().As<INodeMonitoringService>();
+            builder.RegisterType<ExplorerAddressRestoreService>().As<IAddressRestoreService>();
         }
     }
 }

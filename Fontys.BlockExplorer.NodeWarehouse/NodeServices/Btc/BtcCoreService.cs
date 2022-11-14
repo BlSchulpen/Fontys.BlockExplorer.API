@@ -14,11 +14,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         private static HttpClient _client;
         private readonly ILogger<BtcCoreService> _logger;
 
-        //TODO fix code quality, factory for request content
         public BtcCoreService(IHttpClientFactory httpClientFactory, ILogger<BtcCoreService> logger)
         {
             _client = httpClientFactory.CreateClient("BtcCore");
-            _logger = logger;//todo move logging
+            _logger = logger;
         }
 
         public async Task<string?> GetBestBlockHashAsync()
@@ -29,7 +28,6 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
                 ["method"] = "getbestblockhash"
             };
             var contentParams = new List<string>();
-            //   const string content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getbestblockhash\"}"
             var content = RpcContentBuilderExtension.RpcContent(arguments,contentParams);
             var response = await SendMessageAsync(content);
             if (response == null)
