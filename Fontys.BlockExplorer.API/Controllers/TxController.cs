@@ -24,7 +24,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetTransaction(CoinType coinType, string hash)
         {
-            var result = await _txService.GetTransactionAsync(hash);
+            var result = await _txService.GetTransactionAsync(coinType, hash);
             if (result == null)
             {
                 return NotFound();
