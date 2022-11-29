@@ -21,10 +21,11 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             _logger = logger;
         }
 
+        //TODO update --> how to limit
         public List<Block> GetBlocks(CoinType coinType)
         {
-            const int number = 10; //TODO consider how to indicate this...
-            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(number).ToList();
+            const int numberOfBlocks = 10; //TODO consider how to indicate this...
+            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(numberOfBlocks).ToList();
             return blocks;
         }
 
@@ -76,6 +77,13 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             {
                 _logger.LogError("Failed to remove blocks, the following exception was thrown {Exception}", exception);
             }
+        }
+
+        public List<Block> GetLatestBlock(CoinType coinType)
+        {
+            const int number = 10; //TODO consider how to indicate this...
+            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(number).ToList();
+            return blocks;
         }
     }
 }

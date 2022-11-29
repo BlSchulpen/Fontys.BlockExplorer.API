@@ -19,6 +19,18 @@ namespace Fontys.BlockExplorer.API.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> MockGetBlocks()
+        {
+            var mockResponse = new List<BlockSummaryResponse>()
+            { 
+                new BlockSummaryResponse(){ CoinType = CoinType.BCH, CreationDateTime = DateTime.Now }
+            };
+            return Ok(mockResponse);
+        }
+
+
         //TODO send coin with hash
         [HttpGet("{CoinType}/{Hash}")]
         [ProducesResponseType(200)]
@@ -46,6 +58,15 @@ namespace Fontys.BlockExplorer.API.Controllers
                 var blockResponse = _mapper.Map<BlockSummaryResponse>(blockResult);
                 responseItems.Add(blockResponse);
             }
+            return Ok(responseItems);
+        }
+
+        [HttpGet("{Cointype}/Latest")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetLatestBlock(CoinType coinType)
+        {
+            var responseItems = new List<BlockSummaryResponse>();
+
             return Ok(responseItems);
         }
     }
