@@ -26,7 +26,7 @@
                         foreach (var coinType in Enum.GetValues(typeof(CoinType)).Cast<CoinType>())
                         {
              //               await nodeService.RemoveBadBlocksAsync(coinType);
-               //             await nodeService.GetNewBlocksAsync(coinType);
+                            await nodeService.GetNewBlocksAsync(coinType);
                         }
                     }
                 }

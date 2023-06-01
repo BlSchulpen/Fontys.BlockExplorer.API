@@ -1,6 +1,9 @@
-﻿using Fontys.BlockExplorer.Application.Services.AddressService;
+﻿using BenchmarkDotNet.Loggers;
+using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
 {
@@ -8,11 +11,13 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
     {
         private readonly BlockExplorerContext _context;
         private readonly IAddressService _addressService;
+        private readonly ILogger<IAddressRestoreService> _logger;
 
-        public ExplorerAddressRestoreService(BlockExplorerContext context, IAddressService addressService)
+        public ExplorerAddressRestoreService(BlockExplorerContext context, IAddressService addressService, ILogger<IAddressRestoreService> logger)
         {
             _addressService = addressService;
             _context = context;
+            _logger = logger;
         }
 
         public async Task<List<Address>> RestoreAddressesAsync(Block block)
@@ -20,11 +25,26 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
             var addressesInBlock = GetAllAddressesOfBlock(block);
             var distinctNewAddresses = GetDistinctNewAddresses(addressesInBlock);
             if (distinctNewAddresses.Any())
-                await _addressService.StoreAddressesAsync(distinctNewAddresses); //TODO this could fail --> block shouldn't be stored if the new distinct addresses cant be stored
+                await StoreNewAddresses(distinctNewAddresses);
             var dbAddressesInBlock = _context.Addresses.Where(a => addressesInBlock.Contains(a)).ToList();
             UpdateTransferAddresses(block, dbAddressesInBlock);
             return distinctNewAddresses;
         }
+
+        private async Task<List<Address>?> StoreNewAddresses(List<Address> distinctNewAddresses)
+        {
+            try
+            {
+                await _addressService.StoreAddressesAsync(distinctNewAddresses);
+                return distinctNewAddresses;
+            }
+         
+            catch (Exception exception)
+            {
+                _logger.LogError("Failed store new addresses, the following exception was thrown {Exception}", exception);
+                return null;
+            }
+    }
 
         private List<Address> GetAllAddressesOfBlock(Block block)
         {

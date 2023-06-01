@@ -78,10 +78,10 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             }
         }
 
-        public List<Block> GetLatestBlock(CoinType coinType)
+        public List<Block> GetLatestTenBlock(CoinType coinType)
         {
-            const int number = 10; //TODO consider how to indicate this...
-            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(number).ToList();
+            const int numberOfBlocks = 10;
+            var blocks = _blockExplorerContext.Blocks.Where(b => b.CoinType == coinType).Take(numberOfBlocks).ToList();
             return blocks;
         }
     }

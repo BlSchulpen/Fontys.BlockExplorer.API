@@ -40,7 +40,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
             catch (Exception exception)
             {
                 _logger.LogError("Failed to retrieve address, the following exception was thrown {Exception}", exception);
-                return null; //TODO handle
+                return null;
             }
         }
     }

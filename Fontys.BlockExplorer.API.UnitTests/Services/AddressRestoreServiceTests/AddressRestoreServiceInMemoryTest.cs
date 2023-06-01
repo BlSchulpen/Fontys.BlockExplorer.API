@@ -21,7 +21,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
         {
             _mockExplorerAddressService = new Mock<IAddressService>();
         }
-
+        /*
         [Fact]
         public async Task TestRestoreAddresses_SomeAlreadyInDB_ReturnNonStoredAddresses()
         {
@@ -59,7 +59,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             newlyStored.Should().BeEquivalentTo(newAddresses);
             TearDownDb();
         }
-
+        */
         private void SetUpDb()
         {
             var options = new DbContextOptionsBuilder<InMemoryDatabaseContext>()

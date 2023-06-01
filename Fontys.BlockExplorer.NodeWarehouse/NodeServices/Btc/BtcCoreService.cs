@@ -15,7 +15,6 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         private static HttpClient _client;
         private readonly ILogger<BtcCoreService> _logger;
         private readonly BitcoinRequestConfiguration _requestConfiguration;
-        //TODO add request configuration 
         public BtcCoreService(IHttpClientFactory httpClientFactory, ILogger<BtcCoreService> logger, BitcoinRequestConfiguration requestConfiguration)
         {
             _client = httpClientFactory.CreateClient("BtcCore");
