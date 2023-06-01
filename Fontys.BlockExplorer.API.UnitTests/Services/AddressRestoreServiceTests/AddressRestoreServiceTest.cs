@@ -7,6 +7,7 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fontys.BlockExplorer.Application.Services.AddressService;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
@@ -14,10 +15,12 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
     public class AddressRestoreServiceTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<IAddressService> _mockAddressService;
 
         public AddressRestoreServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _mockAddressService = new Mock<IAddressService>();
         }
 
         [Fact]
@@ -26,7 +29,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             // arrange
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new ExplorerAddressRestoreService(_dbContextMock.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());
@@ -47,7 +50,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             var storedAddress = new Address() { Hash = "0000" };
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>() { storedAddress });
-            var service = new ExplorerAddressRestoreService(_dbContextMock.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());

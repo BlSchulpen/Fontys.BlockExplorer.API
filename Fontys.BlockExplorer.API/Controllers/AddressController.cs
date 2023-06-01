@@ -1,5 +1,4 @@
 ﻿using Fontys.BlockExplorer.Application.Services.AddressService;
-using Fontys.BlockExplorer.Domain.CQS;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fontys.BlockExplorer.API.Controllers
@@ -19,8 +18,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetAddress(string hash)
         {
-            var command = new GetAddressCommand() { Hash = hash };
-            var results = await _addressService.GetAddressAsync(command);
+            var results = await _addressService.GetAddressAsync(hash);
             if (results == null)
             {
                 return NotFound();

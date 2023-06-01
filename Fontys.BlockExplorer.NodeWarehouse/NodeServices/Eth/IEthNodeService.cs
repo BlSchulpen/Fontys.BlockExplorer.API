@@ -1,4 +1,4 @@
-﻿using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
+﻿using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.EthGeth;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth
 {

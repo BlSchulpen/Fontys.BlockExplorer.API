@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
 {
@@ -8,33 +9,25 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
     {
         private readonly IBtcNodeService _btcNodeService;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public BtcBlockProviderService(IBtcNodeService btcNodeService, IMapper mapper)
+        public BtcBlockProviderService(IBtcNodeService btcNodeService, IMapper mapper, ILogger<BtcBlockProviderService> logger)
         {
             _btcNodeService = btcNodeService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<string> GetBestBlockHashAsync()
         {
             var hash = await _btcNodeService.GetBestBlockHashAsync();
+
             return hash;
         }
         public async Task<string> GetHashFromHeightAsync(int height)
         {
-            try
-            {
-                var hash = await _btcNodeService.GetHashFromHeightAsync(height);
-                return hash;
-            }
-            catch (NullReferenceException e)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            var hash = await _btcNodeService.GetHashFromHeightAsync(height);
+            return hash;
         }
 
         public async Task<Block> GetBlockAsync(string hash)

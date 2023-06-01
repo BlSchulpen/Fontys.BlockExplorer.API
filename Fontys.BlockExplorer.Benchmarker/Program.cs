@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Running;
-using MyBenchmarks;
 
 namespace Fontys.BlockExplorer.Benchmarker
 {
@@ -7,7 +6,7 @@ namespace Fontys.BlockExplorer.Benchmarker
     {
         static void Main(string[] args)
         {
-            var results = BenchmarkRunner.Run<AddressRefactorBenchmarker>();
+            var results = BenchmarkRunner.Run<AddressRestoreBenchmarker>();
         }
     }
 }

@@ -3,6 +3,7 @@
     public enum CoinType
     {
         BTC = 0,
-        ETH = 1,
+        BCH = 1,
+        ETH = 2,
     }
 }

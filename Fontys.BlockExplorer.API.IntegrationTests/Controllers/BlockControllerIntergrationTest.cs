@@ -9,17 +9,25 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
+using BenchmarkDotNet.Loggers;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
 {
     public class BlockControllerIntergrationTest
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
+        private readonly Mock<IAddressRestoreService> _mockAddressRestoreService;
+        private readonly Mock<ILogger<ExplorerBlockService>> _mockBlockService;
 
         public BlockControllerIntergrationTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
+            _mockAddressRestoreService = new Mock<IAddressRestoreService>();
+            _mockBlockService = new Mock<ILogger<ExplorerBlockService>>();
+
         }
 
         [Fact]
@@ -42,7 +50,7 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
         {
             var blocks = MockBlocks(nrBlocks);
             _dbContextMock.Setup(x => x.Blocks).ReturnsDbSet(blocks);
-            var service = new ExplorerBlockService(_dbContextMock.Object);
+            var service = new ExplorerBlockService(_dbContextMock.Object, _mockAddressRestoreService.Object, _mockBlockService.Object);
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
             var mapper = new Mapper(config);
             var controller = new BlockController(service, mapper);

@@ -8,6 +8,8 @@ namespace Fontys.BlockExplorer.API.Profiles
     {
         public ExplorerProfile()
         {
+            CreateMap<Block, BlockSummaryResponse>()
+                 .ForMember(dest => dest.NumberOfTransactions, act => act.MapFrom(scr => scr.Transactions.Count));
             CreateMap<Block, BlockResponse>();
             CreateMap<Transaction, TransactionResponse>();
             CreateMap<Transfer, TransferResponse>();

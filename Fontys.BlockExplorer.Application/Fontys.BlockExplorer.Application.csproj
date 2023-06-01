@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fontys.BlockExplorer.Datahub\Fontys.BlockExplorer.Datahub.csproj" />
     <ProjectReference Include="..\Fontys.BlockExplorer.Data\Fontys.BlockExplorer.Data.csproj" />
     <ProjectReference Include="..\Fontys.BlockExplorer.NodeWarehouse\Fontys.BlockExplorer.NodeWarehouse.csproj" />
   </ItemGroup>

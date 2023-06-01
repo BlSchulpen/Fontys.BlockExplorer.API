@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Fontys.BlockExplorer.Domain.CoinResponseModels.EthGeth;
 using Fontys.BlockExplorer.Domain.Models;
+using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.EthGeth;
 
 namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
 {

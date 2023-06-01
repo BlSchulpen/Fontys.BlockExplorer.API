@@ -8,7 +8,6 @@
         [Key]
         public string Hash { get; set; }
 
-
         [Required]
         public int Height { get; set; }
 
@@ -22,5 +21,8 @@
 
         [Required]
         public virtual ICollection<Transaction> Transactions { get; set; }
+
+        [Required]
+        public DateTime CreationDateTime { get; init; }
     }
 }
