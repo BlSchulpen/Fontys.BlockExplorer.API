@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Fontys.BlockExplorer.NodeWarehouse.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,11 @@ builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ExplorerModule()));
+
+// Add request configurations
+var bitcoinRequestConfig = new BitcoinRequestConfiguration(); //TODO --> move this to own module
+builder.Configuration.GetSection("BtcCoreRequests").Bind(bitcoinRequestConfig);
+builder.Services.AddSingleton(bitcoinRequestConfig);
 
 //HttpClients
 builder.Services.AddHttpClient("BtcCore", httpClient =>

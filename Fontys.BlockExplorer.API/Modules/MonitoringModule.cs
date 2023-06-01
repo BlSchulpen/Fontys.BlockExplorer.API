@@ -2,8 +2,6 @@
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 
 namespace Fontys.BlockExplorer.API.Modules
 {

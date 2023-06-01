@@ -2,6 +2,7 @@
 {
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
     using Fontys.BlockExplorer.Domain.Enums;
+    using Fontys.BlockExplorer.NodeWarehouse.Configurations;
     using Microsoft.Extensions.Hosting;
 
     public class NodeDataWorker : BackgroundService
