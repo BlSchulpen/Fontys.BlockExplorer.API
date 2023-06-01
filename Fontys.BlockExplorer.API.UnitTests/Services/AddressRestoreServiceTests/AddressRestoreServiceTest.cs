@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fontys.BlockExplorer.Application.Services.AddressService;
 using Xunit;
+using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
 {
@@ -16,20 +17,22 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
         private readonly Mock<IAddressService> _mockAddressService;
+        private readonly Mock<ILogger<ExplorerAddressRestoreService>> _logger;
 
         public AddressRestoreServiceTest()
         {
             _dbContextMock = new Mock<BlockExplorerContext>();
             _mockAddressService = new Mock<IAddressService>();
+            _logger = new Mock<ILogger<ExplorerAddressRestoreService>>();
         }
-        /*
+        
         [Fact]
         public async Task RestoreAddresses_NoneAreStored_OneNewAddress()
         {
             // arrange
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object, _logger.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());
@@ -49,7 +52,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             // arrange
             var newAddress = new Address { Hash = "0001" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>());
-            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object, _logger.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());
@@ -65,7 +68,6 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
         }
 
 
-
         [Fact]
         public async Task RestoreAddresses_NoneAreStored_NoNewAddresses()
         {
@@ -73,7 +75,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             var storedAddress = new Address() { Hash = "0000" };
             var newAddress = new Address { Hash = "0000" };
             _dbContextMock.Setup(x => x.Addresses).ReturnsDbSet(new List<Address>() { storedAddress });
-            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object);
+            var service = new ExplorerAddressRestoreService(_dbContextMock.Object, _mockAddressService.Object, _logger.Object);
 
             var inputs = MockInputTransfer(new List<Address>() { newAddress });
             var outputs = MockOutputTransfer(new List<Address>());
@@ -100,6 +102,5 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             outputAddresses.ForEach(address => outputTransfer.Add(new TxOutput() { Address = address, Value = 0.12 }));
             return outputTransfer;
         }
-        */
     }
 }
