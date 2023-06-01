@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.TxService
 {
-    public class ExplorerTxService : ITransactionService
+    public class ExplorerTransactionService : ITransactionService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
-        private readonly ILogger<ExplorerTxService> _logger;
+        private readonly ILogger<ExplorerTransactionService> _logger;
 
-        public ExplorerTxService(BlockExplorerContext blockExplorerContext, ILogger<ExplorerTxService> logger)
+        public ExplorerTransactionService(BlockExplorerContext blockExplorerContext, ILogger<ExplorerTransactionService> logger)
         {
             _blockExplorerContext = blockExplorerContext;
             _logger = logger;

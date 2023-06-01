@@ -10,6 +10,9 @@ using Fontys.BlockExplorer.NodeDataManager.Workers;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
+using Fontys.BlockExplorer.Application.Services.BlockService;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +42,11 @@ builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(opt
 builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
 //builder.Services.AddAutoMapper(typeof(EthProfile));
-//builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
+builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
+builder.Services.AddScoped<IBlockDataProviderService, BtcBlockProviderService>();
+builder.Services.AddScoped<IBlockService, ExplorerBlockService>();
+builder.Services.AddScoped<IAddressRestoreService, ExplorerAddressRestoreService>();
+builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ExplorerModule()));
 
 //HttpClients
 builder.Services.AddHttpClient("BtcCore", httpClient =>

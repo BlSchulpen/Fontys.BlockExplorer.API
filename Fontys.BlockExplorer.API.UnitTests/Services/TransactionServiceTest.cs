@@ -26,9 +26,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             // arrange
             const string hash = "1";
             var transaction = new Transaction() { Hash = hash };
-            var mockLogger = new Mock<ILogger<ExplorerTxService>>();
+            var mockLogger = new Mock<ILogger<ExplorerTransactionService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction> { transaction });
-            var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
+            var service = new ExplorerTransactionService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var txResult = await service.GetTransactionAsync(CoinType.BTC ,hash);
@@ -42,9 +42,9 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         {
             // arrange
             const string hash = "1";
-            var mockLogger = new Mock<ILogger<ExplorerTxService>>();
+            var mockLogger = new Mock<ILogger<ExplorerTransactionService>>();
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(new List<Transaction>());
-            var service = new ExplorerTxService(_dbContextMock.Object, mockLogger.Object);
+            var service = new ExplorerTransactionService(_dbContextMock.Object, mockLogger.Object);
 
             // act
             var txResult = await service.GetTransactionAsync(CoinType.BTC, hash);
