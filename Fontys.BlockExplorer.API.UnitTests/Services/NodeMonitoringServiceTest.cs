@@ -1,19 +1,18 @@
 ﻿using FluentAssertions;
-using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
+using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fontys.BlockExplorer.Application.Services.BlockService;
 using Xunit;
-using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -24,7 +23,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
         private readonly Mock<IBlockDataProviderService> _blockDataProviderServiceMock;
         private readonly Mock<IBlockService> _blockService;
         private readonly Mock<ILogger<ExplorerNodeMonitoringService>> _logger;
-        private readonly ExplorerNodeMonitoringService _explorerMonitoringService; 
+        private readonly ExplorerNodeMonitoringService _explorerMonitoringService;
 
         public NodeMonitoringServiceTest()
         {
@@ -71,28 +70,28 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             removedBlocks.Should().BeEmpty();
         }
 
-       [Fact]
-      public async Task RemoveBadBlock_BadStored_ReturnsBadBlocks()
-      {
-          //arrange
-          const CoinType coinType = CoinType.BTC;
-          const int nrChainBlocks = 3;
-          const int nrBadStored = 2;
-          var chainBlocks = GetChainBlocks(nrChainBlocks);
-          var badBlocks = GetBadBlocks(nrBadStored, nrChainBlocks);
-          UpdateBlockProvider(chainBlocks);
-          var storedBlocks = GetStoredBlocks(chainBlocks, badBlocks, nrChainBlocks, nrBadStored);
-          _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
-          var latestBlock = storedBlocks.Count - 1;
-          _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
-          var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderServiceMock.Object, _blockService.Object, _logger.Object);
+        [Fact]
+        public async Task RemoveBadBlock_BadStored_ReturnsBadBlocks()
+        {
+            //arrange
+            const CoinType coinType = CoinType.BTC;
+            const int nrChainBlocks = 3;
+            const int nrBadStored = 2;
+            var chainBlocks = GetChainBlocks(nrChainBlocks);
+            var badBlocks = GetBadBlocks(nrBadStored, nrChainBlocks);
+            UpdateBlockProvider(chainBlocks);
+            var storedBlocks = GetStoredBlocks(chainBlocks, badBlocks, nrChainBlocks, nrBadStored);
+            _dbContextMock.Setup(b => b.Blocks).ReturnsDbSet(storedBlocks);
+            var latestBlock = storedBlocks.Count - 1;
+            _blockDataProviderServiceMock.Setup(b => b.GetHashFromHeightAsync(latestBlock)).ReturnsAsync(latestBlock.ToString());
+            var service = new ExplorerNodeMonitoringService(_dbContextMock.Object, _blockDataProviderServiceMock.Object, _blockService.Object, _logger.Object);
 
-          //act
-          var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
+            //act
+            var removedBlocks = await service.RemoveBadBlocksAsync(coinType);
 
-          //assert
-          removedBlocks.Should().BeEquivalentTo(badBlocks);
-      }
+            //assert
+            removedBlocks.Should().BeEquivalentTo(badBlocks);
+        }
 
         [Fact]
         public async Task GetNewBlocks_BlocksStored_NoNewBlocksInChain_ReturnEmptyList()

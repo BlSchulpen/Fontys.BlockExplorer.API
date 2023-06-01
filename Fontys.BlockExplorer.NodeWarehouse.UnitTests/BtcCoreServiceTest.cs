@@ -3,9 +3,7 @@ using Fontys.BlockExplorer.NodeWarehouse.Configurations;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Net;
 using Xunit;
-using Moq.Protected;
 
 namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 {
@@ -17,9 +15,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 
         public BtcCoreServiceTest()
         {
-         //   _mockClient = new Mock<HttpClient>();
+            _mockClient = new Mock<HttpClient>();
             //TODO
 
+            /*
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("test", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
@@ -27,10 +26,10 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 
 
             var client = new HttpClient(mockHttpMessageHandler.Object);
+            */
 
-           // _mockClient.Setup(x => x.PostAsync(It.IsAny<string>(),It.IsAny<HttpContent>())).ReturnsAsync(new HttpResponseMessage() { StatusCode = HttpStatusCode.EarlyHints });
             _mockHttpClientFactory = new Mock<IHttpClientFactory>();
-            _mockHttpClientFactory.Setup(x => x.CreateClient("BtcCore")).Returns(client);
+            _mockHttpClientFactory.Setup(x => x.CreateClient("BtcCore")).Returns(_mockClient.Object);
             _mockLogger = new Mock<ILogger<BtcCoreService>>();
         }
 
@@ -61,7 +60,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
         */
 
         [Fact]
-        public async Task GetBestBlock_GetBlock_Success_ReturnBlock() 
+        public async Task GetBestBlock_GetBlock_Success_ReturnBlock()
         {
             // arrange
             var bitCoinRequestConfiguration = new BitcoinRequestConfiguration();
@@ -73,7 +72,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.UnitTests
 
 
             // assert
-            result.Should().BeEquivalentTo(bestBlockHash); 
+            result.Should().BeEquivalentTo(bestBlockHash);
         }
     }
 }

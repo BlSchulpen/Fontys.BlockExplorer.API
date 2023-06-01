@@ -4,7 +4,6 @@ using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace Fontys.BlockExplorer.Application.Services.BlockService
 {
@@ -49,7 +48,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
         public async Task AddBlockAsync(Block block)
         {
             await _addressRestoreService.RestoreAddressesAsync(block);
-            
+
             _logger.LogInformation("Storing blocks: {Block}", block);
             try
             {

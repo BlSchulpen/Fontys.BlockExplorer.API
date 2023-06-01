@@ -14,10 +14,10 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         private readonly ILogger<BchBlockProviderService> _logger;
 
         public BchBlockProviderService(IBchNodeService nodeService, ILogger<BchBlockProviderService> logger, IMapper mapper)
-        { 
+        {
             _nodeService = nodeService;
             _logger = logger;
-            _mapper = mapper;   
+            _mapper = mapper;
         }
 
         public async Task<Block> GetBlockAsync(string hash)

@@ -2,7 +2,6 @@
 {
     using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
     using Fontys.BlockExplorer.Domain.Enums;
-    using Fontys.BlockExplorer.NodeWarehouse.Configurations;
     using Microsoft.Extensions.Hosting;
 
     public class NodeDataWorker : BackgroundService
@@ -25,7 +24,7 @@
                         var nodeService = scope.ServiceProvider.GetRequiredService<INodeMonitoringService>();
                         foreach (var coinType in Enum.GetValues(typeof(CoinType)).Cast<CoinType>())
                         {
-             //               await nodeService.RemoveBadBlocksAsync(coinType);
+                            //               await nodeService.RemoveBadBlocksAsync(coinType);
                             await nodeService.GetNewBlocksAsync(coinType);
                         }
                     }

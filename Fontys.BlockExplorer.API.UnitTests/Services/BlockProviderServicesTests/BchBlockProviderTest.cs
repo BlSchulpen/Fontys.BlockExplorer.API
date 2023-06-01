@@ -1,21 +1,13 @@
-﻿using Autofac.Core;
-using AutoMapper;
-using BenchmarkDotNet.Configs;
+﻿using AutoMapper;
 using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.Block;
-using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Diagnostics.Tracing.StackSources;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -33,7 +25,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         }
 
         [Fact]
-        public async Task RequestGenesisBlock_BlockExists_ReturnBlockSuccessfully() 
+        public async Task RequestGenesisBlock_BlockExists_ReturnBlockSuccessfully()
         {
             // arrange
             const int blockNr = 0;
@@ -42,10 +34,10 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             mockNodeService.Setup(x => x.GetBlockFromHashAsync(blockNr.ToString())).ReturnsAsync(expectedResponse);
 
             //todo setup
-            var blockProvider = new BchBlockProviderService(mockNodeService.Object,_logger.Object,_mapper);
+            var blockProvider = new BchBlockProviderService(mockNodeService.Object, _logger.Object, _mapper);
 
             // act
-             var responseBlock = await blockProvider.GetBlockAsync(blockNr.ToString());
+            var responseBlock = await blockProvider.GetBlockAsync(blockNr.ToString());
 
             // assert
             responseBlock.Should().BeEquivalentTo(responseBlock);

@@ -2,6 +2,6 @@
 {
     public class BitcoinRequestConfiguration
     {
-        public ICollection<BitcoinRequest> Requests { get; set; }   
+        public ICollection<BitcoinRequest> Requests { get; set; }
     }
 }

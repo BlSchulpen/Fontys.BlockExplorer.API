@@ -1,14 +1,13 @@
 ﻿using FluentAssertions;
 using Fontys.BlockExplorer.API.UnitTests.Factories;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
+using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data.InMemory;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using Fontys.BlockExplorer.Application.Services.AddressService;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Threading.Tasks;
 using Xunit;
-using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
 {
@@ -24,7 +23,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             _mockExplorerAddressService = new Mock<IAddressService>();
             _logger = new Mock<ILogger<ExplorerAddressRestoreService>>();
         }
-        
+
         [Fact]
         public async Task TestRestoreAddresses_SomeAlreadyInDB_ReturnNonStoredAddresses()
         {
@@ -43,7 +42,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.AddressRestoreServiceTests
             newlyStored.Should().BeEquivalentTo(newAddresses);
             TearDownDb();
         }
-        
+
         [Fact]
         public async Task TestRestoreAddresses_NoAddressesInDb_ReturnNewStoredAddresses()
         {

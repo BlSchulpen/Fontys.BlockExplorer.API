@@ -1,19 +1,16 @@
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Fontys.BlockExplorer.API.Modules;
 using Fontys.BlockExplorer.API.Profiles;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Data.PostgresDb;
-using Fontys.BlockExplorer.NodeWarehouse.Configurations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IBlockDataProviderService,BtcBlockProviderService>();
+builder.Services.AddScoped<IBlockDataProviderService, BtcBlockProviderService>();
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) 
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
 
 // Add services to the container.

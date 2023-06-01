@@ -2,14 +2,13 @@
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressService
 {
     public class ExplorerAddressService : IAddressService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
-        private readonly ILogger<ExplorerAddressService> _logger; 
+        private readonly ILogger<ExplorerAddressService> _logger;
 
         public ExplorerAddressService(BlockExplorerContext blockExplorerContext, ILogger<ExplorerAddressService> logger)
         {
@@ -18,7 +17,7 @@ namespace Fontys.BlockExplorer.Application.Services.AddressService
         }
 
         public async Task StoreAddressesAsync(List<Address> addresses)
-        {   
+        {
             try
             {
                 _blockExplorerContext.Addresses.AddRange(addresses);

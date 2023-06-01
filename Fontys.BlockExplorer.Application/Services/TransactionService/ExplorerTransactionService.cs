@@ -39,10 +39,9 @@ namespace Fontys.BlockExplorer.Application.Services.TxService
             _logger.LogInformation("Retrieving transaction with hash: {Hash}", hash); //maybe only log errors...
             try
             {
-                //todo double check if this is oke... 
+                var test = _blockExplorerContext.Blocks.ToList();
                 var stored = await _blockExplorerContext.Blocks.Where(b => b.CoinType == cointype).Select(b => b.Transactions).Where(t => t.Any(x => x.Hash == hash)).Select(t => t.FirstOrDefault(t => t.Hash == hash)).FirstOrDefaultAsync();
-               // var stored = await _blockExplorerContext.Transactions.FirstOrDefaultAsync(t => t.Hash == hash);
-                _logger.LogInformation("Retrieved transaction is: {Transaction}", stored); 
+                _logger.LogInformation("Retrieved transaction is: {Transaction}", stored);
                 return stored;
             }
             catch (Exception exception)

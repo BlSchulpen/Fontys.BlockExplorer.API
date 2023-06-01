@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fontys.BlockExplorer.Domain.Exceptions
+﻿namespace Fontys.BlockExplorer.Domain.Exceptions
 {
     [Serializable]
     public class NotFoundEntityException : Exception

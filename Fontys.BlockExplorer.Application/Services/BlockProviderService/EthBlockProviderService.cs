@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BenchmarkDotNet.Loggers;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Eth;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,7 @@ namespace Fontys.BlockExplorer.Application.Services.BlockProviderService
         {
             _ethNodeService = ethNodeService;
             _mapper = mapper;
-            _logger = logger;   
+            _logger = logger;
         }
 
         public async Task<Block> GetBlockAsync(string hash)

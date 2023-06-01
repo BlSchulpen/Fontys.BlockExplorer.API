@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Castle.Core.Logging;
+﻿using AutoMapper;
 using FluentAssertions;
-using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
-using Fontys.BlockExplorer.Domain.Enums;
-using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
@@ -43,7 +36,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             nodeService.Setup(x => x.GetHashFromHeightAsync(genesisBlock.Height)).ReturnsAsync(genesisBlock.Hash);
             nodeService.Setup(x => x.GetBlockFromHashAsync(genesisBlock.Hash)).ReturnsAsync(genesisBlock);
 
-            var service = new BtcBlockProviderService(nodeService.Object,_mapper,_logger.Object);
+            var service = new BtcBlockProviderService(nodeService.Object, _mapper, _logger.Object);
 
             // act
             var result = await service.GetBlockAsync(genesisBlock.Hash);
@@ -79,7 +72,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             {
                 Hash = nr.ToString(),
                 Height = nr,
-                Previousblockhash = nr > 0 ? (nr-1).ToString() : null,
+                Previousblockhash = nr > 0 ? (nr - 1).ToString() : null,
                 Tx = new List<BtcBlockTxResponse>()
             };
             return block;

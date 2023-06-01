@@ -4,7 +4,7 @@
     {
         public int Value { get; set; }
         public int N { get; set; }
-        public List<BchAddressResponse> Addresses { get; set; } 
+        public List<BchAddressResponse> Addresses { get; set; }
 
     }
 }

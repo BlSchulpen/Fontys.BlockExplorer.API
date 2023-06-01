@@ -1,15 +1,15 @@
 ﻿using FluentAssertions;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
-using Microsoft.Extensions.Logging;
-using Fontys.BlockExplorer.Domain.Enums;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -17,7 +17,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
     {
         private readonly Mock<BlockExplorerContext> _dbContextMock;
         private readonly Mock<IAddressRestoreService> _mockAddressRestoreService;
-        private readonly Mock<ILogger<ExplorerBlockService>> _logger; 
+        private readonly Mock<ILogger<ExplorerBlockService>> _logger;
 
         public BlockServiceTest()
         {

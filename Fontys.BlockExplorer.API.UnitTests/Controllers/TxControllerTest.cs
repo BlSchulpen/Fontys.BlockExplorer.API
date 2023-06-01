@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using Fontys.BlockExplorer.API.Controllers;
-using Fontys.BlockExplorer.API.Dto.Response;
-using Fontys.BlockExplorer.Application.Services.TxService;
-using Fontys.BlockExplorer.Domain.Models;
-using Moq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Controllers

@@ -24,7 +24,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         public async Task<IActionResult> MockGetBlocks()
         {
             var mockResponse = new List<BlockSummaryResponse>()
-            { 
+            {
                 new BlockSummaryResponse(){ CoinType = CoinType.BCH, CreationDateTime = DateTime.Now }
             };
             return Ok(mockResponse);
@@ -54,7 +54,7 @@ namespace Fontys.BlockExplorer.API.Controllers
             var responseItems = new List<BlockSummaryResponse>();
             var blocksResult = _blockService.GetBlocks(coinType);
             foreach (var blockResult in blocksResult)
-            { 
+            {
                 var blockResponse = _mapper.Map<BlockSummaryResponse>(blockResult);
                 responseItems.Add(blockResponse);
             }

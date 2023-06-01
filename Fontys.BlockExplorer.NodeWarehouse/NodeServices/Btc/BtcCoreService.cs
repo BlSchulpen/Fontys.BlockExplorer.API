@@ -19,18 +19,19 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
         {
             _client = httpClientFactory.CreateClient("BtcCore");
             _logger = logger;
-            _requestConfiguration = requestConfiguration;   
+            _requestConfiguration = requestConfiguration;
         }
 
         public async Task<string?> GetBestBlockHashAsync()
         {
-            var arguments = new Dictionary<string, string> {
+            var arguments = new Dictionary<string, string>
+            {
                 ["jsonrpc"] = "1.0",
-                ["id"] =  "1",
+                ["id"] = "1",
                 ["method"] = "getbestblockhash"
             };
             var contentParams = new List<string>();
-            var content = RpcContentBuilderExtension.RpcContent(arguments,contentParams);
+            var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
             var response = await SendMessageAsync(content);
             if (response == null)
                 return null;
@@ -47,7 +48,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
                 ["id"] = "1",
                 ["method"] = "getblock"
             };
-            var contentParams = new List<string> { hash, "2"};
+            var contentParams = new List<string> { hash, "2" };
             //            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblock\",\"params\":[\"" + hash + "\"," + 2 + "]}";
             var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
             var response = await SendMessageAsync(content);
@@ -67,7 +68,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc
                 ["method"] = "getblockhash"
             };
             var contentParams = new List<string> { height.ToString() };
-//            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
+            //            var content = "{\"jsonrpc\":\"1.0\",\"id\":\"1\",\"method\":\"getblockhash\",\"params\":[" + height.ToString() + "]}";
             var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
 
             var response = await SendMessageAsync(content);

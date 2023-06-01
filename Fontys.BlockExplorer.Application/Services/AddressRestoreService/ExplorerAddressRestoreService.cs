@@ -1,8 +1,6 @@
-﻿using BenchmarkDotNet.Loggers;
-using Fontys.BlockExplorer.Application.Services.AddressService;
+﻿using Fontys.BlockExplorer.Application.Services.AddressService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
@@ -38,13 +36,13 @@ namespace Fontys.BlockExplorer.Application.Services.AddressRestoreService
                 await _addressService.StoreAddressesAsync(distinctNewAddresses);
                 return distinctNewAddresses;
             }
-         
+
             catch (Exception exception)
             {
                 _logger.LogError("Failed store new addresses, the following exception was thrown {Exception}", exception);
                 return null;
             }
-    }
+        }
 
         private List<Address> GetAllAddressesOfBlock(Block block)
         {

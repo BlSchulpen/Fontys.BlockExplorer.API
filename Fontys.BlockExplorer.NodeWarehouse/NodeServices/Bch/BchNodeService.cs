@@ -1,7 +1,5 @@
 ﻿using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.Block;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BchNode.RawTransaction;
-using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
-using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.RawTransaction;
 using Fontys.BlockExplorer.NodeWarehouse.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,7 +14,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
         private readonly HttpClient _client;
 
         public BchNodeService(ILogger<IBchNodeService> logger, HttpClient client)
-        { 
+        {
             _logger = logger;
             _client = client;
         }
@@ -31,7 +29,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
             };
             var contentParams = new List<string>();
             var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);
-            var response = await SendMessageAsync(content);            
+            var response = await SendMessageAsync(content);
             var json = JObject.Parse(response)["result"]?.ToString(Formatting.Indented);
             var formatted = json?[1..^2];
             return formatted;
@@ -45,7 +43,7 @@ namespace Fontys.BlockExplorer.NodeWarehouse.NodeServices.Bch
                 ["id"] = "curltest",
                 ["method"] = "getblock"
             };
-            var contentParams = new List<string> { 
+            var contentParams = new List<string> {
                 hash
             };
             var content = RpcContentBuilderExtension.RpcContent(arguments, contentParams);

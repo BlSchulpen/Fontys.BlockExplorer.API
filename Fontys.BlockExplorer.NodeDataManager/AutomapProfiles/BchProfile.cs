@@ -24,7 +24,7 @@ namespace Fontys.BlockExplorer.NodeDataManager.AutomapProfiles
 
             CreateMap<BchVinResponse, TxInput>()
                      .ForMember(dest => dest.IsNewlyGenerated, act => act.MapFrom(src => src.Vout == null));
-           
+
             CreateMap<BchVoutResponse, TxOutput>()
                     .ForMember(dest => dest.Address, act => act.MapFrom(src => new Address() { Hash = src.Addresses[0].Address }));
 

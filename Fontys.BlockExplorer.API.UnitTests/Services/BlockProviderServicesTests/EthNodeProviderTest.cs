@@ -60,8 +60,8 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             It.IsAny<EventId>(),
             It.Is<It.IsAnyType>((o, t) => string.Equals("Could not retrieve ETH block {Nr}", blockNr.ToString(), StringComparison.InvariantCultureIgnoreCase)),
             It.IsAny<Exception>(),
-            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),Times.Once);
-             await f.Should().ThrowAsync<NullReferenceException>();
+            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
+            await f.Should().ThrowAsync<NullReferenceException>();
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             // arrange
             const int blockNr = 0;
             var expectedResponse = GenerateBlockResponse(blockNr);
-            var mockNodeService = new Mock<IEthNodeService>();         
+            var mockNodeService = new Mock<IEthNodeService>();
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
             var responseBlock = GenerateBlockResponse(blockNr);
             mockNodeService.Setup(x => x.GetBlockByNumberAsync(blockNr)).ReturnsAsync(responseBlock);
@@ -94,7 +94,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
             var mockNodeService = new Mock<IEthNodeService>();
             mockNodeService.Setup(x => x.GetLatestNumber()).ReturnsAsync(blockNr);
             var responseBlock = GenerateBlockResponse(blockNr);
-            mockNodeService.Setup(x => x.GetBlockByNumberAsync(blockNr)).ReturnsAsync(responseBlock); 
+            mockNodeService.Setup(x => x.GetBlockByNumberAsync(blockNr)).ReturnsAsync(responseBlock);
 
             //todo setup
             var blockProvider = new EthBlockProviderService(mockNodeService.Object, _mapper, _logger.Object);
@@ -113,7 +113,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services.BlockProviderServicesTests
         {
             // arrange
             const int oldLatest = 5;
-            const int newLatest = oldLatest+1;
+            const int newLatest = oldLatest + 1;
 
             var expectedResponse = GenerateBlockResponse(oldLatest);
             var newLatestResponse = GenerateBlockResponse(newLatest);

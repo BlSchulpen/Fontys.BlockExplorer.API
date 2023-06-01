@@ -2,17 +2,16 @@
 using FluentAssertions;
 using Fontys.BlockExplorer.API.Controllers;
 using Fontys.BlockExplorer.API.Dto.Response;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
-using BenchmarkDotNet.Loggers;
-using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
-using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
 {

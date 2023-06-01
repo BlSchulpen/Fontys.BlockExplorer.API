@@ -5,10 +5,8 @@ using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Application.Services.NodeMonitoringService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
-using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Moq.EntityFrameworkCore;
 
 namespace Fontys.BlockExplorer.Benchmarker
 {
@@ -16,14 +14,14 @@ namespace Fontys.BlockExplorer.Benchmarker
     [MemoryDiagnoser]
     public class NodeMonitoringBenchmarker
     {
-        private readonly  INodeMonitoringService _nodeMonitoringService;
-     //   private readonly IBlockDataProviderService _blockDataProviderService;
+        private readonly INodeMonitoringService _nodeMonitoringService;
+        //   private readonly IBlockDataProviderService _blockDataProviderService;
 
         // mock db is used thus exectiontime EF commands not meassured
         public NodeMonitoringBenchmarker()
         {
             var mockContext = new Mock<BlockExplorerContext>();
-          //  mockContext.Setup(x => x.Blocks).ReturnsDbSet();
+            //  mockContext.Setup(x => x.Blocks).ReturnsDbSet();
             var mockResolver = new Mock<Func<CoinType, IBlockDataProviderService>>();
             var mockBlockService = new Mock<IBlockService>();
             var logger = new Mock<ILogger<ExplorerNodeMonitoringService>>();

@@ -1,5 +1,5 @@
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Fontys.BlockExplorer.API.Modules;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Data;
@@ -7,11 +7,11 @@ using Fontys.BlockExplorer.Data.PostgresDb;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.NodeDataManager.AutomapProfiles;
 using Fontys.BlockExplorer.NodeDataManager.Workers;
+using Fontys.BlockExplorer.NodeWarehouse.Configurations;
+using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text;
-using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
-using Fontys.BlockExplorer.NodeWarehouse.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 

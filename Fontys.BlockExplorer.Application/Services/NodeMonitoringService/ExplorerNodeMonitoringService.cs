@@ -1,6 +1,4 @@
-﻿using Fontys.BlockExplorer.API.Hubs;
-using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
-using Fontys.BlockExplorer.Application.Services.BlockProviderService;
+﻿using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Enums;
@@ -18,18 +16,18 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         //  private readonly Func<CoinType, IBlockDataProviderService> _providerServiceResolver;
 
-        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, IBlockDataProviderService providerService,  IBlockService blockService, ILogger<ExplorerNodeMonitoringService> logger)
+        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, IBlockDataProviderService providerService, IBlockService blockService, ILogger<ExplorerNodeMonitoringService> logger)
         {
             _context = blockExplorerContext;
             _logger = logger;
-           // _providerServiceResolver = providerServiceResolver;
+            // _providerServiceResolver = providerServiceResolver;
             _blockService = blockService;
             _providerService = providerService;
         }
 
         public async Task<ICollection<Block>> RemoveBadBlocksAsync(CoinType coinType)
         {
-         //   var providerService = _providerServiceResolver(coinType);
+            //   var providerService = _providerServiceResolver(coinType);
             var toRemoveBlocks = new List<Block>();
             if (!_context.Blocks.Any())
             {
@@ -53,13 +51,13 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         public async Task<ICollection<Block>> GetNewBlocksAsync(CoinType coinType)
         {
-        //    var providerService = _providerServiceResolver(coinType);
+            //    var providerService = _providerServiceResolver(coinType);
             var newBlocks = await GetStartingBlockListAsync(coinType);
             var storedHeight = _context.Blocks.Where(b => b.CoinType == CoinType.BTC).Max(x => x.Height);
             var chainBlock = await GetBestBlockAsync(_providerService);
             if (chainBlock == null)
             {
-                
+
                 throw new NullReferenceException("No blocks can be found in the chain");
             }
 
@@ -105,7 +103,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
 
         private async Task<Block> GetFirstBlockAsync(CoinType coinType)
         {
-       //     var providerService = _providerServiceResolver(coinType);
+            //     var providerService = _providerServiceResolver(coinType);
             var firstBlockHeight = 0;
             var firstBlockHash = await _providerService.GetHashFromHeightAsync(firstBlockHeight);
             var firstBlock = await _providerService.GetBlockAsync(firstBlockHash);

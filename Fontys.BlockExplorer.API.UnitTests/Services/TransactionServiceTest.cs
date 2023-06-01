@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
 using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Data;
+using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Microsoft.Extensions.Logging;
-using Fontys.BlockExplorer.Domain.Enums;
 
 namespace Fontys.BlockExplorer.API.UnitTests.Services
 {
@@ -31,7 +31,7 @@ namespace Fontys.BlockExplorer.API.UnitTests.Services
             var service = new ExplorerTransactionService(_dbContextMock.Object, mockLogger.Object);
 
             // act
-            var txResult = await service.GetTransactionAsync(CoinType.BTC ,hash);
+            var txResult = await service.GetTransactionAsync(CoinType.BTC, hash);
 
             // assert
             txResult.Should().BeEquivalentTo(transaction);

@@ -6,10 +6,10 @@ using Fontys.BlockExplorer.Application.Services.TxService;
 using Fontys.BlockExplorer.Data;
 using Fontys.BlockExplorer.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers

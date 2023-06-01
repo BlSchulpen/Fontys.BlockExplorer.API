@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Fontys.BlockExplorer.API.Dto.Response;
 using Fontys.BlockExplorer.Domain.Enums;
 using Fontys.BlockExplorer.Domain.Models;
 using Fontys.BlockExplorer.NodeWarehouse.CoinResponseModels.BtcCore.Block;
