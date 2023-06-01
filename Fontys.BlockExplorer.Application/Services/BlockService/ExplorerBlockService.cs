@@ -21,7 +21,6 @@ namespace Fontys.BlockExplorer.Application.Services.BlockService
             _logger = logger;
         }
 
-        //TODO update --> how to limit
         public List<Block> GetBlocks(CoinType coinType)
         {
             const int numberOfBlocks = 10; //TODO consider how to indicate this...

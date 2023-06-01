@@ -16,10 +16,10 @@ namespace Fontys.BlockExplorer.API.UnitTests.Controllers
         {
             // arrange
             var hash = "Test";
-            var mockService = new Mock<ITxService>();
+            var mockService = new Mock<ITransactionService>();
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Block, BlockResponse>());
             var mapper = new Mapper(config);
-            var controller = new TxController(mockService.Object, mapper);
+            var controller = new TransactionController(mockService.Object, mapper);
 
             // act
             await controller.GetTransaction(hash);

@@ -9,14 +9,14 @@ namespace Fontys.BlockExplorer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TxController : ControllerBase
+    public class TransactionController : ControllerBase
     {
-        private readonly ITxService _txService;
+        private readonly ITransactionService _transactionService;
         private readonly IMapper _mapper;
 
-        public TxController(ITxService txService, IMapper mapper)
+        public TransactionController(ITransactionService txService, IMapper mapper)
         {
-            _txService = txService;
+            _transactionService = txService;
             _mapper = mapper;
         }
 
@@ -24,7 +24,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetTransaction(CoinType coinType, string hash)
         {
-            var result = await _txService.GetTransactionAsync(coinType, hash);
+            var result = await _transactionService.GetTransactionAsync(coinType, hash);
             if (result == null)
             {
                 return NotFound();
@@ -37,7 +37,7 @@ namespace Fontys.BlockExplorer.API.Controllers
         [ProducesResponseType(200)]
         public async Task<IActionResult> GetlatestTransaction(CoinType coinType)
         {
-            var result = await _txService.GetLatestTransactions(coinType);
+            var result = await _transactionService.GetLatestTransactionsAsync(coinType);
             if (result == null)
             {
                 return NotFound();

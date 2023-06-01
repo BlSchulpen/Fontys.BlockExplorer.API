@@ -6,7 +6,6 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BenchmarkDotNet.Loggers;
 using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Xunit;
 using Microsoft.Extensions.Logging;

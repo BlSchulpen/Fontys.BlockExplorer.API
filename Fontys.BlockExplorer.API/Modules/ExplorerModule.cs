@@ -10,7 +10,7 @@ namespace Fontys.BlockExplorer.API.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ExplorerBlockService>().As<IBlockService>();
-            builder.RegisterType<ExplorerTxService>().As<ITxService>();
+            builder.RegisterType<ExplorerTxService>().As<ITransactionService>();
             builder.RegisterType<ExplorerAddressService>().As<IAddressService>();
         }
     }

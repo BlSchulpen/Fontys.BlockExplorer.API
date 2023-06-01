@@ -1,4 +1,5 @@
-﻿using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
+﻿using Fontys.BlockExplorer.API.Hubs;
+using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 using Fontys.BlockExplorer.Application.Services.BlockProviderService;
 using Fontys.BlockExplorer.Application.Services.BlockService;
 using Fontys.BlockExplorer.Data;
@@ -15,7 +16,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
         private readonly ILogger<ExplorerNodeMonitoringService> _logger;
         private readonly Func<CoinType, IBlockDataProviderService> _providerServiceResolver;
 
-        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, Func<CoinType, IBlockDataProviderService> providerServiceResolver, IBlockService blockService, ILogger<ExplorerNodeMonitoringService> logger)
+        public ExplorerNodeMonitoringService(BlockExplorerContext blockExplorerContext, BtcBlockHub btcBlockHub ,Func<CoinType, IBlockDataProviderService> providerServiceResolver, IBlockService blockService, ILogger<ExplorerNodeMonitoringService> logger)
         {
             _context = blockExplorerContext;
             _logger = logger;
@@ -75,6 +76,7 @@ namespace Fontys.BlockExplorer.Application.Services.NodeMonitoringService
                 var chainHash = await providerService.GetHashFromHeightAsync(chainBlock.Height - 1);
                 chainBlock = await providerService.GetBlockAsync(chainHash);
             }
+
             return newBlocks;
         }
 

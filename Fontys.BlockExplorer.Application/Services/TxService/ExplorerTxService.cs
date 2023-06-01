@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fontys.BlockExplorer.Application.Services.TxService
 {
-    public class ExplorerTxService : ITxService
+    public class ExplorerTxService : ITransactionService
     {
         private readonly BlockExplorerContext _blockExplorerContext;
         private readonly ILogger<ExplorerTxService> _logger;
@@ -17,7 +17,7 @@ namespace Fontys.BlockExplorer.Application.Services.TxService
             _logger = logger;
         }
 
-        public async Task<List<Transaction>> GetLatestTransactionsAsync(CoinType coinType)
+        public async Task<List<Transaction>?> GetLatestTransactionsAsync(CoinType coinType)
         {
             _logger.LogInformation("Get latest transactions of coin: {CoinType}", coinType); //maybe only log errors...
             try

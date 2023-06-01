@@ -68,14 +68,14 @@ namespace Fontys.BlockExplorer.API.IntegrationTests.Controllers
             return newTransactions;
         }
 
-        private TxController SetupController(int nrTransactions)
+        private TransactionController SetupController(int nrTransactions)
         {
             var transactions = MockTransactions(nrTransactions);
             _dbContextMock.Setup(x => x.Transactions).ReturnsDbSet(transactions);
             var service = new ExplorerTxService(_dbContextMock.Object, _logger.Object);
             var config = new MapperConfiguration(cfg => cfg.AddProfile<ExplorerProfile>());
             var mapper = new Mapper(config);
-            var controller = new TxController(service, mapper);
+            var controller = new TransactionController(service, mapper);
             return controller;
         }
     }
