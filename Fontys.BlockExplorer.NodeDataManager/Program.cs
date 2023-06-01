@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Text;
 using Fontys.BlockExplorer.NodeWarehouse.NodeServices.Btc;
-using Fontys.BlockExplorer.Application.Services.BlockService;
-using Fontys.BlockExplorer.Application.Services.AddressRestoreService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,11 +39,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterMod
 builder.Services.AddDbContext<BlockExplorerContext, PostgresDatabaseContext>(options => options.UseNpgsql(builder.Configuration["PostgresDbOptions:ConnectionsString"], b => b.MigrationsAssembly("Fontys.BlockExplorer.API")));
 builder.Services.AddHostedService<NodeDataWorker>();
 builder.Services.AddAutoMapper(typeof(BtcProfile));
-//builder.Services.AddAutoMapper(typeof(EthProfile));
 builder.Services.AddScoped<IBtcNodeService, BtcCoreService>();
-builder.Services.AddScoped<IBlockDataProviderService, BtcBlockProviderService>();
-builder.Services.AddScoped<IBlockService, ExplorerBlockService>();
-builder.Services.AddScoped<IAddressRestoreService, ExplorerAddressRestoreService>();
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ExplorerModule()));
 
 //HttpClients
@@ -54,14 +48,6 @@ builder.Services.AddHttpClient("BtcCore", httpClient =>
     httpClient.BaseAddress = new Uri(builder.Configuration["BtcCoreSettings:BaseUrl"]);
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["BtcCoreSettings:Username"]}:{builder.Configuration["BtcCoreSettings:Password"]}")));
 });
-
-/*
-builder.Services.AddHttpClient("EthGeth", httpClient =>
-{
-    httpClient.BaseAddress = new Uri(builder.Configuration["EthGethSettings:BaseUrl"]);
-    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{builder.Configuration["EthGethSettings:Username"]}:{builder.Configuration["EthGethSettings:Password"]}")));
-});
-*/
 
 builder.Services.AddHttpClient("BchNode", httpClient =>
 {

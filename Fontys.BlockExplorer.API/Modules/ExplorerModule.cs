@@ -12,6 +12,7 @@ namespace Fontys.BlockExplorer.API.Modules
             builder.RegisterType<ExplorerBlockService>().As<IBlockService>();
             builder.RegisterType<ExplorerTransactionService>().As<ITransactionService>();
             builder.RegisterType<ExplorerAddressService>().As<IAddressService>();
+            builder.RegisterType<ExplorerBlockService>().As<IBlockService>();
         }
     }
 }
